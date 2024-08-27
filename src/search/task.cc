@@ -50,7 +50,7 @@ void Task::dump_state(DBState s) const
     }
     const auto& relations = s.get_relations();
     for (size_t i = 0; i < relations.size(); ++i) {
-        string relation_name = predicates[i].get_name();
+        string relation_name = predicates[relations[i].predicate_symbol].get_name();
         unordered_set<GroundAtom, TupleHash> tuples = relations[i].tuples;
         for (auto &tuple : tuples) {
             cout << relation_name << "(";

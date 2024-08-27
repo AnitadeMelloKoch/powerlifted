@@ -59,6 +59,7 @@ add_executable(search
         successor_generators/ordered_join_successor.cc successor_generators/ordered_join_successor.h
         successor_generators/generic_join_successor.cc successor_generators/generic_join_successor.h
         successor_generators/full_reducer_successor_generator.cc successor_generators/full_reducer_successor_generator.h
+        fact_layer/fact_layer_generator.cc fact_layer/fact_layer_generator.h
         database/semi_join.h database/semi_join.cc
         database/hash_join.cc database/hash_join.h
         hash_structures.cc hash_structures.h
