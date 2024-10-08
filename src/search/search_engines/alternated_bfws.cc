@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <iostream>
 #include <vector>
+#include <tuple>
 
 #include "../fact_layer/fact_layer_generator.h"
 
@@ -139,11 +140,16 @@ utils::ExitCode AlternatedBFWS<PackedStateT>::search(const Task &task,
     const auto applicable = generator.get_applicable_actions(action_schemas, state);
 
     FactLayerGenerator fact_layer_generator = FactLayerGenerator(task);
-    DBState next_fact_layer = fact_layer_generator.generate_next_fact_layer(
-        applicable,
-        action_schemas,
-        state
-    );
+    task.dump_state(state);
+    fact_layer_generator.generate_fact_layers(action_schemas,
+                                              state);
+    // DBState next_fact_layer;
+    // fact_layer_generator.generate_next_fact_layer(
+    //     action_schemas,
+    //     state
+    // );
+
+    // applicable = generator.get_applicable_actions(action_schemas, next_fact_layer);
 
     // cout << "initial state" << endl;
     // task.dump_state(task.initial_state);
@@ -151,8 +157,8 @@ utils::ExitCode AlternatedBFWS<PackedStateT>::search(const Task &task,
     // cout << "static info" << endl;
     // task.dump_state(task.static_info);
 
-    cout << "next fact layer" << endl;
-    task.dump_state(next_fact_layer);
+    // cout << "next fact layer" << endl;
+    // task.dump_state(next_fact_layer);
 
     cout << "==================================" << endl;
     cout << "==================================" << endl;

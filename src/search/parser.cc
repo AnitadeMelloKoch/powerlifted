@@ -227,6 +227,7 @@ void parse_goal(Task &task, int goal_size)
     task.create_goal_condition(goals, positive_nullary_goals, negative_nullary_goals);
 }
 
+// creates dbstate
 void parse_initial_state(Task &task, int initial_state_size)
 {
     //StaticInformation static_info(task.predicates.size());

@@ -15,7 +15,7 @@ public:
     std::vector<tuple_t> tuples;
     /// @var tuple_index: Indices of each variable in order
     std::vector<int> tuple_index;
-
+    // create table from dbstate
     Table(std::vector<tuple_t> &&tuples, std::vector<int> &&tuple_index) :
         tuples(std::move(tuples)),
         tuple_index(std::move(tuple_index))
