@@ -82,6 +82,9 @@ def set_extra_options(options):
     # Checks if unit-cost flag is true
     if options.unit_cost:
         PYTHON_EXTRA_OPTIONS += ["--unit-cost"]
+    
+    if options.forward_reachability:
+        CPP_EXTRA_OPTIONS += ['--forward-reachability', str(1)]
 
     return PYTHON_EXTRA_OPTIONS, CPP_EXTRA_OPTIONS
 

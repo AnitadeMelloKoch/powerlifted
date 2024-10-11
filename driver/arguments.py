@@ -100,6 +100,8 @@ def parse_options():
                            help="flag if the actions should be treated as unit-cost actions")
     parser.add_argument("--validate", action="store_true",
                         help="flag if VAL should be called to validate the plan found")
+    parser.add_argument("--forward-reachability", action="store_true",
+                        help="run forward reachibility to generate all fact layers")
     args = parser.parse_args()
     if args.domain is None:
         args.domain = find_domain_filename(args.instance)

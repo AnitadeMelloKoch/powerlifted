@@ -33,42 +33,6 @@ void FactLayerGenerator::dump_relation_list(std::vector<Relation> relations){
     cout << endl;
 }
 
-// std::tuple<DBState, bool> FactLayerGenerator::generate_next_fact_layer(
-//     const std::vector<ActionSchema> action_schemas,
-//     const DBState &state
-// ){
-//     std::vector<bool> new_nullary_atoms(state.get_nullary_atoms());
-//     std::vector<Relation> relations(state.get_relations());
-
-//     bool extended = false;
-
-//     for (auto & action : action_schemas){
-//         std::vector<Relation> new_relations(state.get_relations());
-        
-//         new_relations = get_new_relation(action, op, new_relations);
-
-//         for (auto relation : new_relations){
-//             for (size_t i = 0; i < relations.size(); i++){
-//                 if (relations[i].predicate_symbol == relation.predicate_symbol){
-//                     for (auto tuple:relation.tuples){
-//                         if (relations[i].tuples.find(tuple) == relations[i].tuples.end()){
-//                             relations[i].tuples.insert(tuple);
-//                             extended = true;
-//                         }
-//                     }
-//                 }
-//             }
-//         }
-//         apply_nullary_effects(action, new_nullary_atoms);
-//     }
-
-//     return std::make_tuple(DBState(std::move(relations), std::move(new_nullary_atoms)), extended);
-    
-// }
-
-// Need to figure out where all grounded actions are then work out
-// how to reapply those actions
-
 tuple<vector<Relation>, bool> FactLayerGenerator::generate_next_fact_layer(
     const std::vector<ActionSchema> action_schemas,
     vector<Relation> relations
@@ -91,19 +55,24 @@ tuple<vector<Relation>, bool> FactLayerGenerator::generate_next_fact_layer(
     return make_tuple(relations, extended);
 }
 
-void FactLayerGenerator::generate_fact_layers(const vector<ActionSchema> action_schemas, 
-                                              const DBState &state){
+DBState FactLayerGenerator::generate_fact_layers(const vector<ActionSchema> action_schemas, 
+                                                 const DBState &state){
+    
+    clock_t timer_start = clock();
     vector<bool> new_nullary_atoms(state.get_nullary_atoms());
     vector<Relation> relations(state.get_relations());
 
     bool extended = true;
+    int passes = 0;
     while (extended){
         tie(relations, extended) = generate_next_fact_layer(action_schemas, relations);
-        cout << "extended: " << extended << endl; 
+        passes += 1;
     }
-    cout << "+++++++++++++++++++++++++++++" << endl;
-    dump_relation_list(relations);
-    cout << "+++++++++++++++++++++++++++++" << endl;
+
+    cout << "Fact layers generated with " << passes << " passes" << endl;
+    cout << "Fact layers total time: " << double(clock() - timer_start)/CLOCKS_PER_SEC << endl;
+    
+    return DBState(move(relations), move(new_nullary_atoms));
 }
 
 vector<Relation> FactLayerGenerator::get_new_relation(

@@ -9,6 +9,7 @@
 #include "search_engines/search_factory.h"
 #include "successor_generators/successor_generator.h"
 #include "successor_generators/successor_generator_factory.h"
+#include "fact_layer/fact_layer_generator.h"
 
 // TODO This should be included in the heuristic, not here. Right now it is here for testing
 #include "heuristics/ff_heuristic.h"
@@ -54,6 +55,8 @@ int main(int argc, char *argv[]) {
     std::unique_ptr<SuccessorGenerator> sgen(SuccessorGeneratorFactory::create(opt.get_successor_generator(),
                                                                                opt.get_seed(),
                                                                                task));
+    
+    std::unique_ptr<FactLayerGenerator> forward_reachability = make_unique<FactLayerGenerator>(task);
 
     PlanManager::set_plan_filename(opt.get_plan_file());
 
@@ -64,10 +67,17 @@ int main(int argc, char *argv[]) {
     }
 
     try {
-        auto exitcode = search->search(task, *sgen, *heuristic);
-        search->print_statistics();
-        utils::report_exit_code_reentrant(exitcode);
-        return static_cast<int>(exitcode);
+        if (opt.get_forward_reachability()){
+            auto new_state = forward_reachability->generate_fact_layers(task.get_action_schemas(),
+                                                                        task.initial_state);
+            task.dump_state(new_state);
+        }else{
+            auto exitcode = search->search(task, *sgen, *heuristic);
+            search->print_statistics();
+            utils::report_exit_code_reentrant(exitcode);
+            return static_cast<int>(exitcode);
+        }
+        
     }
     catch (const bad_alloc& ex) {
         //search->print_statistics();

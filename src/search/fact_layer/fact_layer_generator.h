@@ -29,7 +29,7 @@ class FactLayerGenerator : public GenericJoinSuccessor{
             std::vector<Relation> relations
         );
 
-        void generate_fact_layers(
+        DBState generate_fact_layers(
             const std::vector<ActionSchema> action_schemas,
             const DBState &state
         );

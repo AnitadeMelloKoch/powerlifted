@@ -17,6 +17,7 @@ class Options {
     bool only_effects_opt;
     bool novelty_early_stop;
     unsigned seed;
+    bool forward_reachability;
 
 public:
     Options(int argc, char** argv) {
@@ -32,6 +33,7 @@ public:
             ("plan-file", po::value<std::string>()->default_value("FilePathUndefined"), "Plan file.")
             ("only-effects-novelty-check", po::value<bool>()->default_value(false), "Check only effects of applied actions when evaluation novelty of a state.")
             ("novelty-early-stop", po::value<bool>()->default_value(false), "Stop evaluating novelty as soon as w-value is defined.")
+            ("forward-reachability", po::value<bool>()->default_value(false), "Generate all fact layers")
             ;
 
         po::variables_map vm;
@@ -59,6 +61,7 @@ public:
         only_effects_opt = vm["only-effects-novelty-check"].as<bool>();
         novelty_early_stop = vm["novelty-early-stop"].as<bool>();
         seed = vm["seed"].as<unsigned>();
+        forward_reachability = vm["forward-reachability"].as<bool>();
 
     }
 
@@ -96,6 +99,10 @@ public:
 
     unsigned get_seed() const {
         return seed;
+    }
+
+    bool get_forward_reachability() const {
+        return forward_reachability;
     }
 
 

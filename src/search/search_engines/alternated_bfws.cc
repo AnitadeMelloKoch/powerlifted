@@ -131,39 +131,6 @@ utils::ExitCode AlternatedBFWS<PackedStateT>::search(const Task &task,
 
     if (check_goal(task, generator, timer_start, task.initial_state, root_node, space)) return utils::ExitCode::SUCCESS;
 
-    cout << "==================================" << endl;
-    cout << "==================================" << endl;
-    cout << "==================================" << endl;
-
-    auto state = task.initial_state;
-
-    const auto applicable = generator.get_applicable_actions(action_schemas, state);
-
-    FactLayerGenerator fact_layer_generator = FactLayerGenerator(task);
-    task.dump_state(state);
-    fact_layer_generator.generate_fact_layers(action_schemas,
-                                              state);
-    // DBState next_fact_layer;
-    // fact_layer_generator.generate_next_fact_layer(
-    //     action_schemas,
-    //     state
-    // );
-
-    // applicable = generator.get_applicable_actions(action_schemas, next_fact_layer);
-
-    // cout << "initial state" << endl;
-    // task.dump_state(task.initial_state);
-
-    // cout << "static info" << endl;
-    // task.dump_state(task.static_info);
-
-    // cout << "next fact layer" << endl;
-    // task.dump_state(next_fact_layer);
-
-    cout << "==================================" << endl;
-    cout << "==================================" << endl;
-    cout << "==================================" << endl;
-
     int heuristic_layer = initial_h;
     while (not open_list.empty()) {
         StateID sid = open_list.get_top_node();
