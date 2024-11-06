@@ -7,6 +7,8 @@
 #include <cassert>
 #include <unordered_map>
 
+#include <iostream>
+
 using namespace std;
 
 std::vector<int> project_tuple(
@@ -20,6 +22,19 @@ std::vector<int> project_tuple(
     }
     return projected;
 }
+
+vector<int> ptr_project_tuple(
+    const std::vector<int> tuple,
+    const std::vector<int>& pattern
+){
+    auto sz = pattern.size();
+    vector<int> projected(sz);
+    for (size_t i = 0; i < sz; ++i){
+        projected[i] = tuple[pattern[i]];
+    }
+
+    return projected;
+} 
 
 void hash_join(Table &t1, const Table &t2) {
     /*
@@ -87,4 +102,56 @@ void hash_join(Table &t1, const Table &t2) {
 
     }
     t1.tuples = std::move(new_tuples);
+}
+
+void ptr_hash_join(PtrTable &t1, const PtrTable &t2){
+    std::vector<int> matches1, matches2;
+    ptr_compute_matching_columns(t1, t2, matches1, matches2);
+    assert(matches1.size()==matches2.size());
+
+    vector<shared_ptr<vector<int>>> new_tuples;
+    if (matches1.empty()){
+        t1.tuple_index.insert(t1.tuple_index.end(), t2.tuple_index.begin(), t2.tuple_index.end());
+        for (shared_ptr<vector<int>> tuple_t1 : t1.tuples){
+            for (shared_ptr<vector<int>> tuple_t2 : t2.tuples){
+                vector<int> aux(*tuple_t1);
+                vector<int> t2_copy(*tuple_t2);
+                aux.insert(aux.end(), t2_copy.begin(), t2_copy.end());
+                new_tuples.push_back(make_shared<vector<int>>(aux));
+            }
+        }
+    }else{
+        unordered_map<vector<int>, vector<shared_ptr<vector<int>>>, TupleHash> hash_join_map;
+
+        for (const shared_ptr<vector<int>> &tuple : t1.tuples){
+            hash_join_map[ptr_project_tuple(*tuple, matches1)].push_back(tuple);
+        }
+
+        vector<bool> to_remove(t2.tuple_index.size(), false);
+        for (const auto &m : matches2){
+            to_remove[m] = true;
+        }
+
+        for (size_t j = 0; j < t2.tuple_index.size(); ++j){
+            if (!to_remove[j]){
+                t1.tuple_index.push_back(t2.tuple_index[j]);
+            }
+        }
+
+        for(shared_ptr<vector<int>> tuple : t2.tuples){
+            auto it = hash_join_map.find(ptr_project_tuple(*tuple, matches2));
+
+            if (it != hash_join_map.end()) {
+                const auto matching_tuples = it->second;
+                for (shared_ptr<vector<int>> t : matching_tuples){
+                    vector<int> t_copy(*t);
+                    for (unsigned j = 0; j < to_remove.size(); ++j){
+                        if (!to_remove[j]) t_copy.push_back(tuple->at(j));
+                    }
+                    new_tuples.push_back(make_shared<vector<int>>(t_copy));
+                }
+            }
+        }
+    }
+    t1.tuples = move(new_tuples);
 }

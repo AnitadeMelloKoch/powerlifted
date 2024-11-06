@@ -2,6 +2,7 @@
 #define SEARCH_HASH_STRUCTURES_H
 
 #include <vector>
+#include <memory>
 
 
 /**
@@ -12,6 +13,10 @@
  */
 struct TupleHash {
   std::size_t operator()(const std::vector<int> &c) const;
+};
+
+struct PtrTupleHash {
+    std::size_t operator()(const std::shared_ptr<std::vector<int>> c) const;
 };
 
 #endif // SEARCH_HASH_STRUCTURES_H

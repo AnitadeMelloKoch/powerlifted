@@ -2,6 +2,7 @@
 #define SEARCH_HASH_JOIN_H
 
 class Table;
+class PtrTable;
 
 /**
  * @brief Join two tables but using hash-based approach.
@@ -15,5 +16,7 @@ class Table;
  * @see join.cc
  */
 void hash_join(Table &t1, const Table &t2);
+
+void ptr_hash_join(PtrTable &t1, const PtrTable &t2);
 
 #endif //SEARCH_HASH_JOIN_H

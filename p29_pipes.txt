@@ -1,0 +1,384 @@
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/anita/code/powerlifted/builds/release/search
+[100%] Built target search
+Parsing...
+Parsing: [0.010s CPU, 0.001s wall-clock]
+Processing task p29-net3-b20-g6_rt0_instance
+Normalizing task... [0.000s CPU, 0.000s wall-clock]
+Performing sanity checks...... [0.000s CPU, 0.000s wall-clock]
+Compiling types into unary predicates... [0.000s CPU, 0.000s wall-clock]
+Checking static predicates... [0.000s CPU, 0.000s wall-clock]
+Initial state size: 80
+Getting dictionary of types... [0.000s CPU, 0.000s wall-clock]
+Removing function symbols from initial state... [0.000s CPU, 0.000s wall-clock]
+Removing unused predicate symbols... [0.000s CPU, 0.000s wall-clock]
+Removing unused predicate symbols... Removing satisfied static predicates from the goal.
+[0.000s CPU, 0.000s wall-clock]
+Printing names and representation type... [0.000s CPU, 0.000s wall-clock]
+Printing types... [0.000s CPU, 0.000s wall-clock]
+Printing predicates... [0.000s CPU, 0.000s wall-clock]
+Printing objects (i.e., constants)... [0.000s CPU, 0.000s wall-clock]
+Printing initial state... [0.000s CPU, 0.001s wall-clock]
+Printing goal... [0.000s CPU, 0.000s wall-clock]
+Printing action schemas... [0.000s CPU, 0.000s wall-clock]
+Total translation time: 0.010s
+Initializing planner
+Reading task description file.
+pipesworld_strips p29-net3-b20-g6_rt0_instance
+Total number of types: 6
+Total number of predicates: 19
+Total number of objects: 89
+Total number of atoms in the initial state: 365
+Total number of fluent atoms in the goal state: 6
+Total number of action schemas: 4
+IMPORTANT: Assuming that negative effects are always listed first. (This is guaranteed by the default translator.)
+Creating search factory for method alt-bfws1...
+Using Dual-Queue BFWS
+Creating heuristic factory...
+Iteration removed 355 equivalent rules.
+Iteration removed 0 equivalent rules.
+Total number of static atoms in the EDB: 285
+Total number of rules: 130
+Creating successor generator factory...
+==================================
+==================================
+==================================
+num applicable actions: 72
+relation num: 19
+relation predicate: 0 size: 0
+relation predicate: 1 size: 0
+relation predicate: 2 size: 0
+relation predicate: 3 size: 9
+relation predicate: 4 size: 5
+relation predicate: 5 size: 8
+relation predicate: 6 size: 0
+relation predicate: 7 size: 17
+relation predicate: 8 size: 0
+relation predicate: 9 size: 0
+relation predicate: 10 size: 0
+relation predicate: 11 size: 24
+relation predicate: 12 size: 48
+relation predicate: 13 size: 0
+relation predicate: 14 size: 0
+relation predicate: 15 size: 0
+relation predicate: 16 size: 0
+relation predicate: 17 size: 0
+relation predicate: 18 size: 0
+==================================
+==================================
+==================================
+num applicable actions: 20
+relation num: 19
+relation predicate: 0 size: 0
+relation predicate: 1 size: 0
+relation predicate: 2 size: 0
+relation predicate: 3 size: 13
+relation predicate: 4 size: 9
+relation predicate: 5 size: 8
+relation predicate: 6 size: 0
+relation predicate: 7 size: 18
+relation predicate: 8 size: 0
+relation predicate: 9 size: 0
+relation predicate: 10 size: 0
+relation predicate: 11 size: 25
+relation predicate: 12 size: 52
+relation predicate: 13 size: 0
+relation predicate: 14 size: 0
+relation predicate: 15 size: 0
+relation predicate: 16 size: 0
+relation predicate: 17 size: 0
+relation predicate: 18 size: 0
+==================================
+==================================
+==================================
+num applicable actions: 1015
+relation num: 19
+relation predicate: 0 size: 0
+relation predicate: 1 size: 0
+relation predicate: 2 size: 0
+relation predicate: 3 size: 15
+relation predicate: 4 size: 21
+relation predicate: 5 size: 31
+relation predicate: 6 size: 0
+relation predicate: 7 size: 20
+relation predicate: 8 size: 0
+relation predicate: 9 size: 0
+relation predicate: 10 size: 0
+relation predicate: 11 size: 33
+relation predicate: 12 size: 57
+relation predicate: 13 size: 0
+relation predicate: 14 size: 0
+relation predicate: 15 size: 0
+relation predicate: 16 size: 0
+relation predicate: 17 size: 0
+relation predicate: 18 size: 0
+==================================
+==================================
+==================================
+num applicable actions: 216
+relation num: 19
+relation predicate: 0 size: 0
+relation predicate: 1 size: 0
+relation predicate: 2 size: 0
+relation predicate: 3 size: 18
+relation predicate: 4 size: 24
+relation predicate: 5 size: 31
+relation predicate: 6 size: 0
+relation predicate: 7 size: 21
+relation predicate: 8 size: 0
+relation predicate: 9 size: 0
+relation predicate: 10 size: 0
+relation predicate: 11 size: 39
+relation predicate: 12 size: 57
+relation predicate: 13 size: 0
+relation predicate: 14 size: 0
+relation predicate: 15 size: 0
+relation predicate: 16 size: 0
+relation predicate: 17 size: 0
+relation predicate: 18 size: 0
+Fact layer passes: 1
+==================================
+==================================
+==================================
+num applicable actions: 49406
+relation num: 19
+relation predicate: 0 size: 0
+relation predicate: 1 size: 0
+relation predicate: 2 size: 0
+relation predicate: 3 size: 19
+relation predicate: 4 size: 32
+relation predicate: 5 size: 64
+relation predicate: 6 size: 0
+relation predicate: 7 size: 23
+relation predicate: 8 size: 0
+relation predicate: 9 size: 0
+relation predicate: 10 size: 0
+relation predicate: 11 size: 39
+relation predicate: 12 size: 57
+relation predicate: 13 size: 0
+relation predicate: 14 size: 0
+relation predicate: 15 size: 0
+relation predicate: 16 size: 0
+relation predicate: 17 size: 0
+relation predicate: 18 size: 0
+==================================
+==================================
+==================================
+num applicable actions: 504
+relation num: 19
+relation predicate: 0 size: 0
+relation predicate: 1 size: 0
+relation predicate: 2 size: 0
+relation predicate: 3 size: 19
+relation predicate: 4 size: 32
+relation predicate: 5 size: 64
+relation predicate: 6 size: 0
+relation predicate: 7 size: 27
+relation predicate: 8 size: 0
+relation predicate: 9 size: 0
+relation predicate: 10 size: 0
+relation predicate: 11 size: 43
+relation predicate: 12 size: 57
+relation predicate: 13 size: 0
+relation predicate: 14 size: 0
+relation predicate: 15 size: 0
+relation predicate: 16 size: 0
+relation predicate: 17 size: 0
+relation predicate: 18 size: 0
+==================================
+==================================
+==================================
+num applicable actions: 71812
+relation num: 19
+relation predicate: 0 size: 0
+relation predicate: 1 size: 0
+relation predicate: 2 size: 0
+relation predicate: 3 size: 31
+relation predicate: 4 size: 32
+relation predicate: 5 size: 145
+relation predicate: 6 size: 0
+relation predicate: 7 size: 29
+relation predicate: 8 size: 0
+relation predicate: 9 size: 0
+relation predicate: 10 size: 0
+relation predicate: 11 size: 45
+relation predicate: 12 size: 57
+relation predicate: 13 size: 0
+relation predicate: 14 size: 0
+relation predicate: 15 size: 0
+relation predicate: 16 size: 0
+relation predicate: 17 size: 0
+relation predicate: 18 size: 0
+==================================
+==================================
+==================================
+num applicable actions: 896
+relation num: 19
+relation predicate: 0 size: 0
+relation predicate: 1 size: 0
+relation predicate: 2 size: 0
+relation predicate: 3 size: 32
+relation predicate: 4 size: 33
+relation predicate: 5 size: 145
+relation predicate: 6 size: 0
+relation predicate: 7 size: 32
+relation predicate: 8 size: 0
+relation predicate: 9 size: 0
+relation predicate: 10 size: 0
+relation predicate: 11 size: 45
+relation predicate: 12 size: 57
+relation predicate: 13 size: 0
+relation predicate: 14 size: 0
+relation predicate: 15 size: 0
+relation predicate: 16 size: 0
+relation predicate: 17 size: 0
+relation predicate: 18 size: 0
+Fact layer passes: 2
+==================================
+==================================
+==================================
+num applicable actions: 942018
+relation num: 19
+relation predicate: 0 size: 0
+relation predicate: 1 size: 0
+relation predicate: 2 size: 0
+relation predicate: 3 size: 36
+relation predicate: 4 size: 41
+relation predicate: 5 size: 202
+relation predicate: 6 size: 0
+relation predicate: 7 size: 38
+relation predicate: 8 size: 0
+relation predicate: 9 size: 0
+relation predicate: 10 size: 0
+relation predicate: 11 size: 45
+relation predicate: 12 size: 57
+relation predicate: 13 size: 0
+relation predicate: 14 size: 0
+relation predicate: 15 size: 0
+relation predicate: 16 size: 0
+relation predicate: 17 size: 0
+relation predicate: 18 size: 0
+==================================
+==================================
+==================================
+num applicable actions: 896
+relation num: 19
+relation predicate: 0 size: 0
+relation predicate: 1 size: 0
+relation predicate: 2 size: 0
+relation predicate: 3 size: 36
+relation predicate: 4 size: 41
+relation predicate: 5 size: 202
+relation predicate: 6 size: 0
+relation predicate: 7 size: 38
+relation predicate: 8 size: 0
+relation predicate: 9 size: 0
+relation predicate: 10 size: 0
+relation predicate: 11 size: 45
+relation predicate: 12 size: 57
+relation predicate: 13 size: 0
+relation predicate: 14 size: 0
+relation predicate: 15 size: 0
+relation predicate: 16 size: 0
+relation predicate: 17 size: 0
+relation predicate: 18 size: 0
+==================================
+==================================
+==================================
+num applicable actions: 584192
+relation num: 19
+relation predicate: 0 size: 0
+relation predicate: 1 size: 0
+relation predicate: 2 size: 0
+relation predicate: 3 size: 44
+relation predicate: 4 size: 41
+relation predicate: 5 size: 253
+relation predicate: 6 size: 0
+relation predicate: 7 size: 50
+relation predicate: 8 size: 0
+relation predicate: 9 size: 0
+relation predicate: 10 size: 0
+relation predicate: 11 size: 52
+relation predicate: 12 size: 57
+relation predicate: 13 size: 0
+relation predicate: 14 size: 0
+relation predicate: 15 size: 0
+relation predicate: 16 size: 0
+relation predicate: 17 size: 0
+relation predicate: 18 size: 0
+==================================
+==================================
+==================================
+num applicable actions: 1596
+relation num: 19
+relation predicate: 0 size: 0
+relation predicate: 1 size: 0
+relation predicate: 2 size: 0
+relation predicate: 3 size: 50
+relation predicate: 4 size: 47
+relation predicate: 5 size: 253
+relation predicate: 6 size: 0
+relation predicate: 7 size: 51
+relation predicate: 8 size: 0
+relation predicate: 9 size: 0
+relation predicate: 10 size: 0
+relation predicate: 11 size: 52
+relation predicate: 12 size: 57
+relation predicate: 13 size: 0
+relation predicate: 14 size: 0
+relation predicate: 15 size: 0
+relation predicate: 16 size: 0
+relation predicate: 17 size: 0
+relation predicate: 18 size: 0
+Fact layer passes: 3
+==================================
+==================================
+==================================
+num applicable actions: 5065060
+relation num: 19
+relation predicate: 0 size: 0
+relation predicate: 1 size: 0
+relation predicate: 2 size: 0
+relation predicate: 3 size: 50
+relation predicate: 4 size: 55
+relation predicate: 5 size: 336
+relation predicate: 6 size: 0
+relation predicate: 7 size: 52
+relation predicate: 8 size: 0
+relation predicate: 9 size: 0
+relation predicate: 10 size: 0
+relation predicate: 11 size: 52
+relation predicate: 12 size: 57
+relation predicate: 13 size: 0
+relation predicate: 14 size: 0
+relation predicate: 15 size: 0
+relation predicate: 16 size: 0
+relation predicate: 17 size: 0
+relation predicate: 18 size: 0
+==================================
+==================================
+==================================
+num applicable actions: 1596
+relation num: 19
+relation predicate: 0 size: 0
+relation predicate: 1 size: 0
+relation predicate: 2 size: 0
+relation predicate: 3 size: 50
+relation predicate: 4 size: 55
+relation predicate: 5 size: 336
+relation predicate: 6 size: 0
+relation predicate: 7 size: 52
+relation predicate: 8 size: 0
+relation predicate: 9 size: 0
+relation predicate: 10 size: 0
+relation predicate: 11 size: 52
+relation predicate: 12 size: 57
+relation predicate: 13 size: 0
+relation predicate: 14 size: 0
+relation predicate: 15 size: 0
+relation predicate: 16 size: 0
+relation predicate: 17 size: 0
+relation predicate: 18 size: 0
+Executing "/home/anita/code/powerlifted/builds/release/search/search -f output.lifted -s alt-bfws1 -e ff -g yannakakis -r sparse --seed 1 --plan-file plan --forward-reachability 1"
+Iteration finished correctly.

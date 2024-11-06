@@ -6,3 +6,7 @@
 std::size_t TupleHash::operator()(const std::vector<int> &c) const {
     return boost::hash_range(c.begin(), c.end());
 }
+
+std::size_t PtrTupleHash::operator()(const std::shared_ptr<std::vector<int>> c) const {
+    return boost::hash_range(c->begin(), c->end());
+}

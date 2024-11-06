@@ -79,9 +79,13 @@ int main(int argc, char *argv[]) {
         }
         
     }
-    catch (const bad_alloc& ex) {
+    // catch (const bad_alloc& ex) {
+    //     //search->print_statistics();
+    //     exit_with(utils::ExitCode::SEARCH_OUT_OF_MEMORY);
+    // }
+    catch (const exception& ex) {
         //search->print_statistics();
-        exit_with(utils::ExitCode::SEARCH_OUT_OF_MEMORY);
+        cerr << ex.what();
     }
 
 }

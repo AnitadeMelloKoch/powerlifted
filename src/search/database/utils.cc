@@ -32,3 +32,16 @@ void compute_matching_columns(const Table &t1, const Table &t2, std::vector<int>
     }
 }
 
+void ptr_compute_matching_columns(const PtrTable &t1, const PtrTable &t2, vector<int>& matches1, vector<int>& matches2){
+    auto sz1 = t1.tuple_index.size();
+    auto sz2 = t2.tuple_index.size();
+    for (size_t i = 0; i < sz1; ++i){
+        for (size_t j = 0; j < sz2; ++j){
+            if (t1.tuple_index[i] == t2.tuple_index[j]){
+                matches1.push_back(i);
+                matches2.push_back(j);
+            }
+        }
+    }
+}
+

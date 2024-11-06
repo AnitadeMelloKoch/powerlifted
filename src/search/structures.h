@@ -8,6 +8,8 @@
 #include <unordered_set>
 #include <vector>
 
+#include <memory>
+
 /**
  * @brief GroundAtom is an alias for vector of integers. It is represented
  * as a list of object indices.
@@ -90,6 +92,8 @@ public:
  * @var tuples: Set of tuples (vectors) corresponding to the ground atoms in this relation.
  *
  */
+
+struct PtrRelation;
 struct Relation {
     Relation() = default;
     Relation(int predicate_symbol,
@@ -99,6 +103,7 @@ struct Relation {
 
     Relation(const Relation &) = default;
 
+    Relation(const PtrRelation &relation);
 
     bool operator==(const Relation &other) const {
         return predicate_symbol == other.predicate_symbol && tuples == other.tuples;
@@ -106,6 +111,21 @@ struct Relation {
 
     int predicate_symbol{};
     std::unordered_set<GroundAtom, TupleHash> tuples;
+};
+
+struct PtrRelation {
+    PtrRelation() = default;
+    PtrRelation(int predicate_symbol,
+        std::unordered_set<std::shared_ptr<GroundAtom>, PtrTupleHash> tuples)
+            : predicate_symbol(predicate_symbol),
+            tuples(tuples) {}
+    
+    PtrRelation(const PtrRelation &) = default;
+
+    PtrRelation(const Relation &relation);
+
+    int predicate_symbol{};
+    std::unordered_set<std::shared_ptr<GroundAtom>, PtrTupleHash> tuples;
 };
 
 #endif //SEARCH_STRUCTURES_H

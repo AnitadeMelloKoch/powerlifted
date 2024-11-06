@@ -5,6 +5,8 @@
 #include <vector>
 #include <ostream>
 
+#include <memory>
+
 /*
  * The Action class represents a grounded action.
  * The attribute index is the action schema index, from where we can retrieve its name and number of
@@ -39,5 +41,31 @@ public:
 };
 
 std::ostream &operator<<(std::ostream &os, const LiftedOperatorId& id);
+
+class PtrLiftedOperatorId{
+    private:
+        int index;
+        std::shared_ptr<std::vector<int>> instantiation;
+
+    public:
+        static const PtrLiftedOperatorId no_operator;
+
+        PtrLiftedOperatorId(int index, std::shared_ptr<std::vector<int>> instantiation)
+            : index(index), instantiation(instantiation)
+        {}
+
+        PtrLiftedOperatorId() = delete;
+
+        int get_index() const {
+            return index;
+        }
+
+        std::shared_ptr<std::vector<int>> get_instantiation() const{
+            return instantiation;
+        }
+
+        bool operator==(const PtrLiftedOperatorId &other) const { return index == other.index; }
+        bool operator!=(const PtrLiftedOperatorId &other) const { return !(*this == other); }
+};
 
 #endif  // SEARCH_ACTION_H

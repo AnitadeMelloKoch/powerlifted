@@ -29,7 +29,6 @@ GenericJoinSuccessor::GenericJoinSuccessor(const Task &task)
 Table GenericJoinSuccessor::instantiate(const ActionSchema &action,
                                         const DBState &state)
 {
-
     if (action.is_ground()) {
         throw std::runtime_error("Shouldn't be calling instantiate() on a ground action");
     }

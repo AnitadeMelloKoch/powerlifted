@@ -37,7 +37,7 @@ add_executable(search
         goal_condition.h
         atom.h
         action_schema.cc action_schema.h
-        structures.h
+        structures.h structures.cc
         search_engines/search_factory.cc search_engines/search_factory.h
         search_engines/search.cc search_engines/search.h
         search_engines/breadth_first_search.cc search_engines/breadth_first_search.h

@@ -2,11 +2,13 @@
 #define SEARCH_TABLE_H
 
 #include <vector>
+#include <memory>
 
 /**
  * @brief Data-structure containing a set of tuples and the indices corresponding to
  * the free variable index of each tuple position.
  */
+
 class Table {
 public:
     using tuple_t = std::vector<int>;
@@ -30,5 +32,25 @@ public:
     static const Table& EMPTY_TABLE();
 };
 
+class PtrTable {
+    public:
+        using ptr_tuple_t = std::shared_ptr<std::vector<int>>;
+
+        std::vector<ptr_tuple_t> tuples;
+        std::vector<int> tuple_index;
+
+        bool index_is_variable(std::size_t i) const {
+            return tuple_index[i] >= 0;
+        }
+
+        PtrTable(std::vector<ptr_tuple_t> tuples, std::vector<int> &&tuple_index):
+            tuples(tuples),
+            tuple_index(std::move(tuple_index))
+        {}
+
+        PtrTable() = default;
+
+        static const PtrTable& EMPTY_TABLE();
+};
 
 #endif //SEARCH_TABLE_H
