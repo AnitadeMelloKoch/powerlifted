@@ -69,8 +69,9 @@ int main(int argc, char *argv[]) {
     try {
         if (opt.get_forward_reachability()){
             auto new_state = forward_reachability->generate_fact_layers(task.get_action_schemas(),
-                                                                        task.initial_state);
-            task.dump_state(new_state);
+                                                                        task.initial_state,
+                                                                        task.get_goal());
+            // task.dump_state(new_state);
         }else{
             auto exitcode = search->search(task, *sgen, *heuristic);
             search->print_statistics();

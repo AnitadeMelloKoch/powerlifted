@@ -56,9 +56,11 @@ void FactLayerGenerator::print_relation_stats(vector<Relation> relations){
 
 tuple<vector<PtrRelation>, bool> FactLayerGenerator::generate_next_fact_layer(
     const std::vector<ActionSchema> action_schemas,
-    vector<PtrRelation> relations
+    vector<PtrRelation> &relations,
+    const GoalCondition &goal
 ){
     bool extended = false;
+    bool goal_grounded = false;
 
     for (auto &action : action_schemas){
         auto applicable = get_applicable_actions(action, relations);
@@ -68,14 +70,23 @@ tuple<vector<PtrRelation>, bool> FactLayerGenerator::generate_next_fact_layer(
                                                            op, 
                                                            relations);
             extended = extended | op_extended;
+            if (op_extended){
+                if (check_goal(relations, goal)){
+                    goal_grounded = true;
+                    break;
+                }
+            }
         }
     }
 
-    return make_tuple(relations, extended);
+    bool complete = goal_grounded || !extended;
+
+    return make_tuple(relations, complete);
 }
 
 DBState FactLayerGenerator::generate_fact_layers(const vector<ActionSchema> action_schemas, 
-                                                 const DBState &state){
+                                                 const DBState &state,
+                                                 const GoalCondition &goal){
     
     clock_t timer_start = clock();
     vector<bool> new_nullary_atoms(state.get_nullary_atoms());
@@ -89,10 +100,10 @@ DBState FactLayerGenerator::generate_fact_layers(const vector<ActionSchema> acti
         );
     }
 
-    bool extended = true;
+    bool complete = false;
     int passes = 0;
-    while (extended){
-        tie(relations, extended) = generate_next_fact_layer(action_schemas, relations);
+    while (!complete){
+        tie(relations, complete) = generate_next_fact_layer(action_schemas, relations, goal);
         passes += 1;
         cout << "Fact layer passes: " << passes << endl;
     }
@@ -192,7 +203,7 @@ const GroundAtom FactLayerGenerator::tuple_to_atom(const shared_ptr<vector<int>>
     return ground_atom;
 }
 
-vector<PtrLiftedOperatorId> FactLayerGenerator::get_applicable_actions(const ActionSchema &action, const vector<PtrRelation> relations){
+vector<PtrLiftedOperatorId> FactLayerGenerator::get_applicable_actions(const ActionSchema &action, const vector<PtrRelation> &relations){
     vector<PtrLiftedOperatorId> applicable;
 
     if (action.is_ground()) {
@@ -245,7 +256,7 @@ void FactLayerGenerator::compute_map_indices_to_table_positions(const PtrTable &
     }
 }
 
-bool FactLayerGenerator::is_ground_action_applicable(const ActionSchema &action, const vector<PtrRelation> relations) const{
+bool FactLayerGenerator::is_ground_action_applicable(const ActionSchema &action, const vector<PtrRelation> &relations) const{
     for (const Atom &precond : action.get_precondition()){
         int index = precond.get_predicate_symbol_idx();
         vector<int> tuple;
@@ -386,7 +397,7 @@ PtrPrecompiledActionData FactLayerGenerator::precompile_action_data(const Action
 }
 
 bool FactLayerGenerator::parse_precond_into_join_program(const PtrPrecompiledActionData &adata,
-                                                         const vector<PtrRelation> relations,
+                                                         const vector<PtrRelation> &relations,
                                                          vector<PtrTable>& tables){
     /*
      * Parse the state and the atom preconditions into a set of tables
@@ -421,7 +432,7 @@ bool FactLayerGenerator::parse_precond_into_join_program(const PtrPrecompiledAct
     return true;
 }
 
-PtrTable FactLayerGenerator::instantiate(const ActionSchema &action, const vector<PtrRelation> relations){
+PtrTable FactLayerGenerator::instantiate(const ActionSchema &action, const vector<PtrRelation> &relations){
     
     if (action.is_ground()){
         throw runtime_error("Shouldn't be calling instantiate() on a ground action");
@@ -511,3 +522,21 @@ void FactLayerGenerator::filter_static(const ActionSchema &action, PtrTable &wor
         }
     }
 }
+
+bool FactLayerGenerator::check_goal(const vector<PtrRelation> &relations,
+                                    const GoalCondition &goal){
+    for (const AtomicGoal &atomic_goal : goal.goal){
+        int goal_predicate = atomic_goal.get_predicate_index();
+        const PtrRelation &relation_at_goal_predicate = relations[goal_predicate];
+
+        assert(goal_predicate == relation_at_goal_predicate.predicate_symbol);
+
+        const auto args_in_relation = find_tuple(relation_at_goal_predicate.tuples, atomic_goal.get_arguments());
+        if ((!atomic_goal.is_negated() && !args_in_relation) || (atomic_goal.is_negated() && args_in_relation)){
+            return false;
+        }
+    }
+    return true;
+}
+
+

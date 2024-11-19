@@ -34,12 +34,14 @@ class FactLayerGenerator : public GenericJoinSuccessor{
 
         std::tuple<std::vector<PtrRelation>, bool> generate_next_fact_layer(
             const std::vector<ActionSchema> action_schemas,
-            std::vector<PtrRelation> relations
+            std::vector<PtrRelation> &relations,
+            const GoalCondition &goal
         );
 
         DBState generate_fact_layers(
             const std::vector<ActionSchema> action_schemas,
-            const DBState &state
+            const DBState &state,
+            const GoalCondition &goal
         );
 
         std::tuple<std::vector<PtrRelation>, bool> get_new_relation(
@@ -48,9 +50,9 @@ class FactLayerGenerator : public GenericJoinSuccessor{
             std::vector<PtrRelation> &new_relation
         );
 
-        std::vector<PtrLiftedOperatorId> get_applicable_actions(const ActionSchema &action, const std::vector<PtrRelation> relations);
+        std::vector<PtrLiftedOperatorId> get_applicable_actions(const ActionSchema &action, const std::vector<PtrRelation> &relations);
         
-        bool is_ground_action_applicable(const ActionSchema &action, const std::vector<PtrRelation> relations) const;
+        bool is_ground_action_applicable(const ActionSchema &action, const std::vector<PtrRelation> &relations) const;
 
         void select_tuples(const std::vector<PtrRelation> &relations,
                            const Atom &a,
@@ -58,10 +60,10 @@ class FactLayerGenerator : public GenericJoinSuccessor{
                            const std::vector<int> &constants);
         
         bool parse_precond_into_join_program(const PtrPrecompiledActionData &adata,
-                                             const std::vector<PtrRelation> relations,
+                                             const std::vector<PtrRelation> &relations,
                                              std::vector<PtrTable>& tables);
         
-        PtrTable instantiate(const ActionSchema &action, const std::vector<PtrRelation> relations);
+        PtrTable instantiate(const ActionSchema &action, const std::vector<PtrRelation> &relations);
 
         bool apply_ground_action_effects(const ActionSchema &action,
                                          std::vector<PtrRelation> &relation);
@@ -73,6 +75,8 @@ class FactLayerGenerator : public GenericJoinSuccessor{
         static void filter_static(const ActionSchema &action, PtrTable &working_table);
 
         const GroundAtom tuple_to_atom(const std::shared_ptr<std::vector<int>> tuple, const Atom &eff);
+
+        bool check_goal(const std::vector<PtrRelation> &relations, const GoalCondition &goal);
 
     protected:
         static void order_tuple_by_free_variable_order(const std::vector<int> &free_var_indices,
