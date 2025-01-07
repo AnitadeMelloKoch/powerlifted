@@ -18,7 +18,7 @@ Relation::Relation(const PtrRelation &relation){
 }
 
 PtrRelation::PtrRelation(const Relation &relation){
-    tuples = std::unordered_set<std::shared_ptr<GroundAtom>, PtrTupleHash>();
+    tuples = std::unordered_set<std::shared_ptr<GroundAtom>, PtrTupleHash, PtrTupleEq>();
     for (auto tuple : relation.tuples){
         auto new_tuple = std::vector<int>();
         for (auto &elem : tuple){

@@ -19,4 +19,8 @@ struct PtrTupleHash {
     std::size_t operator()(const std::shared_ptr<std::vector<int>> c) const;
 };
 
+struct PtrTupleEq {
+    bool operator()(const std::shared_ptr<std::vector<int>> a, const std::shared_ptr<std::vector<int>> b) const;
+};
+
 #endif // SEARCH_HASH_STRUCTURES_H

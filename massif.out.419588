@@ -1,0 +1,1320 @@
+desc: (none)
+cmd: /home/anita/code/powerlifted/builds/release/search/search -f output.lifted -s alt-bfws1 -e ff -g yannakakis -r sparse --seed 1 --plan-file plan --forward-reachability 1
+time_unit: i
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=3195049689
+mem_heap_B=91027582
+mem_heap_extra_B=17463162
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=2
+#-----------
+time=5018520662
+mem_heap_B=118131986
+mem_heap_extra_B=33269446
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=3
+#-----------
+time=7858599775
+mem_heap_B=432953250
+mem_heap_extra_B=97198406
+mem_stacks_B=0
+heap_tree=detailed
+n7: 432953250 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 135146880 0x174E97: allocate (new_allocator.h:151)
+  n1: 135146880 0x174E97: allocate (alloc_traits.h:482)
+   n1: 135146880 0x174E97: _M_allocate (stl_vector.h:381)
+    n1: 135146880 0x174E97: _M_create_storage (stl_vector.h:398)
+     n1: 135146880 0x174E97: _Vector_base (stl_vector.h:335)
+      n1: 135146880 0x174E97: vector (stl_vector.h:603)
+       n1: 135146880 0x174E97: _Construct<std::vector<int>, std::vector<int, std::allocator<int> >&> (stl_construct.h:119)
+        n1: 135146880 0x174E97: construct<std::vector<int>, std::vector<int, std::allocator<int> >&> (alloc_traits.h:661)
+         n1: 135146880 0x174E97: _Sp_counted_ptr_inplace<std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:604)
+          n1: 135146880 0x174E97: __shared_count<std::vector<int>, std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:971)
+           n1: 135146880 0x174E97: __shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:1712)
+            n1: 135146880 0x174E97: shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:464)
+             n1: 135146880 0x174E97: make_shared<std::vector<int>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:1010)
+              n1: 135146880 0x174E97: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:120)
+               n1: 135146880 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+                n1: 135146880 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+                 n1: 135146880 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+                  n1: 135146880 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+                   n0: 135146880 0x11B1AA: main (main.cc:73)
+ n1: 122860800 0x174E47: allocate (new_allocator.h:151)
+  n1: 122860800 0x174E47: allocate (alloc_traits.h:482)
+   n1: 122860800 0x174E47: __allocate_guarded<std::allocator<std::_Sp_counted_ptr_inplace<std::vector<int>, std::allocator<void>, (__gnu_cxx::_Lock_policy)2> > > (allocated_ptr.h:98)
+    n1: 122860800 0x174E47: __shared_count<std::vector<int>, std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:969)
+     n1: 122860800 0x174E47: __shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:1712)
+      n1: 122860800 0x174E47: shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:464)
+       n1: 122860800 0x174E47: make_shared<std::vector<int>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:1010)
+        n1: 122860800 0x174E47: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:120)
+         n1: 122860800 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+          n1: 122860800 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+           n1: 122860800 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+            n1: 122860800 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+             n0: 122860800 0x11B1AA: main (main.cc:73)
+ n1: 75497472 0x176182: allocate (new_allocator.h:151)
+  n1: 75497472 0x176182: allocate (alloc_traits.h:482)
+   n1: 75497472 0x176182: _M_allocate (stl_vector.h:381)
+    n2: 75497472 0x176182: void std::vector<std::shared_ptr<std::vector<int, std::allocator<int> > >, std::allocator<std::shared_ptr<std::vector<int, std::allocator<int> > > > >::_M_realloc_insert<std::shared_ptr<std::vector<int, std::allocator<int> > > >(__gnu_cxx::__normal_iterator<std::shared_ptr<std::vector<int, std::allocator<int> > >*, std::vector<std::shared_ptr<std::vector<int, std::allocator<int> > >, std::allocator<std::shared_ptr<std::vector<int, std::allocator<int> > > > > >, std::shared_ptr<std::vector<int, std::allocator<int> > >&&) (vector.tcc:459)
+     n1: 67108864 0x1753F0: emplace_back<std::shared_ptr<std::vector<int, std::allocator<int> > > > (vector.tcc:123)
+      n1: 67108864 0x1753F0: push_back (stl_vector.h:1299)
+       n1: 67108864 0x1753F0: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:120)
+        n1: 67108864 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+         n1: 67108864 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+          n1: 67108864 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+           n1: 67108864 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+            n0: 67108864 0x11B1AA: main (main.cc:73)
+     n1: 8388608 0x174ABE: emplace_back<std::shared_ptr<std::vector<int, std::allocator<int> > > > (vector.tcc:123)
+      n1: 8388608 0x174ABE: push_back (stl_vector.h:1299)
+       n1: 8388608 0x174ABE: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:151)
+        n1: 8388608 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+         n1: 8388608 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+          n1: 8388608 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+           n1: 8388608 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+            n0: 8388608 0x11B1AA: main (main.cc:73)
+ n1: 62914560 0x171892: allocate (new_allocator.h:151)
+  n1: 62914560 0x171892: allocate (alloc_traits.h:482)
+   n1: 62914560 0x171892: _M_allocate (stl_vector.h:381)
+    n2: 62914560 0x171892: void std::vector<std::shared_ptr<std::vector<int, std::allocator<int> > >, std::allocator<std::shared_ptr<std::vector<int, std::allocator<int> > > > >::_M_realloc_insert<std::shared_ptr<std::vector<int, std::allocator<int> > > const&>(__gnu_cxx::__normal_iterator<std::shared_ptr<std::vector<int, std::allocator<int> > >*, std::vector<std::shared_ptr<std::vector<int, std::allocator<int> > >, std::allocator<std::shared_ptr<std::vector<int, std::allocator<int> > > > > >, std::shared_ptr<std::vector<int, std::allocator<int> > > const&) (vector.tcc:459)
+     n1: 62914560 0x174117: push_back (stl_vector.h:1292)
+      n1: 62914560 0x174117: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:127)
+       n1: 62914560 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+        n1: 62914560 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+         n1: 62914560 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+          n1: 62914560 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+           n0: 62914560 0x11B1AA: main (main.cc:73)
+     n0: 0 in 1 place, below massif's threshold (1.00%)
+ n1: 17287600 0x17489D: allocate (new_allocator.h:151)
+  n1: 17287600 0x17489D: allocate (alloc_traits.h:482)
+   n1: 17287600 0x17489D: _M_allocate (stl_vector.h:381)
+    n1: 17287600 0x17489D: _M_create_storage (stl_vector.h:398)
+     n1: 17287600 0x17489D: _Vector_base (stl_vector.h:335)
+      n1: 17287600 0x17489D: vector (stl_vector.h:603)
+       n1: 17287600 0x17489D: _Construct<std::vector<int>, std::vector<int, std::allocator<int> >&> (stl_construct.h:119)
+        n1: 17287600 0x17489D: construct<std::vector<int>, std::vector<int, std::allocator<int> >&> (alloc_traits.h:661)
+         n1: 17287600 0x17489D: _Sp_counted_ptr_inplace<std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:604)
+          n1: 17287600 0x17489D: __shared_count<std::vector<int>, std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:971)
+           n1: 17287600 0x17489D: __shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:1712)
+            n1: 17287600 0x17489D: shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:464)
+             n1: 17287600 0x17489D: make_shared<std::vector<int>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:1010)
+              n1: 17287600 0x17489D: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:151)
+               n1: 17287600 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+                n1: 17287600 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+                 n1: 17287600 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+                  n1: 17287600 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+                   n0: 17287600 0x11B1AA: main (main.cc:73)
+ n1: 15716000 0x174832: allocate (new_allocator.h:151)
+  n1: 15716000 0x174832: allocate (alloc_traits.h:482)
+   n1: 15716000 0x174832: __allocate_guarded<std::allocator<std::_Sp_counted_ptr_inplace<std::vector<int>, std::allocator<void>, (__gnu_cxx::_Lock_policy)2> > > (allocated_ptr.h:98)
+    n1: 15716000 0x174832: __shared_count<std::vector<int>, std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:969)
+     n1: 15716000 0x174832: __shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:1712)
+      n1: 15716000 0x174832: shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:464)
+       n1: 15716000 0x174832: make_shared<std::vector<int>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:1010)
+        n1: 15716000 0x174832: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:151)
+         n1: 15716000 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+          n1: 15716000 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+           n1: 15716000 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+            n1: 15716000 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+             n0: 15716000 0x11B1AA: main (main.cc:73)
+ n0: 3529938 in 313 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=4
+#-----------
+time=10418255211
+mem_heap_B=12953074
+mem_heap_extra_B=2832678
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=5
+#-----------
+time=12154700057
+mem_heap_B=7557658
+mem_heap_extra_B=1630006
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=6
+#-----------
+time=14453681399
+mem_heap_B=217239342
+mem_heap_extra_B=49929298
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=7
+#-----------
+time=16244655432
+mem_heap_B=420212102
+mem_heap_extra_B=82616290
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=8
+#-----------
+time=19283743493
+mem_heap_B=393477230
+mem_heap_extra_B=82577138
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=9
+#-----------
+time=22348342924
+mem_heap_B=10795370
+mem_heap_extra_B=2209230
+mem_stacks_B=0
+heap_tree=detailed
+n5: 10795370 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 4126080 0x17489D: allocate (new_allocator.h:151)
+  n1: 4126080 0x17489D: allocate (alloc_traits.h:482)
+   n1: 4126080 0x17489D: _M_allocate (stl_vector.h:381)
+    n1: 4126080 0x17489D: _M_create_storage (stl_vector.h:398)
+     n1: 4126080 0x17489D: _Vector_base (stl_vector.h:335)
+      n1: 4126080 0x17489D: vector (stl_vector.h:603)
+       n1: 4126080 0x17489D: _Construct<std::vector<int>, std::vector<int, std::allocator<int> >&> (stl_construct.h:119)
+        n1: 4126080 0x17489D: construct<std::vector<int>, std::vector<int, std::allocator<int> >&> (alloc_traits.h:661)
+         n1: 4126080 0x17489D: _Sp_counted_ptr_inplace<std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:604)
+          n1: 4126080 0x17489D: __shared_count<std::vector<int>, std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:971)
+           n1: 4126080 0x17489D: __shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:1712)
+            n1: 4126080 0x17489D: shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:464)
+             n1: 4126080 0x17489D: make_shared<std::vector<int>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:1010)
+              n1: 4126080 0x17489D: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:151)
+               n1: 4126080 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+                n1: 4126080 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+                 n1: 4126080 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+                  n1: 4126080 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+                   n0: 4126080 0x11B1AA: main (main.cc:73)
+ n1: 3438400 0x174832: allocate (new_allocator.h:151)
+  n1: 3438400 0x174832: allocate (alloc_traits.h:482)
+   n1: 3438400 0x174832: __allocate_guarded<std::allocator<std::_Sp_counted_ptr_inplace<std::vector<int>, std::allocator<void>, (__gnu_cxx::_Lock_policy)2> > > (allocated_ptr.h:98)
+    n1: 3438400 0x174832: __shared_count<std::vector<int>, std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:969)
+     n1: 3438400 0x174832: __shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:1712)
+      n1: 3438400 0x174832: shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:464)
+       n1: 3438400 0x174832: make_shared<std::vector<int>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:1010)
+        n1: 3438400 0x174832: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:151)
+         n1: 3438400 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+          n1: 3438400 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+           n1: 3438400 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+            n1: 3438400 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+             n0: 3438400 0x11B1AA: main (main.cc:73)
+ n1: 2097152 0x176182: allocate (new_allocator.h:151)
+  n1: 2097152 0x176182: allocate (alloc_traits.h:482)
+   n1: 2097152 0x176182: _M_allocate (stl_vector.h:381)
+    n2: 2097152 0x176182: void std::vector<std::shared_ptr<std::vector<int, std::allocator<int> > >, std::allocator<std::shared_ptr<std::vector<int, std::allocator<int> > > > >::_M_realloc_insert<std::shared_ptr<std::vector<int, std::allocator<int> > > >(__gnu_cxx::__normal_iterator<std::shared_ptr<std::vector<int, std::allocator<int> > >*, std::vector<std::shared_ptr<std::vector<int, std::allocator<int> > >, std::allocator<std::shared_ptr<std::vector<int, std::allocator<int> > > > > >, std::shared_ptr<std::vector<int, std::allocator<int> > >&&) (vector.tcc:459)
+     n1: 2097152 0x174ABE: emplace_back<std::shared_ptr<std::vector<int, std::allocator<int> > > > (vector.tcc:123)
+      n1: 2097152 0x174ABE: push_back (stl_vector.h:1299)
+       n1: 2097152 0x174ABE: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:151)
+        n1: 2097152 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+         n1: 2097152 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+          n1: 2097152 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+           n1: 2097152 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+            n0: 2097152 0x11B1AA: main (main.cc:73)
+     n0: 0 in 1 place, below massif's threshold (1.00%)
+ n1: 589824 0x171892: allocate (new_allocator.h:151)
+  n1: 589824 0x171892: allocate (alloc_traits.h:482)
+   n1: 589824 0x171892: _M_allocate (stl_vector.h:381)
+    n2: 589824 0x171892: void std::vector<std::shared_ptr<std::vector<int, std::allocator<int> > >, std::allocator<std::shared_ptr<std::vector<int, std::allocator<int> > > > >::_M_realloc_insert<std::shared_ptr<std::vector<int, std::allocator<int> > > const&>(__gnu_cxx::__normal_iterator<std::shared_ptr<std::vector<int, std::allocator<int> > >*, std::vector<std::shared_ptr<std::vector<int, std::allocator<int> > >, std::allocator<std::shared_ptr<std::vector<int, std::allocator<int> > > > > >, std::shared_ptr<std::vector<int, std::allocator<int> > > const&) (vector.tcc:459)
+     n1: 589824 0x174117: push_back (stl_vector.h:1292)
+      n1: 589824 0x174117: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:127)
+       n1: 589824 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+        n1: 589824 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+         n1: 589824 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+          n1: 589824 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+           n0: 589824 0x11B1AA: main (main.cc:73)
+     n0: 0 in 1 place, below massif's threshold (1.00%)
+ n0: 543914 in 315 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=10
+#-----------
+time=23982646492
+mem_heap_B=11262313
+mem_heap_extra_B=2212255
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=11
+#-----------
+time=26229815241
+mem_heap_B=11252969
+mem_heap_extra_B=2210671
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=12
+#-----------
+time=29498425735
+mem_heap_B=427573362
+mem_heap_extra_B=119252118
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=13
+#-----------
+time=31588294901
+mem_heap_B=696911042
+mem_heap_extra_B=181599958
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=14
+#-----------
+time=33426995021
+mem_heap_B=798623754
+mem_heap_extra_B=181664854
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=15
+#-----------
+time=35724492468
+mem_heap_B=1405690470
+mem_heap_extra_B=299123242
+mem_stacks_B=0
+heap_tree=detailed
+n7: 1405690470 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 335544320 0x176182: allocate (new_allocator.h:151)
+  n1: 335544320 0x176182: allocate (alloc_traits.h:482)
+   n1: 335544320 0x176182: _M_allocate (stl_vector.h:381)
+    n2: 335544320 0x176182: void std::vector<std::shared_ptr<std::vector<int, std::allocator<int> > >, std::allocator<std::shared_ptr<std::vector<int, std::allocator<int> > > > >::_M_realloc_insert<std::shared_ptr<std::vector<int, std::allocator<int> > > >(__gnu_cxx::__normal_iterator<std::shared_ptr<std::vector<int, std::allocator<int> > >*, std::vector<std::shared_ptr<std::vector<int, std::allocator<int> > >, std::allocator<std::shared_ptr<std::vector<int, std::allocator<int> > > > > >, std::shared_ptr<std::vector<int, std::allocator<int> > >&&) (vector.tcc:459)
+     n1: 201326592 0x174ABE: emplace_back<std::shared_ptr<std::vector<int, std::allocator<int> > > > (vector.tcc:123)
+      n1: 201326592 0x174ABE: push_back (stl_vector.h:1299)
+       n1: 201326592 0x174ABE: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:151)
+        n1: 201326592 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+         n1: 201326592 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+          n1: 201326592 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+           n1: 201326592 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+            n0: 201326592 0x11B1AA: main (main.cc:73)
+     n1: 134217728 0x1753F0: emplace_back<std::shared_ptr<std::vector<int, std::allocator<int> > > > (vector.tcc:123)
+      n1: 134217728 0x1753F0: push_back (stl_vector.h:1299)
+       n1: 134217728 0x1753F0: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:120)
+        n1: 134217728 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+         n1: 134217728 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+          n1: 134217728 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+           n1: 134217728 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+            n0: 134217728 0x11B1AA: main (main.cc:73)
+ n1: 285120000 0x174E97: allocate (new_allocator.h:151)
+  n1: 285120000 0x174E97: allocate (alloc_traits.h:482)
+   n1: 285120000 0x174E97: _M_allocate (stl_vector.h:381)
+    n1: 285120000 0x174E97: _M_create_storage (stl_vector.h:398)
+     n1: 285120000 0x174E97: _Vector_base (stl_vector.h:335)
+      n1: 285120000 0x174E97: vector (stl_vector.h:603)
+       n1: 285120000 0x174E97: _Construct<std::vector<int>, std::vector<int, std::allocator<int> >&> (stl_construct.h:119)
+        n1: 285120000 0x174E97: construct<std::vector<int>, std::vector<int, std::allocator<int> >&> (alloc_traits.h:661)
+         n1: 285120000 0x174E97: _Sp_counted_ptr_inplace<std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:604)
+          n1: 285120000 0x174E97: __shared_count<std::vector<int>, std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:971)
+           n1: 285120000 0x174E97: __shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:1712)
+            n1: 285120000 0x174E97: shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:464)
+             n1: 285120000 0x174E97: make_shared<std::vector<int>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:1010)
+              n1: 285120000 0x174E97: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:120)
+               n1: 285120000 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+                n1: 285120000 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+                 n1: 285120000 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+                  n1: 285120000 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+                   n0: 285120000 0x11B1AA: main (main.cc:73)
+ n1: 259200000 0x174E47: allocate (new_allocator.h:151)
+  n1: 259200000 0x174E47: allocate (alloc_traits.h:482)
+   n1: 259200000 0x174E47: __allocate_guarded<std::allocator<std::_Sp_counted_ptr_inplace<std::vector<int>, std::allocator<void>, (__gnu_cxx::_Lock_policy)2> > > (allocated_ptr.h:98)
+    n1: 259200000 0x174E47: __shared_count<std::vector<int>, std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:969)
+     n1: 259200000 0x174E47: __shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:1712)
+      n1: 259200000 0x174E47: shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:464)
+       n1: 259200000 0x174E47: make_shared<std::vector<int>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:1010)
+        n1: 259200000 0x174E47: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:120)
+         n1: 259200000 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+          n1: 259200000 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+           n1: 259200000 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+            n1: 259200000 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+             n0: 259200000 0x11B1AA: main (main.cc:73)
+ n1: 184549420 0x17489D: allocate (new_allocator.h:151)
+  n1: 184549420 0x17489D: allocate (alloc_traits.h:482)
+   n1: 184549420 0x17489D: _M_allocate (stl_vector.h:381)
+    n1: 184549420 0x17489D: _M_create_storage (stl_vector.h:398)
+     n1: 184549420 0x17489D: _Vector_base (stl_vector.h:335)
+      n1: 184549420 0x17489D: vector (stl_vector.h:603)
+       n1: 184549420 0x17489D: _Construct<std::vector<int>, std::vector<int, std::allocator<int> >&> (stl_construct.h:119)
+        n1: 184549420 0x17489D: construct<std::vector<int>, std::vector<int, std::allocator<int> >&> (alloc_traits.h:661)
+         n1: 184549420 0x17489D: _Sp_counted_ptr_inplace<std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:604)
+          n1: 184549420 0x17489D: __shared_count<std::vector<int>, std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:971)
+           n1: 184549420 0x17489D: __shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:1712)
+            n1: 184549420 0x17489D: shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:464)
+             n1: 184549420 0x17489D: make_shared<std::vector<int>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:1010)
+              n1: 184549420 0x17489D: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:151)
+               n1: 184549420 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+                n1: 184549420 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+                 n1: 184549420 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+                  n1: 184549420 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+                   n0: 184549420 0x11B1AA: main (main.cc:73)
+ n1: 167772200 0x174832: allocate (new_allocator.h:151)
+  n1: 167772200 0x174832: allocate (alloc_traits.h:482)
+   n1: 167772200 0x174832: __allocate_guarded<std::allocator<std::_Sp_counted_ptr_inplace<std::vector<int>, std::allocator<void>, (__gnu_cxx::_Lock_policy)2> > > (allocated_ptr.h:98)
+    n1: 167772200 0x174832: __shared_count<std::vector<int>, std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:969)
+     n1: 167772200 0x174832: __shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:1712)
+      n1: 167772200 0x174832: shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:464)
+       n1: 167772200 0x174832: make_shared<std::vector<int>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:1010)
+        n1: 167772200 0x174832: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:151)
+         n1: 167772200 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+          n1: 167772200 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+           n1: 167772200 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+            n1: 167772200 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+             n0: 167772200 0x11B1AA: main (main.cc:73)
+ n1: 167772160 0x171892: allocate (new_allocator.h:151)
+  n1: 167772160 0x171892: allocate (alloc_traits.h:482)
+   n1: 167772160 0x171892: _M_allocate (stl_vector.h:381)
+    n2: 167772160 0x171892: void std::vector<std::shared_ptr<std::vector<int, std::allocator<int> > >, std::allocator<std::shared_ptr<std::vector<int, std::allocator<int> > > > >::_M_realloc_insert<std::shared_ptr<std::vector<int, std::allocator<int> > > const&>(__gnu_cxx::__normal_iterator<std::shared_ptr<std::vector<int, std::allocator<int> > >*, std::vector<std::shared_ptr<std::vector<int, std::allocator<int> > >, std::allocator<std::shared_ptr<std::vector<int, std::allocator<int> > > > > >, std::shared_ptr<std::vector<int, std::allocator<int> > > const&) (vector.tcc:459)
+     n1: 167772160 0x174117: push_back (stl_vector.h:1292)
+      n1: 167772160 0x174117: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:127)
+       n1: 167772160 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+        n1: 167772160 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+         n1: 167772160 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+          n1: 167772160 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+           n0: 167772160 0x11B1AA: main (main.cc:73)
+     n0: 0 in 1 place, below massif's threshold (1.00%)
+ n0: 5732370 in 313 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=16
+#-----------
+time=37358798815
+mem_heap_B=544103194
+mem_heap_extra_B=127160470
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=17
+#-----------
+time=39402582611
+mem_heap_B=645942114
+mem_heap_extra_B=147829118
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=18
+#-----------
+time=41036888464
+mem_heap_B=54948998
+mem_heap_extra_B=10390858
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=19
+#-----------
+time=43488347299
+mem_heap_B=53848202
+mem_heap_extra_B=11900358
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=20
+#-----------
+time=46348383823
+mem_heap_B=28482138
+mem_heap_extra_B=6055590
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=21
+#-----------
+time=48269019267
+mem_heap_B=28488162
+mem_heap_extra_B=6056558
+mem_stacks_B=0
+heap_tree=detailed
+n4: 28488162 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 11808000 0x169452: allocate (new_allocator.h:151)
+  n1: 11808000 0x169452: allocate (alloc_traits.h:482)
+   n1: 11808000 0x169452: _M_allocate (stl_vector.h:381)
+    n1: 11808000 0x169452: _M_create_storage (stl_vector.h:398)
+     n1: 11808000 0x169452: _Vector_base (stl_vector.h:335)
+      n1: 11808000 0x169452: vector (stl_vector.h:557)
+       n1: 11808000 0x169452: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:238)
+        n1: 11808000 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+         n1: 11808000 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+          n0: 11808000 0x11B1AA: main (main.cc:73)
+ n1: 9840000 0x1694C2: allocate (new_allocator.h:151)
+  n1: 9840000 0x1694C2: allocate (alloc_traits.h:482)
+   n1: 9840000 0x1694C2: __allocate_guarded<std::allocator<std::_Sp_counted_ptr_inplace<std::vector<int>, std::allocator<void>, (__gnu_cxx::_Lock_policy)2> > > (allocated_ptr.h:98)
+    n1: 9840000 0x1694C2: __shared_count<std::vector<int>, std::allocator<void>, std::vector<int, std::allocator<int> > > (shared_ptr_base.h:969)
+     n1: 9840000 0x1694C2: __shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> > > (shared_ptr_base.h:1712)
+      n1: 9840000 0x1694C2: shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> > > (shared_ptr.h:464)
+       n1: 9840000 0x1694C2: make_shared<std::vector<int>, std::vector<int, std::allocator<int> > > (shared_ptr.h:1010)
+        n1: 9840000 0x1694C2: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:238)
+         n1: 9840000 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+          n1: 9840000 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+           n0: 9840000 0x11B1AA: main (main.cc:73)
+ n1: 6291456 0x171648: allocate (new_allocator.h:151)
+  n1: 6291456 0x171648: allocate (alloc_traits.h:482)
+   n1: 6291456 0x171648: _M_allocate (stl_vector.h:381)
+    n1: 6291456 0x171648: void std::vector<PtrLiftedOperatorId, std::allocator<PtrLiftedOperatorId> >::_M_realloc_insert<int, std::shared_ptr<std::vector<int, std::allocator<int> > > >(__gnu_cxx::__normal_iterator<PtrLiftedOperatorId*, std::vector<PtrLiftedOperatorId, std::allocator<PtrLiftedOperatorId> > >, int&&, std::shared_ptr<std::vector<int, std::allocator<int> > >&&) (vector.tcc:459)
+     n1: 6291456 0x169844: emplace_back<int, std::shared_ptr<std::vector<int, std::allocator<int> > > > (vector.tcc:123)
+      n1: 6291456 0x169844: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:248)
+       n1: 6291456 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+        n1: 6291456 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+         n0: 6291456 0x11B1AA: main (main.cc:73)
+ n0: 548706 in 316 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=22
+#-----------
+time=49924243163
+mem_heap_B=28490834
+mem_heap_extra_B=6057158
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=23
+#-----------
+time=52131208290
+mem_heap_B=28481170
+mem_heap_extra_B=6055198
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=24
+#-----------
+time=53786432237
+mem_heap_B=28489546
+mem_heap_extra_B=6056862
+mem_stacks_B=0
+heap_tree=detailed
+n4: 28489546 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 11808000 0x169452: allocate (new_allocator.h:151)
+  n1: 11808000 0x169452: allocate (alloc_traits.h:482)
+   n1: 11808000 0x169452: _M_allocate (stl_vector.h:381)
+    n1: 11808000 0x169452: _M_create_storage (stl_vector.h:398)
+     n1: 11808000 0x169452: _Vector_base (stl_vector.h:335)
+      n1: 11808000 0x169452: vector (stl_vector.h:557)
+       n1: 11808000 0x169452: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:238)
+        n1: 11808000 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+         n1: 11808000 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+          n0: 11808000 0x11B1AA: main (main.cc:73)
+ n1: 9840000 0x1694C2: allocate (new_allocator.h:151)
+  n1: 9840000 0x1694C2: allocate (alloc_traits.h:482)
+   n1: 9840000 0x1694C2: __allocate_guarded<std::allocator<std::_Sp_counted_ptr_inplace<std::vector<int>, std::allocator<void>, (__gnu_cxx::_Lock_policy)2> > > (allocated_ptr.h:98)
+    n1: 9840000 0x1694C2: __shared_count<std::vector<int>, std::allocator<void>, std::vector<int, std::allocator<int> > > (shared_ptr_base.h:969)
+     n1: 9840000 0x1694C2: __shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> > > (shared_ptr_base.h:1712)
+      n1: 9840000 0x1694C2: shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> > > (shared_ptr.h:464)
+       n1: 9840000 0x1694C2: make_shared<std::vector<int>, std::vector<int, std::allocator<int> > > (shared_ptr.h:1010)
+        n1: 9840000 0x1694C2: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:238)
+         n1: 9840000 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+          n1: 9840000 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+           n0: 9840000 0x11B1AA: main (main.cc:73)
+ n1: 6291456 0x171648: allocate (new_allocator.h:151)
+  n1: 6291456 0x171648: allocate (alloc_traits.h:482)
+   n1: 6291456 0x171648: _M_allocate (stl_vector.h:381)
+    n1: 6291456 0x171648: void std::vector<PtrLiftedOperatorId, std::allocator<PtrLiftedOperatorId> >::_M_realloc_insert<int, std::shared_ptr<std::vector<int, std::allocator<int> > > >(__gnu_cxx::__normal_iterator<PtrLiftedOperatorId*, std::vector<PtrLiftedOperatorId, std::allocator<PtrLiftedOperatorId> > >, int&&, std::shared_ptr<std::vector<int, std::allocator<int> > >&&) (vector.tcc:459)
+     n1: 6291456 0x169844: emplace_back<int, std::shared_ptr<std::vector<int, std::allocator<int> > > > (vector.tcc:123)
+      n1: 6291456 0x169844: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:248)
+       n1: 6291456 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+        n1: 6291456 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+         n0: 6291456 0x11B1AA: main (main.cc:73)
+ n0: 550090 in 316 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=25
+#-----------
+time=55993397371
+mem_heap_B=62456970
+mem_heap_extra_B=15441494
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=26
+#-----------
+time=57112432703
+mem_heap_B=290833842
+mem_heap_extra_B=60567574
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=27
+#-----------
+time=59319397846
+mem_heap_B=690864086
+mem_heap_extra_B=151364322
+mem_stacks_B=0
+heap_tree=detailed
+n6: 690864086 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 282256848 0x174E97: allocate (new_allocator.h:151)
+  n1: 282256848 0x174E97: allocate (alloc_traits.h:482)
+   n1: 282256848 0x174E97: _M_allocate (stl_vector.h:381)
+    n1: 282256848 0x174E97: _M_create_storage (stl_vector.h:398)
+     n1: 282256848 0x174E97: _Vector_base (stl_vector.h:335)
+      n1: 282256848 0x174E97: vector (stl_vector.h:603)
+       n1: 282256848 0x174E97: _Construct<std::vector<int>, std::vector<int, std::allocator<int> >&> (stl_construct.h:119)
+        n1: 282256848 0x174E97: construct<std::vector<int>, std::vector<int, std::allocator<int> >&> (alloc_traits.h:661)
+         n1: 282256848 0x174E97: _Sp_counted_ptr_inplace<std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:604)
+          n1: 282256848 0x174E97: __shared_count<std::vector<int>, std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:971)
+           n1: 282256848 0x174E97: __shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:1712)
+            n1: 282256848 0x174E97: shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:464)
+             n1: 282256848 0x174E97: make_shared<std::vector<int>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:1010)
+              n1: 282256848 0x174E97: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:120)
+               n1: 282256848 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+                n1: 282256848 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+                 n1: 282256848 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+                  n1: 282256848 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+                   n0: 282256848 0x11B1AA: main (main.cc:73)
+ n1: 235214040 0x174E47: allocate (new_allocator.h:151)
+  n1: 235214040 0x174E47: allocate (alloc_traits.h:482)
+   n1: 235214040 0x174E47: __allocate_guarded<std::allocator<std::_Sp_counted_ptr_inplace<std::vector<int>, std::allocator<void>, (__gnu_cxx::_Lock_policy)2> > > (allocated_ptr.h:98)
+    n1: 235214040 0x174E47: __shared_count<std::vector<int>, std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:969)
+     n1: 235214040 0x174E47: __shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:1712)
+      n1: 235214040 0x174E47: shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:464)
+       n1: 235214040 0x174E47: make_shared<std::vector<int>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:1010)
+        n1: 235214040 0x174E47: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:120)
+         n1: 235214040 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+          n1: 235214040 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+           n1: 235214040 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+            n1: 235214040 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+             n0: 235214040 0x11B1AA: main (main.cc:73)
+ n1: 142606336 0x176182: allocate (new_allocator.h:151)
+  n1: 142606336 0x176182: allocate (alloc_traits.h:482)
+   n1: 142606336 0x176182: _M_allocate (stl_vector.h:381)
+    n2: 142606336 0x176182: void std::vector<std::shared_ptr<std::vector<int, std::allocator<int> > >, std::allocator<std::shared_ptr<std::vector<int, std::allocator<int> > > > >::_M_realloc_insert<std::shared_ptr<std::vector<int, std::allocator<int> > > >(__gnu_cxx::__normal_iterator<std::shared_ptr<std::vector<int, std::allocator<int> > >*, std::vector<std::shared_ptr<std::vector<int, std::allocator<int> > >, std::allocator<std::shared_ptr<std::vector<int, std::allocator<int> > > > > >, std::shared_ptr<std::vector<int, std::allocator<int> > >&&) (vector.tcc:459)
+     n1: 134217728 0x1753F0: emplace_back<std::shared_ptr<std::vector<int, std::allocator<int> > > > (vector.tcc:123)
+      n1: 134217728 0x1753F0: push_back (stl_vector.h:1299)
+       n1: 134217728 0x1753F0: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:120)
+        n1: 134217728 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+         n1: 134217728 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+          n1: 134217728 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+           n1: 134217728 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+            n0: 134217728 0x11B1AA: main (main.cc:73)
+     n0: 8388608 in 1 place, below massif's threshold (1.00%)
+ n1: 15840000 0x17489D: allocate (new_allocator.h:151)
+  n1: 15840000 0x17489D: allocate (alloc_traits.h:482)
+   n1: 15840000 0x17489D: _M_allocate (stl_vector.h:381)
+    n1: 15840000 0x17489D: _M_create_storage (stl_vector.h:398)
+     n1: 15840000 0x17489D: _Vector_base (stl_vector.h:335)
+      n1: 15840000 0x17489D: vector (stl_vector.h:603)
+       n1: 15840000 0x17489D: _Construct<std::vector<int>, std::vector<int, std::allocator<int> >&> (stl_construct.h:119)
+        n1: 15840000 0x17489D: construct<std::vector<int>, std::vector<int, std::allocator<int> >&> (alloc_traits.h:661)
+         n1: 15840000 0x17489D: _Sp_counted_ptr_inplace<std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:604)
+          n1: 15840000 0x17489D: __shared_count<std::vector<int>, std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:971)
+           n1: 15840000 0x17489D: __shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:1712)
+            n1: 15840000 0x17489D: shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:464)
+             n1: 15840000 0x17489D: make_shared<std::vector<int>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:1010)
+              n1: 15840000 0x17489D: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:151)
+               n1: 15840000 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+                n1: 15840000 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+                 n1: 15840000 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+                  n1: 15840000 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+                   n0: 15840000 0x11B1AA: main (main.cc:73)
+ n1: 14400000 0x174832: allocate (new_allocator.h:151)
+  n1: 14400000 0x174832: allocate (alloc_traits.h:482)
+   n1: 14400000 0x174832: __allocate_guarded<std::allocator<std::_Sp_counted_ptr_inplace<std::vector<int>, std::allocator<void>, (__gnu_cxx::_Lock_policy)2> > > (allocated_ptr.h:98)
+    n1: 14400000 0x174832: __shared_count<std::vector<int>, std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:969)
+     n1: 14400000 0x174832: __shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:1712)
+      n1: 14400000 0x174832: shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:464)
+       n1: 14400000 0x174832: make_shared<std::vector<int>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:1010)
+        n1: 14400000 0x174832: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:151)
+         n1: 14400000 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+          n1: 14400000 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+           n1: 14400000 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+            n1: 14400000 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+             n0: 14400000 0x11B1AA: main (main.cc:73)
+ n0: 546862 in 314 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=28
+#-----------
+time=60422880657
+mem_heap_B=740657014
+mem_heap_extra_B=155704298
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=29
+#-----------
+time=63181587514
+mem_heap_B=1012268070
+mem_heap_extra_B=181783562
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=30
+#-----------
+time=65083490863
+mem_heap_B=1575293270
+mem_heap_extra_B=307882258
+mem_stacks_B=0
+heap_tree=peak
+n7: 1575293270 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 311040000 0x174E97: allocate (new_allocator.h:151)
+  n1: 311040000 0x174E97: allocate (alloc_traits.h:482)
+   n1: 311040000 0x174E97: _M_allocate (stl_vector.h:381)
+    n1: 311040000 0x174E97: _M_create_storage (stl_vector.h:398)
+     n1: 311040000 0x174E97: _Vector_base (stl_vector.h:335)
+      n1: 311040000 0x174E97: vector (stl_vector.h:603)
+       n1: 311040000 0x174E97: _Construct<std::vector<int>, std::vector<int, std::allocator<int> >&> (stl_construct.h:119)
+        n1: 311040000 0x174E97: construct<std::vector<int>, std::vector<int, std::allocator<int> >&> (alloc_traits.h:661)
+         n1: 311040000 0x174E97: _Sp_counted_ptr_inplace<std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:604)
+          n1: 311040000 0x174E97: __shared_count<std::vector<int>, std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:971)
+           n1: 311040000 0x174E97: __shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:1712)
+            n1: 311040000 0x174E97: shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:464)
+             n1: 311040000 0x174E97: make_shared<std::vector<int>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:1010)
+              n1: 311040000 0x174E97: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:120)
+               n1: 311040000 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+                n1: 311040000 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+                 n1: 311040000 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+                  n1: 311040000 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+                   n0: 311040000 0x11B1AA: main (main.cc:73)
+ n1: 304325424 0x17489D: allocate (new_allocator.h:151)
+  n1: 304325424 0x17489D: allocate (alloc_traits.h:482)
+   n1: 304325424 0x17489D: _M_allocate (stl_vector.h:381)
+    n1: 304325424 0x17489D: _M_create_storage (stl_vector.h:398)
+     n1: 304325424 0x17489D: _Vector_base (stl_vector.h:335)
+      n1: 304325424 0x17489D: vector (stl_vector.h:603)
+       n1: 304325424 0x17489D: _Construct<std::vector<int>, std::vector<int, std::allocator<int> >&> (stl_construct.h:119)
+        n1: 304325424 0x17489D: construct<std::vector<int>, std::vector<int, std::allocator<int> >&> (alloc_traits.h:661)
+         n1: 304325424 0x17489D: _Sp_counted_ptr_inplace<std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:604)
+          n1: 304325424 0x17489D: __shared_count<std::vector<int>, std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:971)
+           n1: 304325424 0x17489D: __shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:1712)
+            n1: 304325424 0x17489D: shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:464)
+             n1: 304325424 0x17489D: make_shared<std::vector<int>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:1010)
+              n1: 304325424 0x17489D: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:151)
+               n1: 304325424 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+                n1: 304325424 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+                 n1: 304325424 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+                  n1: 304325424 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+                   n0: 304325424 0x11B1AA: main (main.cc:73)
+ n1: 268435456 0x176182: allocate (new_allocator.h:151)
+  n1: 268435456 0x176182: allocate (alloc_traits.h:482)
+   n1: 268435456 0x176182: _M_allocate (stl_vector.h:381)
+    n2: 268435456 0x176182: void std::vector<std::shared_ptr<std::vector<int, std::allocator<int> > >, std::allocator<std::shared_ptr<std::vector<int, std::allocator<int> > > > >::_M_realloc_insert<std::shared_ptr<std::vector<int, std::allocator<int> > > >(__gnu_cxx::__normal_iterator<std::shared_ptr<std::vector<int, std::allocator<int> > >*, std::vector<std::shared_ptr<std::vector<int, std::allocator<int> > >, std::allocator<std::shared_ptr<std::vector<int, std::allocator<int> > > > > >, std::shared_ptr<std::vector<int, std::allocator<int> > >&&) (vector.tcc:459)
+     n1: 134217728 0x174ABE: emplace_back<std::shared_ptr<std::vector<int, std::allocator<int> > > > (vector.tcc:123)
+      n1: 134217728 0x174ABE: push_back (stl_vector.h:1299)
+       n1: 134217728 0x174ABE: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:151)
+        n1: 134217728 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+         n1: 134217728 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+          n1: 134217728 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+           n1: 134217728 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+            n0: 134217728 0x11B1AA: main (main.cc:73)
+     n1: 134217728 0x1753F0: emplace_back<std::shared_ptr<std::vector<int, std::allocator<int> > > > (vector.tcc:123)
+      n1: 134217728 0x1753F0: push_back (stl_vector.h:1299)
+       n1: 134217728 0x1753F0: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:120)
+        n1: 134217728 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+         n1: 134217728 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+          n1: 134217728 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+           n1: 134217728 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+            n0: 134217728 0x11B1AA: main (main.cc:73)
+ n1: 259200000 0x174E47: allocate (new_allocator.h:151)
+  n1: 259200000 0x174E47: allocate (alloc_traits.h:482)
+   n1: 259200000 0x174E47: __allocate_guarded<std::allocator<std::_Sp_counted_ptr_inplace<std::vector<int>, std::allocator<void>, (__gnu_cxx::_Lock_policy)2> > > (allocated_ptr.h:98)
+    n1: 259200000 0x174E47: __shared_count<std::vector<int>, std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:969)
+     n1: 259200000 0x174E47: __shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:1712)
+      n1: 259200000 0x174E47: shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:464)
+       n1: 259200000 0x174E47: make_shared<std::vector<int>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:1010)
+        n1: 259200000 0x174E47: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:120)
+         n1: 259200000 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+          n1: 259200000 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+           n1: 259200000 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+            n1: 259200000 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+             n0: 259200000 0x11B1AA: main (main.cc:73)
+ n1: 253604520 0x174832: allocate (new_allocator.h:151)
+  n1: 253604520 0x174832: allocate (alloc_traits.h:482)
+   n1: 253604520 0x174832: __allocate_guarded<std::allocator<std::_Sp_counted_ptr_inplace<std::vector<int>, std::allocator<void>, (__gnu_cxx::_Lock_policy)2> > > (allocated_ptr.h:98)
+    n1: 253604520 0x174832: __shared_count<std::vector<int>, std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:969)
+     n1: 253604520 0x174832: __shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:1712)
+      n1: 253604520 0x174832: shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:464)
+       n1: 253604520 0x174832: make_shared<std::vector<int>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:1010)
+        n1: 253604520 0x174832: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:151)
+         n1: 253604520 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+          n1: 253604520 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+           n1: 253604520 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+            n1: 253604520 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+             n0: 253604520 0x11B1AA: main (main.cc:73)
+ n1: 167772160 0x171892: allocate (new_allocator.h:151)
+  n1: 167772160 0x171892: allocate (alloc_traits.h:482)
+   n1: 167772160 0x171892: _M_allocate (stl_vector.h:381)
+    n2: 167772160 0x171892: void std::vector<std::shared_ptr<std::vector<int, std::allocator<int> > >, std::allocator<std::shared_ptr<std::vector<int, std::allocator<int> > > > >::_M_realloc_insert<std::shared_ptr<std::vector<int, std::allocator<int> > > const&>(__gnu_cxx::__normal_iterator<std::shared_ptr<std::vector<int, std::allocator<int> > >*, std::vector<std::shared_ptr<std::vector<int, std::allocator<int> > >, std::allocator<std::shared_ptr<std::vector<int, std::allocator<int> > > > > >, std::shared_ptr<std::vector<int, std::allocator<int> > > const&) (vector.tcc:459)
+     n1: 167772160 0x174117: push_back (stl_vector.h:1292)
+      n1: 167772160 0x174117: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:127)
+       n1: 167772160 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+        n1: 167772160 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+         n1: 167772160 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+          n1: 167772160 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+           n0: 167772160 0x11B1AA: main (main.cc:73)
+     n0: 0 in 1 place, below massif's threshold (1.00%)
+ n0: 10915710 in 313 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=31
+#-----------
+time=66186973668
+mem_heap_B=707365518
+mem_heap_extra_B=155672162
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=32
+#-----------
+time=68393938947
+mem_heap_B=837129774
+mem_heap_extra_B=155745826
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=33
+#-----------
+time=70049162765
+mem_heap_B=667021278
+mem_heap_extra_B=140741026
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=34
+#-----------
+time=71684750029
+mem_heap_B=40726782
+mem_heap_extra_B=7682618
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=35
+#-----------
+time=74953362573
+mem_heap_B=20639433
+mem_heap_extra_B=3916095
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=36
+#-----------
+time=77404821984
+mem_heap_B=20631961
+mem_heap_extra_B=3914663
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=37
+#-----------
+time=80673434667
+mem_heap_B=20632043
+mem_heap_extra_B=3914461
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=38
+#-----------
+time=83942047167
+mem_heap_B=535689574
+mem_heap_extra_B=132921282
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=39
+#-----------
+time=85576353436
+mem_heap_B=693765978
+mem_heap_extra_B=181600214
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=40
+#-----------
+time=87210659971
+mem_heap_B=779750202
+mem_heap_extra_B=181641014
+mem_stacks_B=0
+heap_tree=detailed
+n5: 779750202 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 285120000 0x174E97: allocate (new_allocator.h:151)
+  n1: 285120000 0x174E97: allocate (alloc_traits.h:482)
+   n1: 285120000 0x174E97: _M_allocate (stl_vector.h:381)
+    n1: 285120000 0x174E97: _M_create_storage (stl_vector.h:398)
+     n1: 285120000 0x174E97: _Vector_base (stl_vector.h:335)
+      n1: 285120000 0x174E97: vector (stl_vector.h:603)
+       n1: 285120000 0x174E97: _Construct<std::vector<int>, std::vector<int, std::allocator<int> >&> (stl_construct.h:119)
+        n1: 285120000 0x174E97: construct<std::vector<int>, std::vector<int, std::allocator<int> >&> (alloc_traits.h:661)
+         n1: 285120000 0x174E97: _Sp_counted_ptr_inplace<std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:604)
+          n1: 285120000 0x174E97: __shared_count<std::vector<int>, std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:971)
+           n1: 285120000 0x174E97: __shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:1712)
+            n1: 285120000 0x174E97: shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:464)
+             n1: 285120000 0x174E97: make_shared<std::vector<int>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:1010)
+              n1: 285120000 0x174E97: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:120)
+               n1: 285120000 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+                n1: 285120000 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+                 n1: 285120000 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+                  n1: 285120000 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+                   n0: 285120000 0x11B1AA: main (main.cc:73)
+ n1: 259200000 0x174E47: allocate (new_allocator.h:151)
+  n1: 259200000 0x174E47: allocate (alloc_traits.h:482)
+   n1: 259200000 0x174E47: __allocate_guarded<std::allocator<std::_Sp_counted_ptr_inplace<std::vector<int>, std::allocator<void>, (__gnu_cxx::_Lock_policy)2> > > (allocated_ptr.h:98)
+    n1: 259200000 0x174E47: __shared_count<std::vector<int>, std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:969)
+     n1: 259200000 0x174E47: __shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:1712)
+      n1: 259200000 0x174E47: shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:464)
+       n1: 259200000 0x174E47: make_shared<std::vector<int>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:1010)
+        n1: 259200000 0x174E47: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:120)
+         n1: 259200000 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+          n1: 259200000 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+           n1: 259200000 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+            n1: 259200000 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+             n0: 259200000 0x11B1AA: main (main.cc:73)
+ n1: 134217728 0x176182: allocate (new_allocator.h:151)
+  n1: 134217728 0x176182: allocate (alloc_traits.h:482)
+   n1: 134217728 0x176182: _M_allocate (stl_vector.h:381)
+    n2: 134217728 0x176182: void std::vector<std::shared_ptr<std::vector<int, std::allocator<int> > >, std::allocator<std::shared_ptr<std::vector<int, std::allocator<int> > > > >::_M_realloc_insert<std::shared_ptr<std::vector<int, std::allocator<int> > > >(__gnu_cxx::__normal_iterator<std::shared_ptr<std::vector<int, std::allocator<int> > >*, std::vector<std::shared_ptr<std::vector<int, std::allocator<int> > >, std::allocator<std::shared_ptr<std::vector<int, std::allocator<int> > > > > >, std::shared_ptr<std::vector<int, std::allocator<int> > >&&) (vector.tcc:459)
+     n1: 134217728 0x1753F0: emplace_back<std::shared_ptr<std::vector<int, std::allocator<int> > > > (vector.tcc:123)
+      n1: 134217728 0x1753F0: push_back (stl_vector.h:1299)
+       n1: 134217728 0x1753F0: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:120)
+        n1: 134217728 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+         n1: 134217728 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+          n1: 134217728 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+           n1: 134217728 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+            n0: 134217728 0x11B1AA: main (main.cc:73)
+     n0: 0 in 1 place, below massif's threshold (1.00%)
+ n1: 100663296 0x171892: allocate (new_allocator.h:151)
+  n1: 100663296 0x171892: allocate (alloc_traits.h:482)
+   n1: 100663296 0x171892: _M_allocate (stl_vector.h:381)
+    n2: 100663296 0x171892: void std::vector<std::shared_ptr<std::vector<int, std::allocator<int> > >, std::allocator<std::shared_ptr<std::vector<int, std::allocator<int> > > > >::_M_realloc_insert<std::shared_ptr<std::vector<int, std::allocator<int> > > const&>(__gnu_cxx::__normal_iterator<std::shared_ptr<std::vector<int, std::allocator<int> > >*, std::vector<std::shared_ptr<std::vector<int, std::allocator<int> > >, std::allocator<std::shared_ptr<std::vector<int, std::allocator<int> > > > > >, std::shared_ptr<std::vector<int, std::allocator<int> > > const&) (vector.tcc:459)
+     n1: 100663296 0x174117: push_back (stl_vector.h:1292)
+      n1: 100663296 0x174117: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:127)
+       n1: 100663296 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+        n1: 100663296 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+         n1: 100663296 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+          n1: 100663296 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+           n0: 100663296 0x11B1AA: main (main.cc:73)
+     n0: 0 in 1 place, below massif's threshold (1.00%)
+ n0: 549178 in 315 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=41
+#-----------
+time=88844966277
+mem_heap_B=1015848702
+mem_heap_extra_B=225096066
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=42
+#-----------
+time=92113578885
+mem_heap_B=707991202
+mem_heap_extra_B=181593310
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=43
+#-----------
+time=94565038328
+mem_heap_B=820652234
+mem_heap_extra_B=181594870
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=44
+#-----------
+time=97833650832
+mem_heap_B=67164942
+mem_heap_extra_B=12681818
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=45
+#-----------
+time=101102263244
+mem_heap_B=42704346
+mem_heap_extra_B=8217774
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=46
+#-----------
+time=104370875652
+mem_heap_B=42701106
+mem_heap_extra_B=8217150
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=47
+#-----------
+time=106005185828
+mem_heap_B=42694314
+mem_heap_extra_B=8215894
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=48
+#-----------
+time=108456645184
+mem_heap_B=42703698
+mem_heap_extra_B=8217670
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=49
+#-----------
+time=110908104530
+mem_heap_B=42698290
+mem_heap_extra_B=8216534
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=50
+#-----------
+time=112011587425
+mem_heap_B=42697114
+mem_heap_extra_B=8216342
+mem_stacks_B=0
+heap_tree=detailed
+n4: 42697114 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 16128000 0x169452: allocate (new_allocator.h:151)
+  n1: 16128000 0x169452: allocate (alloc_traits.h:482)
+   n1: 16128000 0x169452: _M_allocate (stl_vector.h:381)
+    n1: 16128000 0x169452: _M_create_storage (stl_vector.h:398)
+     n1: 16128000 0x169452: _Vector_base (stl_vector.h:335)
+      n1: 16128000 0x169452: vector (stl_vector.h:557)
+       n1: 16128000 0x169452: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:238)
+        n1: 16128000 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+         n1: 16128000 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+          n0: 16128000 0x11B1AA: main (main.cc:73)
+ n1: 13440000 0x1694C2: allocate (new_allocator.h:151)
+  n1: 13440000 0x1694C2: allocate (alloc_traits.h:482)
+   n1: 13440000 0x1694C2: __allocate_guarded<std::allocator<std::_Sp_counted_ptr_inplace<std::vector<int>, std::allocator<void>, (__gnu_cxx::_Lock_policy)2> > > (allocated_ptr.h:98)
+    n1: 13440000 0x1694C2: __shared_count<std::vector<int>, std::allocator<void>, std::vector<int, std::allocator<int> > > (shared_ptr_base.h:969)
+     n1: 13440000 0x1694C2: __shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> > > (shared_ptr_base.h:1712)
+      n1: 13440000 0x1694C2: shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> > > (shared_ptr.h:464)
+       n1: 13440000 0x1694C2: make_shared<std::vector<int>, std::vector<int, std::allocator<int> > > (shared_ptr.h:1010)
+        n1: 13440000 0x1694C2: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:238)
+         n1: 13440000 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+          n1: 13440000 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+           n0: 13440000 0x11B1AA: main (main.cc:73)
+ n1: 12582912 0x171648: allocate (new_allocator.h:151)
+  n1: 12582912 0x171648: allocate (alloc_traits.h:482)
+   n1: 12582912 0x171648: _M_allocate (stl_vector.h:381)
+    n1: 12582912 0x171648: void std::vector<PtrLiftedOperatorId, std::allocator<PtrLiftedOperatorId> >::_M_realloc_insert<int, std::shared_ptr<std::vector<int, std::allocator<int> > > >(__gnu_cxx::__normal_iterator<PtrLiftedOperatorId*, std::vector<PtrLiftedOperatorId, std::allocator<PtrLiftedOperatorId> > >, int&&, std::shared_ptr<std::vector<int, std::allocator<int> > >&&) (vector.tcc:459)
+     n1: 12582912 0x169844: emplace_back<int, std::shared_ptr<std::vector<int, std::allocator<int> > > > (vector.tcc:123)
+      n1: 12582912 0x169844: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:248)
+       n1: 12582912 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+        n1: 12582912 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+         n0: 12582912 0x11B1AA: main (main.cc:73)
+ n0: 546202 in 316 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=51
+#-----------
+time=113115070283
+mem_heap_B=42701386
+mem_heap_extra_B=8217086
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=52
+#-----------
+time=114218553127
+mem_heap_B=42700530
+mem_heap_extra_B=8216990
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=53
+#-----------
+time=115322036347
+mem_heap_B=42694314
+mem_heap_extra_B=8216006
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=54
+#-----------
+time=116425519161
+mem_heap_B=42700370
+mem_heap_extra_B=8216950
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=55
+#-----------
+time=117529001992
+mem_heap_B=41273682
+mem_heap_extra_B=10232334
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=56
+#-----------
+time=118632484840
+mem_heap_B=195881746
+mem_heap_extra_B=43822854
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=57
+#-----------
+time=119735967668
+mem_heap_B=395896930
+mem_heap_extra_B=89221230
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=58
+#-----------
+time=120839450510
+mem_heap_B=625581750
+mem_heap_extra_B=133560138
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=59
+#-----------
+time=121942933575
+mem_heap_B=716540438
+mem_heap_extra_B=155680410
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=60
+#-----------
+time=123046416508
+mem_heap_B=788892326
+mem_heap_extra_B=155712730
+mem_stacks_B=0
+heap_tree=detailed
+n5: 788892326 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 311040000 0x174E97: allocate (new_allocator.h:151)
+  n1: 311040000 0x174E97: allocate (alloc_traits.h:482)
+   n1: 311040000 0x174E97: _M_allocate (stl_vector.h:381)
+    n1: 311040000 0x174E97: _M_create_storage (stl_vector.h:398)
+     n1: 311040000 0x174E97: _Vector_base (stl_vector.h:335)
+      n1: 311040000 0x174E97: vector (stl_vector.h:603)
+       n1: 311040000 0x174E97: _Construct<std::vector<int>, std::vector<int, std::allocator<int> >&> (stl_construct.h:119)
+        n1: 311040000 0x174E97: construct<std::vector<int>, std::vector<int, std::allocator<int> >&> (alloc_traits.h:661)
+         n1: 311040000 0x174E97: _Sp_counted_ptr_inplace<std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:604)
+          n1: 311040000 0x174E97: __shared_count<std::vector<int>, std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:971)
+           n1: 311040000 0x174E97: __shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:1712)
+            n1: 311040000 0x174E97: shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:464)
+             n1: 311040000 0x174E97: make_shared<std::vector<int>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:1010)
+              n1: 311040000 0x174E97: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:120)
+               n1: 311040000 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+                n1: 311040000 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+                 n1: 311040000 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+                  n1: 311040000 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+                   n0: 311040000 0x11B1AA: main (main.cc:73)
+ n1: 259200000 0x174E47: allocate (new_allocator.h:151)
+  n1: 259200000 0x174E47: allocate (alloc_traits.h:482)
+   n1: 259200000 0x174E47: __allocate_guarded<std::allocator<std::_Sp_counted_ptr_inplace<std::vector<int>, std::allocator<void>, (__gnu_cxx::_Lock_policy)2> > > (allocated_ptr.h:98)
+    n1: 259200000 0x174E47: __shared_count<std::vector<int>, std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:969)
+     n1: 259200000 0x174E47: __shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:1712)
+      n1: 259200000 0x174E47: shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:464)
+       n1: 259200000 0x174E47: make_shared<std::vector<int>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:1010)
+        n1: 259200000 0x174E47: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:120)
+         n1: 259200000 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+          n1: 259200000 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+           n1: 259200000 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+            n1: 259200000 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+             n0: 259200000 0x11B1AA: main (main.cc:73)
+ n1: 134217728 0x176182: allocate (new_allocator.h:151)
+  n1: 134217728 0x176182: allocate (alloc_traits.h:482)
+   n1: 134217728 0x176182: _M_allocate (stl_vector.h:381)
+    n2: 134217728 0x176182: void std::vector<std::shared_ptr<std::vector<int, std::allocator<int> > >, std::allocator<std::shared_ptr<std::vector<int, std::allocator<int> > > > >::_M_realloc_insert<std::shared_ptr<std::vector<int, std::allocator<int> > > >(__gnu_cxx::__normal_iterator<std::shared_ptr<std::vector<int, std::allocator<int> > >*, std::vector<std::shared_ptr<std::vector<int, std::allocator<int> > >, std::allocator<std::shared_ptr<std::vector<int, std::allocator<int> > > > > >, std::shared_ptr<std::vector<int, std::allocator<int> > >&&) (vector.tcc:459)
+     n1: 134217728 0x1753F0: emplace_back<std::shared_ptr<std::vector<int, std::allocator<int> > > > (vector.tcc:123)
+      n1: 134217728 0x1753F0: push_back (stl_vector.h:1299)
+       n1: 134217728 0x1753F0: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:120)
+        n1: 134217728 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+         n1: 134217728 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+          n1: 134217728 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+           n1: 134217728 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+            n0: 134217728 0x11B1AA: main (main.cc:73)
+     n0: 0 in 1 place, below massif's threshold (1.00%)
+ n1: 83886080 0x171892: allocate (new_allocator.h:151)
+  n1: 83886080 0x171892: allocate (alloc_traits.h:482)
+   n1: 83886080 0x171892: _M_allocate (stl_vector.h:381)
+    n2: 83886080 0x171892: void std::vector<std::shared_ptr<std::vector<int, std::allocator<int> > >, std::allocator<std::shared_ptr<std::vector<int, std::allocator<int> > > > >::_M_realloc_insert<std::shared_ptr<std::vector<int, std::allocator<int> > > const&>(__gnu_cxx::__normal_iterator<std::shared_ptr<std::vector<int, std::allocator<int> > >*, std::vector<std::shared_ptr<std::vector<int, std::allocator<int> > >, std::allocator<std::shared_ptr<std::vector<int, std::allocator<int> > > > > >, std::shared_ptr<std::vector<int, std::allocator<int> > > const&) (vector.tcc:459)
+     n1: 83886080 0x174117: push_back (stl_vector.h:1292)
+      n1: 83886080 0x174117: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:127)
+       n1: 83886080 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+        n1: 83886080 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+         n1: 83886080 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+          n1: 83886080 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+           n0: 83886080 0x11B1AA: main (main.cc:73)
+     n0: 0 in 1 place, below massif's threshold (1.00%)
+ n0: 548518 in 315 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=61
+#-----------
+time=124149899549
+mem_heap_B=856001190
+mem_heap_extra_B=155712730
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=62
+#-----------
+time=125253382398
+mem_heap_B=1042306278
+mem_heap_extra_B=189976026
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=63
+#-----------
+time=126356865203
+mem_heap_B=1405814358
+mem_heap_extra_B=261660962
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=64
+#-----------
+time=127460348032
+mem_heap_B=1234163054
+mem_heap_extra_B=263386922
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=65
+#-----------
+time=128563831114
+mem_heap_B=733320198
+mem_heap_extra_B=155673146
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=66
+#-----------
+time=129667314132
+mem_heap_B=799380486
+mem_heap_extra_B=155745722
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=67
+#-----------
+time=130770796967
+mem_heap_B=837130602
+mem_heap_extra_B=155746286
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=68
+#-----------
+time=131874279822
+mem_heap_B=739854062
+mem_heap_extra_B=160604722
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=69
+#-----------
+time=132977762705
+mem_heap_B=120193926
+mem_heap_extra_B=24347530
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=70
+#-----------
+time=134081245533
+mem_heap_B=24628494
+mem_heap_extra_B=4435946
+mem_stacks_B=0
+heap_tree=detailed
+n4: 24628494 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 8559408 0x17489D: allocate (new_allocator.h:151)
+  n1: 8559408 0x17489D: allocate (alloc_traits.h:482)
+   n1: 8559408 0x17489D: _M_allocate (stl_vector.h:381)
+    n1: 8559408 0x17489D: _M_create_storage (stl_vector.h:398)
+     n1: 8559408 0x17489D: _Vector_base (stl_vector.h:335)
+      n1: 8559408 0x17489D: vector (stl_vector.h:603)
+       n1: 8559408 0x17489D: _Construct<std::vector<int>, std::vector<int, std::allocator<int> >&> (stl_construct.h:119)
+        n1: 8559408 0x17489D: construct<std::vector<int>, std::vector<int, std::allocator<int> >&> (alloc_traits.h:661)
+         n1: 8559408 0x17489D: _Sp_counted_ptr_inplace<std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:604)
+          n1: 8559408 0x17489D: __shared_count<std::vector<int>, std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:971)
+           n1: 8559408 0x17489D: __shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:1712)
+            n1: 8559408 0x17489D: shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:464)
+             n1: 8559408 0x17489D: make_shared<std::vector<int>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:1010)
+              n1: 8559408 0x17489D: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:151)
+               n1: 8559408 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+                n1: 8559408 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+                 n1: 8559408 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+                  n1: 8559408 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+                   n0: 8559408 0x11B1AA: main (main.cc:73)
+ n1: 8388608 0x176182: allocate (new_allocator.h:151)
+  n1: 8388608 0x176182: allocate (alloc_traits.h:482)
+   n1: 8388608 0x176182: _M_allocate (stl_vector.h:381)
+    n2: 8388608 0x176182: void std::vector<std::shared_ptr<std::vector<int, std::allocator<int> > >, std::allocator<std::shared_ptr<std::vector<int, std::allocator<int> > > > >::_M_realloc_insert<std::shared_ptr<std::vector<int, std::allocator<int> > > >(__gnu_cxx::__normal_iterator<std::shared_ptr<std::vector<int, std::allocator<int> > >*, std::vector<std::shared_ptr<std::vector<int, std::allocator<int> > >, std::allocator<std::shared_ptr<std::vector<int, std::allocator<int> > > > > >, std::shared_ptr<std::vector<int, std::allocator<int> > >&&) (vector.tcc:459)
+     n1: 8388608 0x174ABE: emplace_back<std::shared_ptr<std::vector<int, std::allocator<int> > > > (vector.tcc:123)
+      n1: 8388608 0x174ABE: push_back (stl_vector.h:1299)
+       n1: 8388608 0x174ABE: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:151)
+        n1: 8388608 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+         n1: 8388608 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+          n1: 8388608 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+           n1: 8388608 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+            n0: 8388608 0x11B1AA: main (main.cc:73)
+     n0: 0 in 1 place, below massif's threshold (1.00%)
+ n1: 7132840 0x174832: allocate (new_allocator.h:151)
+  n1: 7132840 0x174832: allocate (alloc_traits.h:482)
+   n1: 7132840 0x174832: __allocate_guarded<std::allocator<std::_Sp_counted_ptr_inplace<std::vector<int>, std::allocator<void>, (__gnu_cxx::_Lock_policy)2> > > (allocated_ptr.h:98)
+    n1: 7132840 0x174832: __shared_count<std::vector<int>, std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:969)
+     n1: 7132840 0x174832: __shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr_base.h:1712)
+      n1: 7132840 0x174832: shared_ptr<std::allocator<void>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:464)
+       n1: 7132840 0x174832: make_shared<std::vector<int>, std::vector<int, std::allocator<int> >&> (shared_ptr.h:1010)
+        n1: 7132840 0x174832: ptr_hash_join(PtrTable&, PtrTable const&) (hash_join.cc:151)
+         n1: 7132840 0x168B70: FactLayerGenerator::instantiate(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:467)
+          n1: 7132840 0x169395: FactLayerGenerator::get_applicable_actions(ActionSchema const&, std::vector<PtrRelation, std::allocator<PtrRelation> > const&) (fact_layer_generator.cc:219)
+           n1: 7132840 0x16C1D1: FactLayerGenerator::generate_next_fact_layer(std::vector<ActionSchema, std::allocator<ActionSchema> >, std::vector<PtrRelation, std::allocator<PtrRelation> >&, GoalCondition const&) (fact_layer_generator.cc:66)
+            n1: 7132840 0x16EBB7: FactLayerGenerator::generate_fact_layers(std::vector<ActionSchema, std::allocator<ActionSchema> >, DBState const&, GoalCondition const&) (fact_layer_generator.cc:108)
+             n0: 7132840 0x11B1AA: main (main.cc:73)
+ n0: 547638 in 316 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=71
+#-----------
+time=135184728356
+mem_heap_B=33853242
+mem_heap_extra_B=6836670
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=72
+#-----------
+time=136288211166
+mem_heap_B=20636169
+mem_heap_extra_B=3915671
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=73
+#-----------
+time=137391694078
+mem_heap_B=20633257
+mem_heap_extra_B=3915135
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=74
+#-----------
+time=138495176967
+mem_heap_B=20632353
+mem_heap_extra_B=3914807
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=75
+#-----------
+time=139598659822
+mem_heap_B=20640161
+mem_heap_extra_B=3916447
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=76
+#-----------
+time=140702142627
+mem_heap_B=20642369
+mem_heap_extra_B=3916839
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=77
+#-----------
+time=141805625528
+mem_heap_B=20635657
+mem_heap_extra_B=3915383
+mem_stacks_B=0
+heap_tree=empty

@@ -116,7 +116,7 @@ struct Relation {
 struct PtrRelation {
     PtrRelation() = default;
     PtrRelation(int predicate_symbol,
-        std::unordered_set<std::shared_ptr<GroundAtom>, PtrTupleHash> tuples)
+        std::unordered_set<std::shared_ptr<GroundAtom>, PtrTupleHash, PtrTupleEq> tuples)
             : predicate_symbol(predicate_symbol),
             tuples(tuples) {}
     
@@ -125,7 +125,7 @@ struct PtrRelation {
     PtrRelation(const Relation &relation);
 
     int predicate_symbol{};
-    std::unordered_set<std::shared_ptr<GroundAtom>, PtrTupleHash> tuples;
+    std::unordered_set<std::shared_ptr<GroundAtom>, PtrTupleHash, PtrTupleEq> tuples;
 };
 
 #endif //SEARCH_STRUCTURES_H

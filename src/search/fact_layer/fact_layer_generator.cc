@@ -11,13 +11,14 @@
 #include <cassert>
 
 #include <memory>
+#include <fstream>
 
 using namespace std;
 
 
 
 FactLayerGenerator::FactLayerGenerator(const Task &task) 
-    : GenericJoinSuccessor(task), static_info(task.static_info){
+    : GenericJoinSuccessor(task), static_info(task.static_info), objects(task.objects), predicates(task.predicates){
     action_data = precompile_action_data(task.get_action_schemas());
 }
 
@@ -25,17 +26,33 @@ void FactLayerGenerator::dump_relation_list(std::vector<PtrRelation> relations){
     cout << "relations size: " << relations.size() << " " << endl;
     for(size_t i = 0; i < relations.size(); i++){
         auto tuples = relations[i].tuples;
-        cout << "relation predicate: " << relations[i].predicate_symbol << " ";
+        cout << "relation predicate: " << predicates[relations[i].predicate_symbol].get_name() << " ";
         for (auto &tuple:tuples) {
             cout << "(";
             for (auto obj : *tuple){
-                cout << obj << ",";
+                cout << objects[obj].get_name() << ",";
             }
             cout << "), ";
         }
         cout << " | ";
     }
     cout << endl;
+}
+
+void FactLayerGenerator::dump_idx_name(vector<PtrRelation> relations){
+    cout << "_______________________________________" << endl;
+    cout << "Relations" << endl;
+    cout << "---------------------------------------" << endl;
+    for (size_t i = 0; i < relations.size(); i++){
+        cout << i << " " << predicates[relations[i].predicate_symbol].get_name() << endl;
+    }
+    cout << "---------------------------------------" << endl;
+    cout << "Objects" << endl;
+    cout << "---------------------------------------" << endl;
+    for (size_t i = 0; i < objects.size(); i++){
+        cout << i << " " << objects[i].get_name() << endl;
+    }
+    cout << "_______________________________________" << endl;
 }
 
 void FactLayerGenerator::print_relation_stats(vector<PtrRelation> relations){
@@ -57,37 +74,18 @@ void FactLayerGenerator::print_relation_stats(vector<Relation> relations){
 tuple<vector<PtrRelation>, bool> FactLayerGenerator::generate_next_fact_layer(
     const std::vector<ActionSchema> action_schemas,
     vector<PtrRelation> &relations,
-    const GoalCondition &goal
+    const GoalCondition &goal,
+    vector<bool> &new_nullary_atoms
 ){
-    bool extended = false;
-    bool goal_grounded = false;
+    auto expanded = effects_from_table(action_schemas,
+                                       relations);
 
-    for (auto &action : action_schemas){
-        auto applicable = get_applicable_actions(action, relations);
-        for (auto &op : applicable){
-            bool op_extended;
-            tie(relations, op_extended) = get_new_relation(action,
-                                                           op, 
-                                                           relations);
-            extended = extended | op_extended;
-            if (op_extended){
-                if (check_goal(relations, goal)){
-                    goal_grounded = true;
-                    break;
-                }
-            }
-        }
-    }
-
-    bool complete = goal_grounded || !extended;
-
-    return make_tuple(relations, complete);
+    return make_tuple(relations, !expanded);
 }
 
 DBState FactLayerGenerator::generate_fact_layers(const vector<ActionSchema> action_schemas, 
                                                  const DBState &state,
                                                  const GoalCondition &goal){
-    
     clock_t timer_start = clock();
     vector<bool> new_nullary_atoms(state.get_nullary_atoms());
     auto relations = vector<PtrRelation>();
@@ -102,8 +100,9 @@ DBState FactLayerGenerator::generate_fact_layers(const vector<ActionSchema> acti
 
     bool complete = false;
     int passes = 0;
+    dump_idx_name(relations);
     while (!complete){
-        tie(relations, complete) = generate_next_fact_layer(action_schemas, relations, goal);
+        tie(relations, complete) = generate_next_fact_layer(action_schemas, relations, goal, new_nullary_atoms);
         passes += 1;
         cout << "Fact layer passes: " << passes << endl;
     }
@@ -111,6 +110,8 @@ DBState FactLayerGenerator::generate_fact_layers(const vector<ActionSchema> acti
     cout << "Fact layers generated with " << passes << " passes" << endl;
     cout << "Fact layers total time: " << double(clock() - timer_start)/CLOCKS_PER_SEC << endl;
     
+    relations_to_csv(relations, "big_relations.csv");
+
     auto state_relations = vector<Relation>();
     for (auto relation : relations){
         state_relations.push_back(
@@ -174,13 +175,10 @@ bool FactLayerGenerator::apply_lifted_action_effects(
         GroundAtom ga = tuple_to_atom(tuple, eff);
         assert(eff.get_predicate_symbol_idx() == relation[eff.get_predicate_symbol_idx()].predicate_symbol);
         if (!eff.is_negated()){
-            int predicate_symbol_idx = eff.get_predicate_symbol_idx();
-            if (!find_tuple(relation[predicate_symbol_idx].tuples, ga)){
-                auto tuples_size = relation[eff.get_predicate_symbol_idx()].tuples.size();
-                relation[eff.get_predicate_symbol_idx()].tuples.insert(make_shared<GroundAtom>(ga));
-                if (relation[eff.get_predicate_symbol_idx()].tuples.size() > tuples_size){
-                    expanded = true;
-                }
+            auto tuples_size = relation[eff.get_predicate_symbol_idx()].tuples.size();
+            relation[eff.get_predicate_symbol_idx()].tuples.insert(make_shared<GroundAtom>(ga));
+            if (relation[eff.get_predicate_symbol_idx()].tuples.size() > tuples_size){
+                expanded = true;
             }
         }
     }
@@ -201,39 +199,6 @@ const GroundAtom FactLayerGenerator::tuple_to_atom(const shared_ptr<vector<int>>
     assert(find(ground_atom.begin(), ground_atom.end(), -1) == ground_atom.end());
 
     return ground_atom;
-}
-
-vector<PtrLiftedOperatorId> FactLayerGenerator::get_applicable_actions(const ActionSchema &action, const vector<PtrRelation> &relations){
-    vector<PtrLiftedOperatorId> applicable;
-
-    if (action.is_ground()) {
-        if (is_ground_action_applicable(action, relations)){
-            applicable.emplace_back(action.get_index(), 
-                make_shared<vector<int>>(vector<int>()));
-        }
-        return applicable;
-    }
-
-    PtrTable instantiations = instantiate(action, relations);
-    if (instantiations.tuples.empty()){
-        return applicable;
-    }
-
-    vector<int> free_var_indices;
-    vector<int> map_indices_to_position;
-    compute_map_indices_to_table_positions(
-        instantiations, free_var_indices, map_indices_to_position
-    );
-
-    for (const shared_ptr<vector<int>> &tuple_with_const: instantiations.tuples){
-        shared_ptr<vector<int>> ordered_tuple = make_shared<vector<int>>(vector<int>(free_var_indices.size()));
-        order_tuple_by_free_variable_order(free_var_indices,
-                                           map_indices_to_position,
-                                           tuple_with_const,
-                                           ordered_tuple);
-        applicable.emplace_back(action.get_index(), move(ordered_tuple));
-    }
-    return applicable;
 }
 
 void FactLayerGenerator::order_tuple_by_free_variable_order(const vector<int> &free_var_indices,
@@ -297,7 +262,7 @@ bool FactLayerGenerator::is_ground_action_applicable(const ActionSchema &action,
     return true;
 }
 
-bool FactLayerGenerator::find_tuple(const unordered_set<PtrTable::ptr_tuple_t, PtrTupleHash> &tuples_in_relation, const vector<int> &tuple) const {
+bool FactLayerGenerator::find_tuple(const unordered_set<PtrTable::ptr_tuple_t, PtrTupleHash, PtrTupleEq> &tuples_in_relation, const vector<int> &tuple) const {
     for (auto rel_tup : tuples_in_relation){
         if (rel_tup->size() == tuple.size()){
             bool tuple_found = true;
@@ -316,7 +281,7 @@ bool FactLayerGenerator::find_tuple(const unordered_set<PtrTable::ptr_tuple_t, P
 
 void FactLayerGenerator::select_tuples(const vector<PtrRelation> &relations,
                                        const Atom &a,
-                                       vector<shared_ptr<GroundAtom>> &tuples,
+                                       unordered_set<shared_ptr<GroundAtom>, PtrTupleHash, PtrTupleEq> &tuples,
                                        const vector<int> &constants){
     for (const shared_ptr<GroundAtom> &atom : relations[a.get_predicate_symbol_idx()].tuples){
         bool match_constants = true;
@@ -327,7 +292,7 @@ void FactLayerGenerator::select_tuples(const vector<PtrRelation> &relations,
                 break;
             }
         }
-        if (match_constants) tuples.push_back(atom);
+        if (match_constants) tuples.insert(atom);
     }
 }
 
@@ -370,7 +335,7 @@ PtrPrecompiledActionData FactLayerGenerator::precompile_action_data(const Action
             continue;
         }
 
-        vector<shared_ptr<GroundAtom>> tuples;
+        unordered_set<shared_ptr<GroundAtom>, PtrTupleHash, PtrTupleEq> tuples;
         vector<int> constants, indices;
 
         get_indices_and_constants_in_preconditions(indices, constants, atom);
@@ -418,12 +383,11 @@ bool FactLayerGenerator::parse_precond_into_join_program(const PtrPrecompiledAct
         const Atom &atom = adata.relevant_precondition_atoms[i];
         assert(!is_static(atom.get_predicate_symbol_idx()));
 
-        vector<shared_ptr<GroundAtom>> tuples;
+        unordered_set<shared_ptr<GroundAtom>, PtrTupleHash, PtrTupleEq> tuples;
         vector<int> constants, indices;
 
         get_indices_and_constants_in_preconditions(indices, constants, atom);
         select_tuples(relations, atom, tuples, constants);
-
 
         if (tuples.empty()) return false;
 
@@ -432,7 +396,20 @@ bool FactLayerGenerator::parse_precond_into_join_program(const PtrPrecompiledAct
     return true;
 }
 
-PtrTable FactLayerGenerator::instantiate(const ActionSchema &action, const vector<PtrRelation> &relations){
+vector<int> get_required_args(const vector<int> &relevant_args, const vector<int> &column_count){
+    vector<int> required_args(relevant_args);
+    for (size_t i = 0; i < column_count.size(); i++){
+        int idx = i; // not sure if type matters for search
+        if (find(relevant_args.begin(), relevant_args.end(), idx) == relevant_args.end()){
+            if (column_count[i] > 1){
+                required_args.push_back(i);
+            }
+        }
+    }
+    return required_args;
+}
+
+PtrTable FactLayerGenerator::instantiate(const ActionSchema &action, const vector<PtrRelation> &relations, vector<int> &relevant_args){
     
     if (action.is_ground()){
         throw runtime_error("Shouldn't be calling instantiate() on a ground action");
@@ -448,10 +425,33 @@ PtrTable FactLayerGenerator::instantiate(const ActionSchema &action, const vecto
     assert(!tables.empty());
     assert(tables.size() == actiondata.relevant_precondition_atoms.size());
 
+    vector<int> column_count(action.get_parameters().size(), 0);
+    for (size_t i = 1; i < tables.size(); i++){
+        for (auto idx : tables[i].tuple_index){
+            column_count[idx] ++;
+        }
+    }
+
     PtrTable &working_table = tables[0];
     for (size_t i = 1; i < tables.size(); i++){
-        ptr_hash_join(working_table, tables[i]);
-        filter_static(action, working_table);
+        //////////////////////////////////////////////////////////////////////////////
+        cout << "column counts" << endl;
+        
+        //////////////////////////////////////////////////////////////////////////////
+        vector<int> required_columns = get_required_args(relevant_args, column_count);
+        for (auto idx : tables[i].tuple_index){
+            column_count[idx] --;
+        }
+        //////////////////////////////////////////////////////////////////////////////
+        cout << "required columns" << endl;
+        for (auto idx : required_columns){
+            cout << idx << " ";
+        }
+        cout << endl;
+        //////////////////////////////////////////////////////////////////////////////
+        ptr_hash_join(working_table, tables[i], required_columns);
+        // don't need to filter_static because we only check predicates we care about
+        // filter_static(action, working_table);
         if (working_table.tuples.empty()){
             return working_table;
         }
@@ -492,11 +492,11 @@ void FactLayerGenerator::filter_static(const ActionSchema &action, PtrTable &wor
                 if (it != tup_idx.end()){
                     int index = distance(tup_idx.begin(), it);
 
-                    vector<shared_ptr<vector<int>>> new_tuples;
+                    unordered_set<shared_ptr<vector<int>>, PtrTupleHash, PtrTupleEq> new_tuples;
                     for (const auto &t : working_table.tuples){
                         if ((atom.is_negated() && t->at(index) != const_idx)
                                 || (!atom.is_negated() && t->at(index) != const_idx)){
-                            new_tuples.push_back(t);
+                            new_tuples.insert(t);
                         }
                     }
                     working_table.tuples = move(new_tuples);
@@ -509,11 +509,11 @@ void FactLayerGenerator::filter_static(const ActionSchema &action, PtrTable &wor
                     int index1 = distance(tup_idx.begin(), it_1);
                     int index2 = distance(tup_idx.begin(), it_2);
 
-                    vector<shared_ptr<vector<int>>> new_tuples;
+                    unordered_set<shared_ptr<vector<int>>, PtrTupleHash, PtrTupleEq> new_tuples;
                     for (const auto &t : working_table.tuples){
                         if ((atom.is_negated() && t->at(index1) != t->at(index2))
                                 || (!atom.is_negated() && t->at(index1) == t->at(index2))){
-                            new_tuples.push_back(t);
+                            new_tuples.insert(t);
                         }
                     }
                     working_table.tuples = move(new_tuples);
@@ -525,18 +525,75 @@ void FactLayerGenerator::filter_static(const ActionSchema &action, PtrTable &wor
 
 bool FactLayerGenerator::check_goal(const vector<PtrRelation> &relations,
                                     const GoalCondition &goal){
-    for (const AtomicGoal &atomic_goal : goal.goal){
-        int goal_predicate = atomic_goal.get_predicate_index();
-        const PtrRelation &relation_at_goal_predicate = relations[goal_predicate];
+    return false;
+    // for (const AtomicGoal &atomic_goal : goal.goal){
+    //     int goal_predicate = atomic_goal.get_predicate_index();
+    //     const PtrRelation &relation_at_goal_predicate = relations[goal_predicate];
 
-        assert(goal_predicate == relation_at_goal_predicate.predicate_symbol);
+    //     assert(goal_predicate == relation_at_goal_predicate.predicate_symbol);
 
-        const auto args_in_relation = find_tuple(relation_at_goal_predicate.tuples, atomic_goal.get_arguments());
-        if ((!atomic_goal.is_negated() && !args_in_relation) || (atomic_goal.is_negated() && args_in_relation)){
-            return false;
-        }
-    }
-    return true;
+    //     const auto args_in_relation = find_tuple(relation_at_goal_predicate.tuples, atomic_goal.get_arguments());
+    //     if ((!atomic_goal.is_negated() && !args_in_relation) || (atomic_goal.is_negated() && args_in_relation)){
+    //         return false;
+    //     }
+    // }
+    // return true;
 }
+
+
+
+void FactLayerGenerator::relations_to_csv(vector<PtrRelation> &relations,
+                                          string filename){
+        ofstream csvfile;
+        csvfile.open(filename);
+
+        csvfile << "predicate_symbol\n";
+
+        for(size_t i = 0; i < relations.size(); i++){
+            for (auto &tuple:relations[i].tuples){
+                csvfile << relations[i].predicate_symbol;
+                for (auto obj:*tuple){
+                    csvfile << "," << obj;
+                }
+                csvfile << "\n";
+            }
+        }
+        csvfile.close();
+    }
+
+bool FactLayerGenerator::effects_from_table(const vector<ActionSchema> &action_schemas,
+                                            vector<PtrRelation> &relations){
+    bool expanded = false;
+    
+    for (auto &action : action_schemas){
+        for (auto &effect : action.get_effects()){
+            if (effect.is_negated()){
+                continue;
+            }
+            // //////////////////////////////////////////////
+            // cout << "*************** ACTION: " << action.get_name() <<  " ******************" << endl;
+            // cout << "************** EFFECT: " << effect.get_name() << " *****************" << endl;
+            // //////////////////////////////////////////////
+
+            vector<int> relevant_args;
+            for (auto &arg : effect.get_arguments()){
+                relevant_args.push_back(arg.get_index());
+            }            
+
+            PtrTable instantiations = instantiate(action, relations, relevant_args);
+            auto relations_size = relations[effect.get_predicate_symbol_idx()].tuples.size();
+            relations[effect.get_predicate_symbol_idx()].tuples.insert(
+                instantiations.tuples.begin(), instantiations.tuples.end());
+            auto new_size = relations[effect.get_predicate_symbol_idx()].tuples.size();
+            if (new_size > relations_size){
+                expanded = true;
+            }
+        }
+        // dump_relation_list(relations);
+    }
+
+    return expanded;
+}
+
 
 

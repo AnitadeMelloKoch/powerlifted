@@ -15,16 +15,19 @@ class PtrPrecompiledActionData;
 class FactLayerGenerator : public GenericJoinSuccessor{
     private:
         void dump_relation_list(std::vector<PtrRelation> relations);
+        void dump_idx_name(std::vector<PtrRelation> relations);
         void print_relation_stats(std::vector<PtrRelation> relations);
         void print_relation_stats(std::vector<Relation> relations);
         bool find_tuple(
-            const std::unordered_set<PtrTable::ptr_tuple_t, PtrTupleHash> &tuples_in_relation,
+            const std::unordered_set<PtrTable::ptr_tuple_t, PtrTupleHash, PtrTupleEq> &tuples_in_relation,
             const std::vector<int> &tuple
         ) const ;
 
     public:
         StaticInformation static_info;
         std::vector<PtrPrecompiledActionData> action_data;
+        std::vector<Object> objects;
+        std::vector<Predicate> predicates;
 
         using GenericJoinSuccessor::parse_precond_into_join_program;
         using GenericJoinSuccessor::instantiate;
@@ -35,7 +38,8 @@ class FactLayerGenerator : public GenericJoinSuccessor{
         std::tuple<std::vector<PtrRelation>, bool> generate_next_fact_layer(
             const std::vector<ActionSchema> action_schemas,
             std::vector<PtrRelation> &relations,
-            const GoalCondition &goal
+            const GoalCondition &goal,
+            std::vector<bool> &new_nullary_atoms
         );
 
         DBState generate_fact_layers(
@@ -49,21 +53,21 @@ class FactLayerGenerator : public GenericJoinSuccessor{
             const PtrLiftedOperatorId& op,
             std::vector<PtrRelation> &new_relation
         );
-
-        std::vector<PtrLiftedOperatorId> get_applicable_actions(const ActionSchema &action, const std::vector<PtrRelation> &relations);
         
         bool is_ground_action_applicable(const ActionSchema &action, const std::vector<PtrRelation> &relations) const;
 
         void select_tuples(const std::vector<PtrRelation> &relations,
                            const Atom &a,
-                           std::vector<std::shared_ptr<GroundAtom>> &tuples,
+                           std::unordered_set<std::shared_ptr<GroundAtom>, PtrTupleHash, PtrTupleEq> &tuples,
                            const std::vector<int> &constants);
         
         bool parse_precond_into_join_program(const PtrPrecompiledActionData &adata,
                                              const std::vector<PtrRelation> &relations,
                                              std::vector<PtrTable>& tables);
         
-        PtrTable instantiate(const ActionSchema &action, const std::vector<PtrRelation> &relations);
+        PtrTable instantiate(const ActionSchema &action, 
+                             const std::vector<PtrRelation> &relations,
+                             std::vector<int> &relevant_args);
 
         bool apply_ground_action_effects(const ActionSchema &action,
                                          std::vector<PtrRelation> &relation);
@@ -77,6 +81,13 @@ class FactLayerGenerator : public GenericJoinSuccessor{
         const GroundAtom tuple_to_atom(const std::shared_ptr<std::vector<int>> tuple, const Atom &eff);
 
         bool check_goal(const std::vector<PtrRelation> &relations, const GoalCondition &goal);
+        
+        bool effects_from_table(const std::vector<ActionSchema> &action_schemas,
+                                std::vector<PtrRelation> &relations);
+
+        void relations_to_csv(std::vector<PtrRelation> &relations,
+                              std::string filename);
+        
 
     protected:
         static void order_tuple_by_free_variable_order(const std::vector<int> &free_var_indices,
@@ -91,7 +102,6 @@ class FactLayerGenerator : public GenericJoinSuccessor{
         std::vector<PtrPrecompiledActionData> precompile_action_data(const std::vector<ActionSchema>& action);
 
         PtrPrecompiledActionData precompile_action_data(const ActionSchema& action);
-        
 
 };
 
@@ -113,6 +123,15 @@ class PtrPrecompiledActionData{
 
         std::vector<PtrTable> precompiled_db;
 
+};
+
+class PtrPrecompiledEffectData{
+    public:
+        PtrPrecompiledEffectData() :
+            precompiled_db()
+        {}
+
+        std::vector<PtrTable> precompiled_db;
 };
 
 #endif

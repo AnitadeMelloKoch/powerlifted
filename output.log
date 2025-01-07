@@ -1,0 +1,819 @@
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/anita/code/powerlifted/builds/release/search
+[  1%] Building CXX object CMakeFiles/search.dir/fact_layer/fact_layer_generator.cc.o
+[  3%] Linking CXX executable search
+[100%] Built target search
+Parsing...
+Parsing: [0.000s CPU, 0.001s wall-clock]
+Processing task p12-net2-b10-g4_rt0_instance
+Normalizing task... [0.010s CPU, 0.000s wall-clock]
+Performing sanity checks...... [0.000s CPU, 0.000s wall-clock]
+Compiling types into unary predicates... [0.000s CPU, 0.000s wall-clock]
+Checking static predicates... [0.000s CPU, 0.000s wall-clock]
+Initial state size: 30
+Getting dictionary of types... [0.000s CPU, 0.000s wall-clock]
+WARNING: file output.lifted already exists, it will be overwritten
+Removing function symbols from initial state... [0.000s CPU, 0.000s wall-clock]
+Removing unused predicate symbols... [0.000s CPU, 0.000s wall-clock]
+Removing unused predicate symbols... Removing satisfied static predicates from the goal.
+[0.000s CPU, 0.000s wall-clock]
+Printing names and representation type... [0.000s CPU, 0.000s wall-clock]
+Printing types... [0.000s CPU, 0.000s wall-clock]
+Printing predicates... [0.000s CPU, 0.000s wall-clock]
+Printing objects (i.e., constants)... [0.000s CPU, 0.000s wall-clock]
+Printing initial state... [0.000s CPU, 0.000s wall-clock]
+Printing goal... [0.000s CPU, 0.000s wall-clock]
+Printing action schemas... [0.000s CPU, 0.000s wall-clock]
+Total translation time: 0.010s
+Initializing planner
+Reading task description file.
+pipesworld_strips p12-net2-b10-g4_rt0_instance
+Total number of types: 6
+Total number of predicates: 19
+Total number of objects: 38
+Total number of atoms in the initial state: 161
+Total number of fluent atoms in the goal state: 4
+Total number of action schemas: 4
+IMPORTANT: Assuming that negative effects are always listed first. (This is guaranteed by the default translator.)
+Creating search factory for method alt-bfws1...
+Using Dual-Queue BFWS
+Creating heuristic factory...
+Iteration removed 355 equivalent rules.
+Iteration removed 0 equivalent rules.
+Total number of static atoms in the EDB: 131
+Total number of rules: 130
+Creating successor generator factory...
+_______________________________________
+Relations
+---------------------------------------
+0 connect
+1 unitary
+2 not-unitary
+3 last
+4 first
+5 follow
+6 is-product
+7 on
+8 may-interface
+9 normal
+10 tank-slot-product-location
+11 occupied
+12 not-occupied
+13 =
+14 type@pipe
+15 type@area
+16 type@product
+17 type@batch-atom
+18 type@tank-slot
+---------------------------------------
+Objects
+---------------------------------------
+0 lco
+1 gasoleo
+2 rat-a
+3 oca1
+4 oc1b
+5 b0
+6 b1
+7 b4
+8 b6
+9 b7
+10 b9
+11 b3
+12 b8
+13 b2
+14 b5
+15 a1
+16 a2
+17 a3
+18 s12
+19 s13
+20 ta1-1-lco
+21 ta1-4-gasoleo
+22 ta1-3-gasoleo
+23 ta1-2-gasoleo
+24 ta1-1-gasoleo
+25 ta1-1-rat-a
+26 ta2-1-lco
+27 ta2-4-gasoleo
+28 ta2-3-gasoleo
+29 ta2-2-gasoleo
+30 ta2-1-gasoleo
+31 ta2-1-rat-a
+32 ta3-1-lco
+33 ta3-4-gasoleo
+34 ta3-3-gasoleo
+35 ta3-2-gasoleo
+36 ta3-1-gasoleo
+37 ta3-1-rat-a
+_______________________________________
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 4 5 6 7 8 9 10 11 
+required columns
+1 0 4 5 6 7 8 9 10 11 
+required columns
+1 0 4 5 6 7 9 10 11 
+required columns
+1 0 5 6 7 9 10 11 
+required columns
+1 0 5 6 7 10 11 
+required columns
+1 0 5 6 7 10 11 
+required columns
+1 0 6 7 10 11 
+required columns
+1 0 6 7 11 
+required columns
+1 0 7 11 
+required columns
+1 0 11 
+required columns
+1 0 
+required columns
+1 4 0 2 3 5 6 7 8 9 10 11 
+required columns
+1 4 0 2 3 5 6 7 8 9 10 11 
+required columns
+1 4 0 2 3 5 6 7 8 9 10 11 
+required columns
+1 4 0 2 3 5 6 7 8 9 10 11 
+required columns
+1 4 0 2 3 5 6 7 8 9 10 11 
+required columns
+1 4 0 2 3 5 6 7 8 9 10 11 
+required columns
+1 4 0 2 3 5 6 7 8 9 10 11 
+required columns
+1 4 0 2 3 5 6 7 8 9 10 11 
+required columns
+1 4 0 2 3 5 6 7 8 9 10 11 
+required columns
+1 4 0 2 3 5 6 7 8 9 10 11 
+required columns
+1 4 0 2 3 5 6 7 8 9 10 11 
+required columns
+1 4 0 2 3 5 6 7 8 9 10 11 
+required columns
+1 4 0 3 5 6 7 8 9 10 11 
+required columns
+1 4 0 5 6 7 8 9 10 11 
+required columns
+1 4 0 5 6 7 8 9 10 11 
+required columns
+1 4 0 5 6 7 9 10 11 
+required columns
+1 4 0 5 6 7 9 10 11 
+required columns
+1 4 0 5 6 7 10 11 
+required columns
+1 4 5 6 7 10 11 
+required columns
+1 4 6 7 10 11 
+required columns
+1 4 6 7 11 
+required columns
+1 4 7 11 
+required columns
+1 4 11 
+required columns
+1 4 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 4 5 6 8 9 10 11 
+required columns
+7 0 4 5 6 8 9 10 11 
+required columns
+7 0 4 5 6 9 10 11 
+required columns
+7 0 5 6 9 10 11 
+required columns
+7 0 5 6 10 11 
+required columns
+7 5 6 10 11 
+required columns
+7 6 10 11 
+required columns
+7 6 11 
+required columns
+7 11 
+required columns
+7 11 
+required columns
+7 
+required columns
+9 0 1 2 3 4 5 6 7 8 10 11 
+required columns
+9 0 1 2 3 4 5 6 7 8 10 11 
+required columns
+9 0 1 2 3 4 5 6 7 8 10 11 
+required columns
+9 0 1 2 3 4 5 6 7 8 10 11 
+required columns
+9 0 1 2 3 4 5 6 7 8 10 11 
+required columns
+9 0 1 2 3 4 5 6 7 8 10 11 
+required columns
+9 0 1 2 3 4 5 6 7 8 10 11 
+required columns
+9 0 1 2 3 4 5 6 7 8 10 11 
+required columns
+9 0 1 2 3 4 5 6 7 8 10 11 
+required columns
+9 0 1 2 3 4 5 6 7 8 10 11 
+required columns
+9 0 1 2 3 4 5 6 7 8 10 11 
+required columns
+9 0 1 2 3 4 5 6 7 8 10 11 
+required columns
+9 0 1 3 4 5 6 7 8 10 11 
+required columns
+9 0 1 4 5 6 7 8 10 11 
+required columns
+9 0 4 5 6 7 8 10 11 
+required columns
+9 0 4 5 6 7 10 11 
+required columns
+9 0 5 6 7 10 11 
+required columns
+9 0 5 6 7 10 11 
+required columns
+9 0 5 6 7 10 11 
+required columns
+9 0 6 7 10 11 
+required columns
+9 0 6 7 11 
+required columns
+9 0 7 11 
+required columns
+9 0 11 
+required columns
+9 0 
+required columns
+8 2 0 1 3 4 5 6 7 9 10 11 
+required columns
+8 2 0 1 3 4 5 6 7 9 10 11 
+required columns
+8 2 0 1 3 4 5 6 7 9 10 11 
+required columns
+8 2 0 1 3 4 5 6 7 9 10 11 
+required columns
+8 2 0 1 3 4 5 6 7 9 10 11 
+required columns
+8 2 0 1 3 4 5 6 7 9 10 11 
+required columns
+8 2 0 1 3 4 5 6 7 9 10 11 
+required columns
+8 2 0 1 3 4 5 6 7 9 10 11 
+required columns
+8 2 0 1 3 4 5 6 7 9 10 11 
+required columns
+8 2 0 1 3 4 5 6 7 9 10 11 
+required columns
+8 2 0 1 3 4 5 6 7 9 10 11 
+required columns
+8 2 0 1 3 4 5 6 7 9 10 11 
+required columns
+8 2 0 1 3 4 5 6 7 9 10 11 
+required columns
+8 2 0 1 4 5 6 7 9 10 11 
+required columns
+8 2 0 4 5 6 7 9 10 11 
+required columns
+8 2 0 4 5 6 7 9 10 11 
+required columns
+8 2 0 5 6 7 9 10 11 
+required columns
+8 2 0 5 6 7 10 11 
+required columns
+8 2 5 6 7 10 11 
+required columns
+8 2 6 7 10 11 
+required columns
+8 2 6 7 11 
+required columns
+8 2 7 11 
+required columns
+8 2 11 
+required columns
+8 2 
+required columns
+11 0 1 2 3 4 5 6 7 8 9 10 
+required columns
+11 0 1 2 3 4 5 6 7 8 9 10 
+required columns
+11 0 1 2 3 4 5 6 7 8 9 10 
+required columns
+11 0 1 2 3 4 5 6 7 8 9 10 
+required columns
+11 0 1 2 3 4 5 6 7 8 9 10 
+required columns
+11 0 1 2 3 4 5 6 7 8 9 10 
+required columns
+11 0 1 2 3 4 5 6 7 8 9 10 
+required columns
+11 0 1 2 3 4 5 6 7 8 9 10 
+required columns
+11 0 1 2 3 4 5 6 7 8 9 10 
+required columns
+11 0 1 2 3 4 5 6 7 8 9 10 
+required columns
+11 0 1 2 3 4 5 6 7 8 9 10 
+required columns
+11 0 1 2 3 4 5 6 7 8 9 10 
+required columns
+11 0 1 3 4 5 6 7 8 9 10 
+required columns
+11 0 1 4 5 6 7 8 9 10 
+required columns
+11 0 4 5 6 7 8 9 10 
+required columns
+11 0 4 5 6 7 9 10 
+required columns
+11 0 5 6 7 9 10 
+required columns
+11 0 5 6 7 10 
+required columns
+11 5 6 7 10 
+required columns
+11 6 7 10 
+required columns
+11 6 7 
+required columns
+11 7 
+required columns
+11 
+required columns
+11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 4 5 6 7 8 9 10 11 
+required columns
+1 0 4 5 6 7 8 9 10 11 
+required columns
+1 0 5 6 7 8 9 10 11 
+required columns
+1 0 5 6 7 9 10 11 
+required columns
+1 0 5 6 7 10 11 
+required columns
+1 0 5 6 7 10 11 
+required columns
+1 0 6 7 10 11 
+required columns
+1 0 7 10 11 
+required columns
+1 0 7 11 
+required columns
+1 0 11 
+required columns
+1 0 
+required columns
+4 1 0 2 3 5 6 7 8 9 10 11 
+required columns
+4 1 0 2 3 5 6 7 8 9 10 11 
+required columns
+4 1 0 2 3 5 6 7 8 9 10 11 
+required columns
+4 1 0 2 3 5 6 7 8 9 10 11 
+required columns
+4 1 0 2 3 5 6 7 8 9 10 11 
+required columns
+4 1 0 2 3 5 6 7 8 9 10 11 
+required columns
+4 1 0 2 3 5 6 7 8 9 10 11 
+required columns
+4 1 0 2 3 5 6 7 8 9 10 11 
+required columns
+4 1 0 2 3 5 6 7 8 9 10 11 
+required columns
+4 1 0 2 3 5 6 7 8 9 10 11 
+required columns
+4 1 0 2 3 5 6 7 8 9 10 11 
+required columns
+4 1 0 2 3 5 6 7 8 9 10 11 
+required columns
+4 1 0 2 3 5 6 7 8 9 10 11 
+required columns
+4 1 0 3 5 6 7 8 9 10 11 
+required columns
+4 1 0 5 6 7 8 9 10 11 
+required columns
+4 1 0 5 6 7 8 9 10 11 
+required columns
+4 1 0 5 6 7 8 9 10 11 
+required columns
+4 1 0 5 6 7 9 10 11 
+required columns
+4 1 0 5 6 7 10 11 
+required columns
+4 1 5 6 7 10 11 
+required columns
+4 1 6 7 10 11 
+required columns
+4 1 7 10 11 
+required columns
+4 1 7 11 
+required columns
+4 1 11 
+required columns
+4 1 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 4 5 6 8 9 10 11 
+required columns
+7 0 4 5 6 8 9 10 11 
+required columns
+7 0 5 6 8 9 10 11 
+required columns
+7 0 5 6 9 10 11 
+required columns
+7 0 5 6 10 11 
+required columns
+7 5 6 10 11 
+required columns
+7 6 10 11 
+required columns
+7 10 11 
+required columns
+7 11 
+required columns
+7 11 
+required columns
+7 
+required columns
+9 0 1 2 3 4 5 6 7 8 10 11 
+required columns
+9 0 1 2 3 4 5 6 7 8 10 11 
+required columns
+9 0 1 2 3 4 5 6 7 8 10 11 
+required columns
+9 0 1 2 3 4 5 6 7 8 10 11 
+required columns
+9 0 1 2 3 4 5 6 7 8 10 11 
+required columns
+9 0 1 2 3 4 5 6 7 8 10 11 
+required columns
+9 0 1 2 3 4 5 6 7 8 10 11 
+required columns
+9 0 1 2 3 4 5 6 7 8 10 11 
+required columns
+9 0 1 2 3 4 5 6 7 8 10 11 
+required columns
+9 0 1 2 3 4 5 6 7 8 10 11 
+required columns
+9 0 1 2 3 4 5 6 7 8 10 11 
+required columns
+9 0 1 2 3 4 5 6 7 8 10 11 
+required columns
+9 0 1 2 3 4 5 6 7 8 10 11 
+required columns
+9 0 1 3 4 5 6 7 8 10 11 
+required columns
+9 0 1 4 5 6 7 8 10 11 
+required columns
+9 0 4 5 6 7 8 10 11 
+required columns
+9 0 5 6 7 8 10 11 
+required columns
+9 0 5 6 7 10 11 
+required columns
+9 0 5 6 7 10 11 
+required columns
+9 0 5 6 7 10 11 
+required columns
+9 0 6 7 10 11 
+required columns
+9 0 7 10 11 
+required columns
+9 0 7 11 
+required columns
+9 0 11 
+required columns
+9 0 
+required columns
+8 3 0 1 2 4 5 6 7 9 10 11 
+required columns
+8 3 0 1 2 4 5 6 7 9 10 11 
+required columns
+8 3 0 1 2 4 5 6 7 9 10 11 
+required columns
+8 3 0 1 2 4 5 6 7 9 10 11 
+required columns
+8 3 0 1 2 4 5 6 7 9 10 11 
+required columns
+8 3 0 1 2 4 5 6 7 9 10 11 
+required columns
+8 3 0 1 2 4 5 6 7 9 10 11 
+required columns
+8 3 0 1 2 4 5 6 7 9 10 11 
+required columns
+8 3 0 1 2 4 5 6 7 9 10 11 
+required columns
+8 3 0 1 2 4 5 6 7 9 10 11 
+required columns
+8 3 0 1 2 4 5 6 7 9 10 11 
+required columns
+8 3 0 1 2 4 5 6 7 9 10 11 
+required columns
+8 3 0 1 2 4 5 6 7 9 10 11 
+required columns
+8 3 0 1 4 5 6 7 9 10 11 
+required columns
+8 3 0 1 4 5 6 7 9 10 11 
+required columns
+8 3 0 4 5 6 7 9 10 11 
+required columns
+8 3 0 5 6 7 9 10 11 
+required columns
+8 3 0 5 6 7 9 10 11 
+required columns
+8 3 0 5 6 7 10 11 
+required columns
+8 3 5 6 7 10 11 
+required columns
+8 3 6 7 10 11 
+required columns
+8 3 7 10 11 
+required columns
+8 3 7 11 
+required columns
+8 3 11 
+required columns
+8 3 
+required columns
+11 0 1 2 3 4 5 6 7 8 9 10 
+required columns
+11 0 1 2 3 4 5 6 7 8 9 10 
+required columns
+11 0 1 2 3 4 5 6 7 8 9 10 
+required columns
+11 0 1 2 3 4 5 6 7 8 9 10 
+required columns
+11 0 1 2 3 4 5 6 7 8 9 10 
+required columns
+11 0 1 2 3 4 5 6 7 8 9 10 
+required columns
+11 0 1 2 3 4 5 6 7 8 9 10 
+required columns
+11 0 1 2 3 4 5 6 7 8 9 10 
+required columns
+11 0 1 2 3 4 5 6 7 8 9 10 
+required columns
+11 0 1 2 3 4 5 6 7 8 9 10 
+required columns
+11 0 1 2 3 4 5 6 7 8 9 10 
+required columns
+11 0 1 2 3 4 5 6 7 8 9 10 
+required columns
+11 0 1 2 3 4 5 6 7 8 9 10 
+required columns
+11 0 1 3 4 5 6 7 8 9 10 
+required columns
+11 0 1 4 5 6 7 8 9 10 
+required columns
+11 0 4 5 6 7 8 9 10 
+required columns
+11 0 5 6 7 8 9 10 
+required columns
+11 0 5 6 7 9 10 
+required columns
+11 0 5 6 7 10 
+required columns
+11 5 6 7 10 
+required columns
+11 6 7 10 
+required columns
+11 7 10 
+required columns
+11 7 
+required columns
+11 
+required columns
+11 
+Fact layer passes: 1
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 2 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 3 4 5 6 7 8 9 10 11 
+required columns
+1 0 4 5 6 7 8 9 10 11 
+required columns
+1 0 4 5 6 7 8 9 10 11 
+required columns
+1 0 4 5 6 7 9 10 11 
+required columns
+1 0 5 6 7 9 10 11 
+required columns
+1 0 5 6 7 10 11 
+required columns
+1 0 5 6 7 10 11 
+required columns
+1 0 6 7 10 11 
+required columns
+1 0 6 7 11 
+required columns
+1 0 7 11 
+required columns
+1 0 11 
+required columns
+1 0 
+required columns
+1 4 0 2 3 5 6 7 8 9 10 11 
+required columns
+1 4 0 2 3 5 6 7 8 9 10 11 
+required columns
+1 4 0 2 3 5 6 7 8 9 10 11 
+required columns
+1 4 0 2 3 5 6 7 8 9 10 11 
+required columns
+1 4 0 2 3 5 6 7 8 9 10 11 
+required columns
+1 4 0 2 3 5 6 7 8 9 10 11 
+required columns
+1 4 0 2 3 5 6 7 8 9 10 11 
+required columns
+1 4 0 2 3 5 6 7 8 9 10 11 
+required columns
+1 4 0 2 3 5 6 7 8 9 10 11 
+required columns
+1 4 0 2 3 5 6 7 8 9 10 11 
+required columns
+1 4 0 2 3 5 6 7 8 9 10 11 
+required columns
+1 4 0 2 3 5 6 7 8 9 10 11 
+required columns
+1 4 0 3 5 6 7 8 9 10 11 
+required columns
+1 4 0 5 6 7 8 9 10 11 
+required columns
+1 4 0 5 6 7 8 9 10 11 
+required columns
+1 4 0 5 6 7 9 10 11 
+required columns
+1 4 0 5 6 7 9 10 11 
+required columns
+1 4 0 5 6 7 10 11 
+required columns
+1 4 5 6 7 10 11 
+required columns
+1 4 6 7 10 11 
+required columns
+1 4 6 7 11 
+required columns
+1 4 7 11 
+required columns
+1 4 11 
+required columns
+1 4 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+required columns
+7 0 1 2 3 4 5 6 8 9 10 11 
+Executing "/home/anita/code/powerlifted/builds/release/search/search -f output.lifted -s alt-bfws1 -e ff -g yannakakis -r sparse --seed 1 --plan-file plan --forward-reachability 1"
+Iteration finished with unknown error.
