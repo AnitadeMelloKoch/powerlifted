@@ -130,6 +130,10 @@ add_executable(search
         heuristics/add_heuristic.h heuristics/utils.h heuristics/utils.cc
         datalog/transformations/remove_equivalent_rules.h datalog/transformations/connected_components.h
         datalog/transformations/variable_projection.h datalog/transformations/variable_renaming.h heuristics/hmax_heuristic.cc heuristics/hmax_heuristic.h
-        parallel_hashmap/phmap.h)
+        parallel_hashmap/phmap.h
+        speculative/speculative_scope.cc 
+        speculative/speculative_scope.h
+        speculative/speculative_search.cc
+        speculative/speculative_search.h)
 
 target_link_libraries(search LINK_PUBLIC ${Boost_LIBRARIES})

@@ -18,6 +18,7 @@ class Options {
     bool novelty_early_stop;
     unsigned seed;
     bool forward_reachability;
+    bool speculative;
 
 public:
     Options(int argc, char** argv) {
@@ -34,6 +35,7 @@ public:
             ("only-effects-novelty-check", po::value<bool>()->default_value(false), "Check only effects of applied actions when evaluation novelty of a state.")
             ("novelty-early-stop", po::value<bool>()->default_value(false), "Stop evaluating novelty as soon as w-value is defined.")
             ("forward-reachability", po::value<bool>()->default_value(false), "Generate all fact layers")
+            ("speculative", po::value<bool>()->default_value(false), "Speculatively scope the task")
             ;
 
         po::variables_map vm;
@@ -62,6 +64,7 @@ public:
         novelty_early_stop = vm["novelty-early-stop"].as<bool>();
         seed = vm["seed"].as<unsigned>();
         forward_reachability = vm["forward-reachability"].as<bool>();
+        speculative = vm["speculative"].as<bool>();
 
     }
 
@@ -104,6 +107,12 @@ public:
     bool get_forward_reachability() const {
         return forward_reachability;
     }
+
+    bool get_speculative() const {
+        return speculative;
+    }
+
+
 
 
 };

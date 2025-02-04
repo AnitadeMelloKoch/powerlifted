@@ -102,6 +102,9 @@ def parse_options():
                         help="flag if VAL should be called to validate the plan found")
     parser.add_argument("--forward-reachability", action="store_true",
                         help="run forward reachibility to generate all fact layers")
+    parser.add_argument("--speculative", action="store_true",
+                        help="scope task speculatively")
+    parser.add_argument("--processes", action="store", type=int, default=4)
     args = parser.parse_args()
     if args.domain is None:
         args.domain = find_domain_filename(args.instance)
