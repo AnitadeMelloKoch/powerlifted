@@ -2,6 +2,7 @@
 #define SPECULATIVE_SCOPE
 #include "../task.h"
 
+#include <string>
 #include <vector>
 #include <unordered_set>
 
@@ -26,7 +27,9 @@ class SpeculativeScope{
         bool check_scope_unique(const std::vector<int> &object_idxs);
     
     public:
-        Task speculative_scope(std::vector<int> &object_idxs);
+        Task speculative_scope(std::vector<int> &object_idxs, 
+                               bool write_pddl_file = false,
+                               std::string file_name = "");
         SpeculativeScope(const Task &task, int seed = 42, int max_attempts = 500);
         void dump_stats(const Task &task);
         std::vector<int> sample_scope();

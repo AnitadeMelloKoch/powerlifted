@@ -134,6 +134,7 @@ add_executable(search
         speculative/speculative_scope.cc 
         speculative/speculative_scope.h
         speculative/speculative_search.cc
-        speculative/speculative_search.h)
+        speculative/speculative_search.h
+        writer.cc writer.h)
 
 target_link_libraries(search LINK_PUBLIC ${Boost_LIBRARIES})

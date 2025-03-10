@@ -33,8 +33,7 @@ def run_single_search(build_dir, time, translator_file, search, evaluator, gener
             print(f"Iteration finished with unknown error.")
         return code
 
-def run_mpi_search(build_dir, time, translator_file,search, evaluator, generator, state, seed, plan_file, extra, processes):
-    
+def run_mpi_search(build_dir, time, translator_file,search, evaluator, generator, state, seed, plan_file, extra, processes):    
     cmd = ["mpirun",
             "-np", f"{processes}",
             os.path.join(build_dir, 'search', 'search'),

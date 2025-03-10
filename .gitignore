@@ -14,3 +14,5 @@ powerlifted.sif
 reports/
 local-tests/
 *.out
+.vscode/settings.json
+.vscode/c_cpp_properties.json

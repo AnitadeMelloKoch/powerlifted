@@ -1,9 +1,12 @@
 #include "speculative_scope.h"
 #include "../task.h"
+#include "../writer.h"
 
 #include <vector>
 #include <iostream>
 #include <unordered_set>
+#include <string>
+#include <stdexcept>
 
 using namespace std;
 
@@ -19,11 +22,12 @@ SpeculativeScope::SpeculativeScope(const Task &task, int seed, int max_attempts)
     attempted_scopes = unordered_set<vector<int>, TupleHash>();
 }
 
-Task SpeculativeScope::speculative_scope(vector<int> &object_idxs){
+Task SpeculativeScope::speculative_scope(vector<int> &object_idxs, 
+                                         bool write_pddl_file,
+                                        string file_name){
     Task new_task = task;
 
     auto sampled_objects = get_objects(object_idxs);
-
 
     new_task.objects = vector<Object>();
 
@@ -59,6 +63,16 @@ Task SpeculativeScope::speculative_scope(vector<int> &object_idxs){
         old_goal.positive_nullary_goals,
         old_goal.negative_nullary_goals
     );
+
+    if (write_pddl_file){
+        if (file_name == ""){
+            throw invalid_argument("Filename was not provided but write_to_file is true.");
+        }
+        success = write(new_task, file_name);
+        if (!success){
+            throw exception("Error during file write for file: " + file_name)
+        }
+    }
     
     return new_task;
 }
