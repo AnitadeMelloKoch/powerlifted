@@ -14,6 +14,7 @@ class Options {
     std::string evaluator;
     std::string state_representation;
     std::string plan_file;
+    std::string pddl_file;
     bool only_effects_opt;
     bool novelty_early_stop;
     unsigned seed;
@@ -32,6 +33,7 @@ public:
             ("search,s", po::value<std::string>()->required(), "Search engine.")
             ("state-representation,r", po::value<std::string>()->default_value("sparse"), "State representation.")
             ("plan-file", po::value<std::string>()->default_value("FilePathUndefined"), "Plan file.")
+            ("pddl-file", po::value<std::string>()->default_value("FilePathUndefined"), "PDDL file.")
             ("only-effects-novelty-check", po::value<bool>()->default_value(false), "Check only effects of applied actions when evaluation novelty of a state.")
             ("novelty-early-stop", po::value<bool>()->default_value(false), "Stop evaluating novelty as soon as w-value is defined.")
             ("forward-reachability", po::value<bool>()->default_value(false), "Generate all fact layers")
@@ -60,6 +62,7 @@ public:
         search_engine = vm["search"].as<std::string>();
         state_representation = vm["state-representation"].as<std::string>();
         plan_file = vm["plan-file"].as<std::string>();
+        pddl_file =vm["pddl-file"].as<std::string>();
         only_effects_opt = vm["only-effects-novelty-check"].as<bool>();
         novelty_early_stop = vm["novelty-early-stop"].as<bool>();
         seed = vm["seed"].as<unsigned>();
@@ -90,6 +93,10 @@ public:
 
     const std::string &get_plan_file() const {
         return plan_file;
+    }
+
+    const std::string &get_pddl_file() const {
+        return pddl_file;
     }
 
     bool get_only_effects_opt() const {

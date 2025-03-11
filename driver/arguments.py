@@ -79,6 +79,9 @@ def parse_options():
     parser.add_argument('--plan-file', dest='plan_file',
                         default='plan',
                         help='name of plan file')
+    parser.add_argument('--pddl-file', dest='pddl_file',
+                        default='pddl_file',
+                        help='name of scoped pddl file')
     parser.add_argument('--datalog-file', dest='datalog_file',
                         default='model.lp',
                         help='Datalog model for the lifted heuristic.')

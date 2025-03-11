@@ -11,6 +11,7 @@
 #include "../search_engines/search_factory.h"
 #include "../search_engines/search.h"
 #include "../plan_manager.h"
+#include "../writer.h"
 
 using namespace std;
 
@@ -86,6 +87,13 @@ int SpeculativeSearch::speculative_search(int argc, char *argv[]){
             
             string plan_name = opt.get_plan_file() + "_rank" + to_string(rank);
             PlanManager::set_plan_filename(plan_name);
+            string pddl_name = opt.get_pddl_file();
+            auto pos_dot = pddl_name.find('.');
+            if (pos_dot != string::npos){
+                pddl_name = pddl_name.substr(0, pos_dot);
+            }
+            pddl_name = pddl_name + "_rank" + to_string(rank) + ".pddl";
+            PlanManager::set_pddl_filename(pddl_name);
 
             auto exitcode = search->search(scoped_task, *sgen, *heuristic);
             int code = static_cast<int>(exitcode);
@@ -93,6 +101,7 @@ int SpeculativeSearch::speculative_search(int argc, char *argv[]){
 
             if(code==0){
                 search->print_statistics();
+                write(scoped_task, PlanManager::get_pddl_filename());
             }
 
             MPI_Send(&code, 1, MPI_INT, 0, 2, MPI_COMM_WORLD);

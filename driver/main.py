@@ -41,6 +41,7 @@ def run_search(build_dir, options, extra):
                               options.state,
                               str(options.seed),
                               options.plan_file,
+                              options.pddl_file,
                               extra,
                               options.processes)
         # If we found a plan, try to validate it

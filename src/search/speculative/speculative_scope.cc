@@ -271,6 +271,7 @@ vector<int> SpeculativeScope::sample_scope(){
         }
 
         sampled_objects_vec = vector<int>(sampled_objects.begin(), sampled_objects.end());
+        sort(sampled_objects_vec.begin(), sampled_objects_vec.end());
 
         scope_found = check_scope_unique(sampled_objects_vec);
     }
