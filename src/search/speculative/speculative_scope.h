@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 #include <unordered_set>
+#include <unordered_map>
+#include <tuple>
 
 class SpeculativeScope{
     private:
@@ -15,6 +17,8 @@ class SpeculativeScope{
         std::vector<int> object_count;
         std::vector<std::vector<int>> type_to_object_index;
         std::unordered_set<std::vector<int>, TupleHash> attempted_scopes; 
+        std::unordered_map<int, std::unordered_set<int>> related_objects;
+        std::unordered_map<int, int> object_cost; // cost of including this object into scope
         int max_attempts;
 
         std::vector<int> get_relevant_predicate_idxs(const Task &task);
@@ -23,6 +27,9 @@ class SpeculativeScope{
         std::vector<int> get_object_count(const std::vector<ActionSchema> &relevant_actions, 
                                           const std::vector<std::vector<int>> &type_to_object_index);
         std::vector<int> get_required_objects(const Task &task);
+        std::tuple<std::unordered_map<int, std::unordered_set<int>>, 
+                   std::unordered_map<int,int>> get_related_objects(const Task &task);
+        
         DBState update_state(const DBState &original_state, std::vector<int> &obj_map);
         bool check_scope_unique(const std::vector<int> &object_idxs);
     

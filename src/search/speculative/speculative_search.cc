@@ -1,5 +1,7 @@
 #include <mpi.h>
 #include <memory>
+#include <string>
+
 #include "speculative_search.h"
 #include "speculative_scope.h"
 #include "../heuristics/heuristic_factory.h"
@@ -8,6 +10,7 @@
 #include "../successor_generators/successor_generator.h"
 #include "../search_engines/search_factory.h"
 #include "../search_engines/search.h"
+#include "../plan_manager.h"
 
 using namespace std;
 
@@ -81,8 +84,10 @@ int SpeculativeSearch::speculative_search(int argc, char *argv[]){
                                                                                   opt.get_seed(),
                                                                                   scoped_task));
             
+            string plan_name = opt.get_plan_file() + "_rank" + to_string(rank);
+            PlanManager::set_plan_filename(plan_name);
+
             auto exitcode = search->search(scoped_task, *sgen, *heuristic);
-            cout << "finished search" << endl;
             int code = static_cast<int>(exitcode);
             cout << "SUCCESS CODE " << code << endl;
 

@@ -5,8 +5,10 @@
 #include <vector>
 #include <iostream>
 #include <unordered_set>
+#include <unordered_map>
 #include <string>
 #include <stdexcept>
+#include <tuple>
 
 using namespace std;
 
@@ -19,6 +21,7 @@ SpeculativeScope::SpeculativeScope(const Task &task, int seed, int max_attempts)
     required_objects = get_required_objects(task);
     object_count = get_object_count(relevant_actions, task.compute_object_index());
     type_to_object_index = task.compute_object_index();
+    tie(related_objects, object_cost) = get_related_objects(task);
     attempted_scopes = unordered_set<vector<int>, TupleHash>();
 }
 
@@ -68,9 +71,9 @@ Task SpeculativeScope::speculative_scope(vector<int> &object_idxs,
         if (file_name == ""){
             throw invalid_argument("Filename was not provided but write_to_file is true.");
         }
-        success = write(new_task, file_name);
+        auto success = write(new_task, file_name);
         if (!success){
-            throw exception("Error during file write for file: " + file_name)
+            throw runtime_error("Error during file write for file: " + file_name);
         }
     }
     
@@ -140,37 +143,64 @@ vector<int> SpeculativeScope::get_required_objects(const Task &task){
         }
     }
 
-    auto init_relations = task.initial_state.get_relations();
-    auto static_relations = task.static_info.get_relations();
+    return required_objects;
+}
 
-    for (size_t i = 0; i < required_objects.size(); i++){
-        // check for required objects in initiation state
-        for (auto relation : init_relations){
-            for (auto tuple : relation.tuples){
-                if (find(tuple.begin(), tuple.end(), required_objects[i]) != tuple.end()){
-                    for (auto obj : tuple){
-                        if (find(required_objects.begin(), required_objects.end(), required_objects[i]) == required_objects.end()){
-                            required_objects.push_back(obj);
+bool compare_index(const Object &o1, const Object &o2){
+    return o1.get_index() < o2.get_index();
+}
+
+tuple<unordered_map<int, unordered_set<int>>,
+      unordered_map<int, int>> SpeculativeScope::get_related_objects(const Task &task){
+    
+    auto &objects = task.objects;
+    const auto &init_relations = task.initial_state.get_relations();
+    const auto &static_relations = task.static_info.get_relations();
+
+    unordered_map<int, unordered_set<int>> related_objects;
+    unordered_map<int, int> object_costs;
+
+    for (auto object : objects){
+        unordered_set<int> related_obj;
+        related_obj.insert(object.get_index());
+        bool objects_added = false;
+
+        do {
+            auto original_size = related_obj.size();
+            objects_added = false;
+            for (auto it = related_obj.begin(); it != related_obj.end(); ++it){
+                for (auto &relation : init_relations){
+                    for (auto &tuple : relation.tuples){
+                        if (find(tuple.begin(), tuple.end(), *it) != tuple.end()){
+                            for (auto obj_id : tuple){
+                                related_obj.insert(obj_id);
+                            }
+                        }
+                    }
+                }
+                for (auto &relation : static_relations){
+                    for (auto &tuple : relation.tuples){
+                        if (find(tuple.begin(), tuple.end(), *it) != tuple.end()){
+                            for (auto obj_id : tuple){
+                                related_obj.insert(obj_id);
+                            }
                         }
                     }
                 }
             }
-        }
-        //check for required objects in static state
-        for (auto relation : static_relations){
-            for (auto tuple : relation.tuples){
-                if (find(tuple.begin(), tuple.end(), required_objects[i]) != tuple.end()){
-                    for (auto obj : tuple){
-                        if (find(required_objects.begin(), required_objects.end(), required_objects[i]) == required_objects.end()){
-                            required_objects.push_back(obj);
-                        }
-                    }
-                }
+
+            if (original_size < related_obj.size()){
+                objects_added = true;
             }
-        }
+
+
+        } while(objects_added);
+
+        related_objects[object.get_index()] = related_obj;
+        object_costs[object.get_index()] = related_obj.size();
     }
 
-    return required_objects;
+    return make_tuple(related_objects, object_costs);
 }
 
 vector<int> SpeculativeScope::get_object_count(const vector<ActionSchema> &relevant_actions,
@@ -215,7 +245,9 @@ int sample_range(int min, int max){
 
 vector<int> SpeculativeScope::sample_scope(){
     bool scope_found = false;
-    vector<int> sampled_objects(required_objects);
+
+    unordered_set<int> sampled_objects(required_objects.begin(), required_objects.end());
+    vector<int> sampled_objects_vec;
 
     int attempts = 0;
 
@@ -229,20 +261,23 @@ vector<int> SpeculativeScope::sample_scope(){
             int num_objects = sample_range(object_count[type_idx], max);
             for (int x = 0; x < num_objects; x++){
                 int obj_idx = sample_range(1, max);
-                sampled_objects.push_back(type_to_object_index[type_idx][obj_idx-1]);
+                sampled_objects.insert(type_to_object_index[type_idx][obj_idx-1]);
             }
         }
 
-        sort(sampled_objects.begin(), sampled_objects.end());
-        auto it = unique(sampled_objects.begin(), sampled_objects.end());
-        sampled_objects.erase(it, sampled_objects.end());
+        for (auto it = sampled_objects.begin(); it != sampled_objects.end(); ++it){
+            auto related_obj = related_objects[*it];
+            sampled_objects.insert(related_obj.begin(), related_obj.end());
+        }
 
-        scope_found = check_scope_unique(sampled_objects);
+        sampled_objects_vec = vector<int>(sampled_objects.begin(), sampled_objects.end());
+
+        scope_found = check_scope_unique(sampled_objects_vec);
     }
 
-    attempted_scopes.insert(sampled_objects);
+    attempted_scopes.insert(sampled_objects_vec);
 
-    return sampled_objects;
+    return sampled_objects_vec;
 }
 
 vector<Object> SpeculativeScope::get_objects(vector<int> &sampled_objects){
