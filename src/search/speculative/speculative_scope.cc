@@ -16,12 +16,17 @@ SpeculativeScope::SpeculativeScope(const Task &task, int seed, int max_attempts)
     : task(task), max_attempts(max_attempts){
     srand(seed);
     
-    relevant_predicate_idxs = get_relevant_predicate_idxs(task);
-    relevant_actions = get_relevant_actions(task, relevant_predicate_idxs);
+    tie(relevant_actions,
+        relevant_predicate_idxs,
+        negated_predicates,
+        affirmed_predicates) = scope_actions(task);
+    samplable_object_types = get_samplable_types(task,
+                                                 relevant_predicate_idxs);
     required_objects = get_required_objects(task);
     object_count = get_object_count(relevant_actions, task.compute_object_index());
     type_to_object_index = task.compute_object_index();
-    tie(related_objects, object_cost) = get_related_objects(task);
+    tie(related_objects, object_cost) = get_related_objects(task,
+                                                            relevant_predicate_idxs);
     attempted_scopes = unordered_set<vector<int>, TupleHash>();
 }
 
@@ -109,16 +114,60 @@ DBState SpeculativeScope::update_state(const DBState &original_state, vector<int
     return DBState(move(new_relations), move(new_nullary_atoms));
 }
 
-vector<ActionSchema> SpeculativeScope::get_relevant_actions(const Task &task, vector<int> &relevant_pred_idxs){
+// TODO REALLY NEED TO CHECK THESE FUNCTIONS WORK WITH NULLARY ATOMS
+
+vector<ActionSchema> SpeculativeScope::get_relevant_actions(const Task &task, 
+                                                            unordered_set<int> &relevant_pred_idxs,
+                                                            vector<bool> &negated_predicates,
+                                                            vector<bool> &affirmed_predicates){
     vector<ActionSchema> relevant_actions = vector<ActionSchema>();
     auto end_pred_idx_it = relevant_pred_idxs.end();
     auto begin_pred_idx_it = relevant_pred_idxs.begin();
 
+
     for (auto &action : task.get_action_schemas()){
+        bool action_added = false;
+        for (size_t i = 0; i < action.get_positive_nullary_effects().size(); ++i){
+            if (action.get_positive_nullary_effects()[i]){
+                if (affirmed_predicates[i]){
+                    relevant_actions.push_back(action);
+                    action_added = true;
+                    break;
+                }
+            }
+        }
+
+        if (action_added){
+            continue;
+        }
+
+        for (size_t i = 0; i < action.get_negative_nullary_effects().size(); ++i){
+            if (action.get_negative_nullary_effects()[i]){
+                if (negated_predicates[i]){
+                    relevant_actions.push_back(action);
+                    action_added = true;
+                    break;
+                }
+            }
+        }
+
+        if (action_added){
+            continue;
+        }
+
         for (auto &effect : action.get_effects()){
             if (find(begin_pred_idx_it, end_pred_idx_it, effect.get_predicate_symbol_idx()) != end_pred_idx_it){
-                relevant_actions.push_back(action);
-                break;
+                if (effect.is_negated()){
+                    if (negated_predicates[effect.get_predicate_symbol_idx()]){
+                        relevant_actions.push_back(action);
+                        break;
+                    }
+                } else {
+                    if (affirmed_predicates[effect.get_predicate_symbol_idx()]){
+                        relevant_actions.push_back(action);
+                        break;
+                    }
+                }
             }
         }
     }
@@ -126,14 +175,96 @@ vector<ActionSchema> SpeculativeScope::get_relevant_actions(const Task &task, ve
     return relevant_actions;
 }
 
-vector<int> SpeculativeScope::get_relevant_predicate_idxs(const Task &task){
-    vector<int> relevant_pred_idxs = vector<int>();
+tuple<vector<ActionSchema>, vector<int>, vector<bool>, vector<bool>> SpeculativeScope::scope_actions(const Task &task){
+    unordered_set<int> relevant_predicates;
+    vector<ActionSchema> relevant_actions;
+    // we should track whether predicate is negated or not so we know which 
+    // version of predicates should be preserved
+    vector<bool> negated_predicate(task.predicates.size(), false);
+    vector<bool> affirmed_predicate(task.predicates.size(), false);
+
+    bool action_added = false;
+
+    // get effects from each atomic goal
     for (auto &goal : task.get_goal().goal){
-        relevant_pred_idxs.push_back(goal.get_predicate_index());
+        relevant_predicates.insert(goal.get_predicate_index());
+        if (goal.is_negated()){
+            negated_predicate[goal.get_predicate_index()] = true;
+        } else {
+            affirmed_predicate[goal.get_predicate_index()] = true;
+        }
     }
 
-    return relevant_pred_idxs;
+    // get positive and negative nullary goals
+    for (auto &pred_idx : task.get_goal().positive_nullary_goals){
+        affirmed_predicate[pred_idx] = true;
+        relevant_predicates.insert(pred_idx);
+    }
+    for (auto &pred_idx : task.get_goal().negative_nullary_goals){
+        negated_predicate[pred_idx] = true;
+        relevant_predicates.insert(pred_idx);
+    }
+
+    do{
+        auto action_num = relevant_actions.size();
+        action_added = false;
+
+        for (ActionSchema &action : relevant_actions){
+            for (size_t i = 0; i < action.get_positive_nullary_precond().size(); ++i){
+                if(action.get_negative_nullary_precond()[i]){
+                    negated_predicate[i] = true;
+                    relevant_predicates.insert(i);
+                }
+            }
+
+            for (size_t i = 0; i < action.get_positive_nullary_precond().size(); ++i){
+                if (action.get_positive_nullary_precond()[i]){
+                    affirmed_predicate[i] = true;
+                    relevant_predicates.insert(i);
+                }
+            }
+
+            for (auto &effect : action.get_effects()){
+                relevant_predicates.insert(effect.get_predicate_symbol_idx());
+                if (effect.is_negated()){
+                    negated_predicate[effect.get_predicate_symbol_idx()] = true;
+                } else {
+                    affirmed_predicate[effect.get_predicate_symbol_idx()] = true;
+                }
+            }
+        }
+
+        relevant_actions = get_relevant_actions(task, 
+                                                relevant_predicates,
+                                                negated_predicate,
+                                                affirmed_predicate);
+
+        if (action_num < relevant_actions.size()){
+            action_added = true;
+        }
+
+        
+    } while(action_added);
+
+    cout << "==================================" << endl;
+    cout << "relevant predicates" << endl;
+    for (auto pred : relevant_predicates){
+        cout << pred << " "; 
+        cout << "negated: " << negated_predicate[pred] << " ";
+        cout << "affirmed: " << affirmed_predicate[pred] << " " << endl;
+    }
+    cout << "==================================" << endl;
+
+    vector<int> relevant_pred_vec(relevant_predicates.begin(),
+                                  relevant_predicates.end());
+
+    return make_tuple(relevant_actions,
+                      relevant_pred_vec,
+                      negated_predicate,
+                      affirmed_predicate); 
 }
+
+
 
 vector<int> SpeculativeScope::get_required_objects(const Task &task){
     vector<int> required_objects = vector<int>();
@@ -146,12 +277,32 @@ vector<int> SpeculativeScope::get_required_objects(const Task &task){
     return required_objects;
 }
 
+vector<bool> SpeculativeScope::get_samplable_types(const Task &task,
+                                                   vector<int> &relevant_predicate_idxs){
+    // go through all predicates and save what types are important then save ids 
+    // of all objects of those types
+    vector<bool> object_type_needed(task.type_names.size(), false);
+    for (auto relation : task.initial_state.get_relations()){
+        if (find(relevant_predicate_idxs.begin(),
+                 relevant_predicate_idxs.end(),
+                 relation.predicate_symbol) != relevant_predicate_idxs.end()){
+            auto predicate = task.predicates[relation.predicate_symbol];
+            for (auto type : predicate.getTypes()){
+                object_type_needed[type] = true;
+            }
+        }
+    }
+
+    return object_type_needed;
+}
+
 bool compare_index(const Object &o1, const Object &o2){
     return o1.get_index() < o2.get_index();
 }
 
 tuple<unordered_map<int, unordered_set<int>>,
-      unordered_map<int, int>> SpeculativeScope::get_related_objects(const Task &task){
+      unordered_map<int, int>> SpeculativeScope::get_related_objects(const Task &task,
+                                                                     vector<int> relevant_predicate_idxs){
     
     auto &objects = task.objects;
     const auto &init_relations = task.initial_state.get_relations();
@@ -170,19 +321,27 @@ tuple<unordered_map<int, unordered_set<int>>,
             objects_added = false;
             for (auto it = related_obj.begin(); it != related_obj.end(); ++it){
                 for (auto &relation : init_relations){
-                    for (auto &tuple : relation.tuples){
-                        if (find(tuple.begin(), tuple.end(), *it) != tuple.end()){
-                            for (auto obj_id : tuple){
-                                related_obj.insert(obj_id);
+                    if (find(relevant_predicate_idxs.begin(),
+                             relevant_predicate_idxs.end(),
+                             relation.predicate_symbol) != relevant_predicate_idxs.end()){
+                        for (auto &tuple : relation.tuples){
+                            if (find(tuple.begin(), tuple.end(), *it) != tuple.end()){
+                                for (auto obj_id : tuple){
+                                    related_obj.insert(obj_id);
+                                }
                             }
                         }
                     }
                 }
                 for (auto &relation : static_relations){
-                    for (auto &tuple : relation.tuples){
-                        if (find(tuple.begin(), tuple.end(), *it) != tuple.end()){
-                            for (auto obj_id : tuple){
-                                related_obj.insert(obj_id);
+                    if (find(relevant_predicate_idxs.begin(),
+                             relevant_predicate_idxs.end(),
+                             relation.predicate_symbol) != relevant_predicate_idxs.end()){
+                        for (auto &tuple : relation.tuples){
+                            if (find(tuple.begin(), tuple.end(), *it) != tuple.end()){
+                                for (auto obj_id : tuple){
+                                    related_obj.insert(obj_id);
+                                }
                             }
                         }
                     }
@@ -257,6 +416,9 @@ vector<int> SpeculativeScope::sample_scope(){
             return vector<int>();
         }
         for (size_t type_idx = 0; type_idx < object_count.size(); type_idx++){
+            if (!samplable_object_types[type_idx]){
+                continue;
+            }
             int max = type_to_object_index[type_idx].size();
             int num_objects = sample_range(object_count[type_idx], max);
             for (int x = 0; x < num_objects; x++){

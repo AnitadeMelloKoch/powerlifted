@@ -164,4 +164,4 @@ how to run the planner with the Singularity image:
  4. Corrêa, A. B.; and Seipp, J. 2022. Best-First Width Search for Lifted
     Classical Planning. In Proc. ICAPS 2022. [[pdf]](https://ai.dmi.unibas.ch/papers/correa-seipp-icaps2022.pdf)
 
-    ```python powerlifted.py -d dev/domains/htg-domains/blocksworld-large-simple/goal-5/domain.pddl -i dev/domains/htg-domains/blocksworld-large-simple/goal-5/p-100-5.pddl --build --speculative --cxx-compiler /usr/local/bin/mpic++```
+    ```python powerlifted.py -d dev/domains/test/blocks/domain.pddl -i dev/domains/test/blocks/blocks_50.pddl --build --speculative --cxx-compiler /usr/local/bin/mpic++ --processes 4```

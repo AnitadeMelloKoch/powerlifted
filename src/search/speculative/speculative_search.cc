@@ -36,7 +36,7 @@ int SpeculativeSearch::speculative_search(int argc, char *argv[]){
             for (int i = 1; i < world_size; i++){
                 auto obj_list = scope.sample_scope();
                 if (obj_list.size() == 0){
-
+                    cout << "object list is empty. Currently throws error. Don't worry about it!" << endl;
                     return -1;
                 }
                 int list_size = obj_list.size();
@@ -69,6 +69,16 @@ int SpeculativeSearch::speculative_search(int argc, char *argv[]){
         bool search_success = false;
 
         unique_ptr<SearchBase> search(SearchFactory::create(opt, opt.get_search_engine(), opt.get_state_representation()));
+        
+        string plan_name = opt.get_plan_file() + "_rank" + to_string(rank);
+        PlanManager::set_plan_filename(plan_name);
+        string pddl_name = opt.get_pddl_file();
+        auto pos_dot = pddl_name.find('.');
+        if (pos_dot != string::npos){
+            pddl_name = pddl_name.substr(0, pos_dot);
+        }
+        pddl_name = pddl_name + "_rank" + to_string(rank) + ".pddl";
+        PlanManager::set_pddl_filename(pddl_name);
 
         while (!search_success){
             int list_size;
@@ -84,16 +94,6 @@ int SpeculativeSearch::speculative_search(int argc, char *argv[]){
             unique_ptr<SuccessorGenerator> sgen(SuccessorGeneratorFactory::create(opt.get_successor_generator(),
                                                                                   opt.get_seed(),
                                                                                   scoped_task));
-            
-            string plan_name = opt.get_plan_file() + "_rank" + to_string(rank);
-            PlanManager::set_plan_filename(plan_name);
-            string pddl_name = opt.get_pddl_file();
-            auto pos_dot = pddl_name.find('.');
-            if (pos_dot != string::npos){
-                pddl_name = pddl_name.substr(0, pos_dot);
-            }
-            pddl_name = pddl_name + "_rank" + to_string(rank) + ".pddl";
-            PlanManager::set_pddl_filename(pddl_name);
 
             auto exitcode = search->search(scoped_task, *sgen, *heuristic);
             int code = static_cast<int>(exitcode);
