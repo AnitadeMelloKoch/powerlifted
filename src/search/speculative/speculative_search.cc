@@ -1,6 +1,7 @@
 #include <mpi.h>
 #include <memory>
 #include <string>
+#include <queue>
 
 #include "speculative_search.h"
 #include "speculative_scope.h"
@@ -27,46 +28,98 @@ int SpeculativeSearch::speculative_search(int argc, char *argv[]){
     MPI_Comm_size(MPI_COMM_WORLD, &world_size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
+    // queue of tasks -> initialization
+
+    int work_request_tag = 0;
+    int result_tag = 1;
+    int list_size_tag = 3;
+    int scope_tag = 4;
+    vector<int> success_code(world_size-1, -1);
+
     if (rank == 0){
         // rank 0 gets all scopes we want to try
-        bool search_success = false;
-        vector<int> exit_codes(world_size-1, -1);
+        bool task_complete = false;
+        queue<vector<int>> task_queue;
+        vector<MPI_Request> work_requests(world_size-1);
+        vector<MPI_Request> result_requests(world_size-1);
+        vector<int> work_flags(world_size-1, 0);
+        vector<int> result_flags(world_size-1, 0);
+        MPI_Request bcast_request;
+        
 
-        while (!search_success){
-            for (int i = 1; i < world_size; i++){
-                auto obj_list = scope.sample_scope();
-                if (obj_list.size() == 0){
-                    cout << "object list is empty. Currently throws error. Don't worry about it!" << endl;
-                    return -1;
-                }
-                int list_size = obj_list.size();
-                // to send the vector we first need to send the vector size 
-                // before sending the vector
-                MPI_Send(&list_size, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
-
-                MPI_Send(obj_list.data(), list_size, MPI_INT, i, 1, MPI_COMM_WORLD);
-            }
-
-            for (int i = 0; i < (world_size-1); i++){
-                int exit_code;
-                MPI_Recv(&exit_code, 1, MPI_INT, i+1, 2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-                exit_codes[i] = exit_code;
-            }
-
-            if (find(exit_codes.begin(), exit_codes.end(), 0) != exit_codes.end()){
-                search_success = true;
-            }
-
-            for (int i = 1; i < world_size; i++){
-                int success_int = int(search_success);
-                MPI_Send(&success_int, 1, MPI_INT, i, 3, MPI_COMM_WORLD);
+        for (int i = 1; i < world_size; ++i){
+            auto obj_list = scope.sample_scope();
+            if (obj_list.size() > 0){
+                task_queue.push(obj_list);
             }
         }
+
+        // receive requests from workers
+        for (int i = 1; i < world_size; ++i){
+            MPI_Irecv(nullptr, 0, MPI_INT, i, work_request_tag, MPI_COMM_WORLD, &work_requests[i-1]);
+        }
+
+        for (int i = 1; i < world_size; ++i){
+            MPI_Irecv(&success_code[i-1], 1, MPI_INT, i, result_tag, MPI_COMM_WORLD, &result_requests[i-1]);
+        }
+
+        // populate task queue
+        // receive task requests -> tag id 0
+        // when get recieve send
+        // recieve that result -> tag id 1
+        // update accordingly
+        // if result is success send success sig -> tag id 2
+        // if queue empty send kill sig -> tag id 2
+        // while this happening make new scopes
+
+        while (!task_complete){
+            auto obj_list = scope.sample_scope();
+            if (obj_list.size() > 0){
+                task_queue.push(obj_list);
+            }
+
+            for (int i = 0; i < world_size-1; ++i){
+                MPI_Test(&work_requests[i], &work_flags[i], MPI_STATUS_IGNORE);
+                if (work_flags[i] == 1){
+                    if (task_queue.size() == 0){
+                        task_complete = true;
+                        // MPI_Ibcast(&task_complete, 1, MPI_C_BOOL, 0, MPI_COMM_WORLD, &bcast_request);
+                        MPI_Abort(MPI_COMM_WORLD, 0);
+                        break;
+                    }
+                    auto objects = task_queue.front();
+                    task_queue.pop();
+                    int list_size = objects.size();
+                    MPI_Send(&list_size, 1, MPI_INT, i+1, list_size_tag, MPI_COMM_WORLD);
+                    MPI_Send(objects.data(), list_size, MPI_INT, i+1, scope_tag, MPI_COMM_WORLD);
+                    MPI_Irecv(nullptr, 0, MPI_INT, i+1, work_request_tag, MPI_COMM_WORLD, &work_requests[i]);
+                }
+
+                MPI_Test(&result_requests[i], &result_flags[i], MPI_STATUSES_IGNORE);
+                if (result_flags[i] == 1){
+                    if (success_code[i] == 0){
+                        task_complete = true;
+                        // MPI_Ibcast(&task_complete, 1, MPI_C_BOOL, 0, MPI_COMM_WORLD, &bcast_request);
+                        MPI_Abort(MPI_COMM_WORLD, 0);
+                        break;
+                    }
+                    MPI_Irecv(&success_code[i], 1, MPI_INT, i+1, result_tag, MPI_COMM_WORLD, &result_requests[i]);
+                }
+            }
+        }
+
+        MPI_Wait(&bcast_request, MPI_STATUS_IGNORE);
         
     } else {
         // receive scope from rank 0 and speculatively plan
         // first need to receive vector size before can receive vector
-        bool search_success = false;
+
+        // request a scope -> blocking
+        // plan for scope
+        // send result -> blocking
+        // check if finished -> non-blocking
+
+        bool search_complete = false;
 
         unique_ptr<SearchBase> search(SearchFactory::create(opt, opt.get_search_engine(), opt.get_state_representation()));
         
@@ -79,12 +132,24 @@ int SpeculativeSearch::speculative_search(int argc, char *argv[]){
         }
         pddl_name = pddl_name + "_rank" + to_string(rank) + ".pddl";
         PlanManager::set_pddl_filename(pddl_name);
+        
+        // MPI_Request bcast_request;
+        // MPI_Irecv(&search_complete, 1, MPI_INT, 0, MPI_COMM_WORLD, &bcast_request);
 
-        while (!search_success){
+        while (!search_complete){
+            MPI_Send(nullptr, 0, MPI_INT, 0, work_request_tag, MPI_COMM_WORLD);
             int list_size;
-            MPI_Recv(&list_size, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            if (search_complete){
+                break;
+            }
+            cout << search_complete << endl;
+            MPI_Recv(&list_size, 1, MPI_INT, 0, list_size_tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             vector<int> obj_list = vector<int>(list_size, 0);
-            MPI_Recv(obj_list.data(), list_size, MPI_INT, 0, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            if (search_complete){
+                break;
+            }
+            cout << search_complete << endl;
+            MPI_Recv(obj_list.data(), list_size, MPI_INT, 0, scope_tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
             auto scoped_task = scope.speculative_scope(obj_list);
 
@@ -103,14 +168,15 @@ int SpeculativeSearch::speculative_search(int argc, char *argv[]){
                 search->print_statistics();
                 write(scoped_task, PlanManager::get_pddl_filename());
             }
-
-            MPI_Send(&code, 1, MPI_INT, 0, 2, MPI_COMM_WORLD);
-            int search_success_int;
-            MPI_Recv(&search_success_int, 1, MPI_INT, 0, 3, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-
-            search_success = bool(search_success_int);
+            if (search_complete){
+                break;
+            }
+            cout << search_complete << endl;
+            MPI_Send(&code, 1, MPI_INT, 0, result_tag, MPI_COMM_WORLD);
         }
+        // MPI_Wait(&bcast_request, MPI_STATUS_IGNORE);
     }
+
 
     MPI_Finalize();
 

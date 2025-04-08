@@ -16,6 +16,12 @@ SpeculativeScope::SpeculativeScope(const Task &task, int seed, int max_attempts)
     : task(task), max_attempts(max_attempts){
     srand(seed);
     
+    cout << "initialising" << endl;
+    cout << "action num: " << task.get_action_schemas().size() << endl; 
+    for (auto action : task.get_action_schemas()){
+        cout << action.get_name() << endl;
+    }
+
     tie(relevant_actions,
         relevant_predicate_idxs,
         negated_predicates,
@@ -124,7 +130,6 @@ vector<ActionSchema> SpeculativeScope::get_relevant_actions(const Task &task,
     auto end_pred_idx_it = relevant_pred_idxs.end();
     auto begin_pred_idx_it = relevant_pred_idxs.begin();
 
-
     for (auto &action : task.get_action_schemas()){
         bool action_added = false;
         for (size_t i = 0; i < action.get_positive_nullary_effects().size(); ++i){
@@ -224,7 +229,7 @@ tuple<vector<ActionSchema>, vector<int>, vector<bool>, vector<bool>> Speculative
                 }
             }
 
-            for (auto &effect : action.get_effects()){
+            for (auto &effect : action.get_precondition()){
                 relevant_predicates.insert(effect.get_predicate_symbol_idx());
                 if (effect.is_negated()){
                     negated_predicate[effect.get_predicate_symbol_idx()] = true;
@@ -245,15 +250,6 @@ tuple<vector<ActionSchema>, vector<int>, vector<bool>, vector<bool>> Speculative
 
         
     } while(action_added);
-
-    cout << "==================================" << endl;
-    cout << "relevant predicates" << endl;
-    for (auto pred : relevant_predicates){
-        cout << pred << " "; 
-        cout << "negated: " << negated_predicate[pred] << " ";
-        cout << "affirmed: " << affirmed_predicate[pred] << " " << endl;
-    }
-    cout << "==================================" << endl;
 
     vector<int> relevant_pred_vec(relevant_predicates.begin(),
                                   relevant_predicates.end());
