@@ -15,3 +15,5 @@ reports/
 local-tests/
 *.out
 .vscode/*
+
+fd-builds/
