@@ -9,7 +9,9 @@
 #include "search_engines/search_factory.h"
 #include "successor_generators/successor_generator.h"
 #include "successor_generators/successor_generator_factory.h"
-#include "speculative/speculative_search.h"
+
+#include "speculative/speculative_search_power.h"
+#include "speculative/speculative_search_fd.h"
 
 // TODO This should be included in the heuristic, not here. Right now it is here for testing
 #include "heuristics/ff_heuristic.h"
@@ -56,7 +58,13 @@ int main(int argc, char *argv[]) {
                                                                                opt.get_seed(),
                                                                                task));
     
-    std::unique_ptr<SpeculativeSearch> speculative_scope = make_unique<SpeculativeSearch>(task, opt, opt.get_seed());
+    std::unique_ptr<SpeculativeSearch> speculative_scope;
+
+    if (opt.get_fd()){
+        speculative_scope = make_unique<SpeculativeSearchFD>(task, opt, opt.get_seed());
+    } else {
+        speculative_scope = make_unique<SpeculativeSearchPower>(task, opt, opt.get_seed());
+    }
 
     PlanManager::set_plan_filename(opt.get_plan_file());
 

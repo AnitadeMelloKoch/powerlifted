@@ -80,7 +80,7 @@ def parse_options():
                         default='plan',
                         help='name of plan file')
     parser.add_argument('--pddl-file', dest='pddl_file',
-                        default='pddl_file',
+                        default='scoped_pddl',
                         help='name of scoped pddl file')
     parser.add_argument('--datalog-file', dest='datalog_file',
                         default='model.lp',
@@ -108,6 +108,10 @@ def parse_options():
     parser.add_argument("--speculative", action="store_true",
                         help="scope task speculatively")
     parser.add_argument("--processes", action="store", type=int, default=4)
+    
+    parser.add_argument("--fd", action="store_true", help="run fast downward planner during scope testing")
+    parser.add_argument("--fd-search", dest='fd_search', action="store", help="search options to be passed to fast downward planner")
+    
     args = parser.parse_args()
     if args.domain is None:
         args.domain = find_domain_filename(args.instance)

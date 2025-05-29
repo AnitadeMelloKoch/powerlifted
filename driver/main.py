@@ -107,6 +107,11 @@ def set_extra_options(options):
     
     if options.speculative:
         CPP_EXTRA_OPTIONS += ['--speculative', str(1)]
+    
+    if options.fd:
+        CPP_EXTRA_OPTIONS += ['--fd', str(1)]
+        CPP_EXTRA_OPTIONS += ['--domain', options.domain]
+        CPP_EXTRA_OPTIONS += ['--fd-search', options.fd_search]
 
     return PYTHON_EXTRA_OPTIONS, CPP_EXTRA_OPTIONS
 

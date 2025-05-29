@@ -20,6 +20,9 @@ class Options {
     unsigned seed;
     bool forward_reachability;
     bool speculative;
+    bool fd;
+    std::string domain_file;
+    std::string fd_search_opt;
 
 public:
     Options(int argc, char** argv) {
@@ -38,6 +41,9 @@ public:
             ("novelty-early-stop", po::value<bool>()->default_value(false), "Stop evaluating novelty as soon as w-value is defined.")
             ("forward-reachability", po::value<bool>()->default_value(false), "Generate all fact layers")
             ("speculative", po::value<bool>()->default_value(false), "Speculatively scope the task")
+            ("fd", po::value<bool>()->default_value(false), "Use fast-downward for scope evaluation")
+            ("domain", po::value<std::string>()->default_value("FilePathNotFound"), "Domain file.")
+            ("fd-search", po::value<std::string>()->default_value("astar(lmcut())"), "search options")
             ;
 
         po::variables_map vm;
@@ -68,6 +74,9 @@ public:
         seed = vm["seed"].as<unsigned>();
         forward_reachability = vm["forward-reachability"].as<bool>();
         speculative = vm["speculative"].as<bool>();
+        fd = vm["fd"].as<bool>();
+        domain_file = vm["domain"].as<std::string>();
+        fd_search_opt = vm["fd-search"].as<std::string>();
 
     }
 
@@ -119,7 +128,17 @@ public:
         return speculative;
     }
 
+    bool get_fd() const {
+        return fd;
+    }
 
+    const std::string &get_domain_file() const {
+        return domain_file;
+    }
+
+    const std::string &get_fd_search_opt() const {
+        return fd_search_opt;
+    }
 
 
 };

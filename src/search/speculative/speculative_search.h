@@ -4,15 +4,21 @@
 #include "../options.h"
 
 class SpeculativeSearch{
-    private:
+    protected:
         SpeculativeScope scope;
-        int seed;
         Options opt;
-
+        int seed;
+        virtual bool search(Task scoped_task) = 0;
+    
     public:
         int speculative_search(int argc, char *argv[]);
 
-        explicit SpeculativeSearch(const Task &task, Options opt, int seed = 42, int max_attempts = 500);
+        SpeculativeSearch(const Task &task, 
+                          Options &opt,
+                          int seed=42,
+                          int max_attempts=500);
+        
+        virtual ~SpeculativeSearch();
 };
 
 
