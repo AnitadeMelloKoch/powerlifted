@@ -38,6 +38,9 @@ SUCCESSOR_GENERATOR_CHOICES = ['yannakakis',
                                'clique_bk',
                                'clique_kckp']
 
+SCOPING_METHOD = ['random',
+                  'cost']
+
 
 def parse_options():
     parser = argparse.ArgumentParser()
@@ -63,6 +66,8 @@ def parse_options():
     parser.add_argument('-g', '--generator', dest='generator', action='store',
                         default='yannakakis', help='Successor generator method',
                         choices=SUCCESSOR_GENERATOR_CHOICES)
+    parser.add_argument('--scope', action='store', default='cost', help='Speculative scope building method',
+                        choices=SCOPING_METHOD)
     parser.add_argument('--iteration', action='append', default=None, type=str,
                         help='Pass a triple S,E,G,T corresponding to search ' \
                         'algorithm, evaluator, successor generator, and relative time.' \

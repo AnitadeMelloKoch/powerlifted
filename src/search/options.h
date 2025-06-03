@@ -23,6 +23,7 @@ class Options {
     bool fd;
     std::string domain_file;
     std::string fd_search_opt;
+    std::string scoping_method;
 
 public:
     Options(int argc, char** argv) {
@@ -44,6 +45,7 @@ public:
             ("fd", po::value<bool>()->default_value(false), "Use fast-downward for scope evaluation")
             ("domain", po::value<std::string>()->default_value("FilePathNotFound"), "Domain file.")
             ("fd-search", po::value<std::string>()->default_value("astar(lmcut())"), "search options")
+            ("scoping-method", po::value<std::string>()->default_value("cost"), "scoping method")
             ;
 
         po::variables_map vm;
@@ -77,7 +79,7 @@ public:
         fd = vm["fd"].as<bool>();
         domain_file = vm["domain"].as<std::string>();
         fd_search_opt = vm["fd-search"].as<std::string>();
-
+        scoping_method = vm["scoping-method"].as<std::string>();
     }
 
     const std::string &get_filename() const {
@@ -138,6 +140,10 @@ public:
 
     const std::string &get_fd_search_opt() const {
         return fd_search_opt;
+    }
+
+    const std::string &get_scoping_method() const {
+        return scoping_method;
     }
 
 

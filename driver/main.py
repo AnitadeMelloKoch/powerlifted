@@ -107,6 +107,7 @@ def set_extra_options(options):
     
     if options.speculative:
         CPP_EXTRA_OPTIONS += ['--speculative', str(1)]
+        CPP_EXTRA_OPTIONS += ['--scoping-method', options.scope]
     
     if options.fd:
         CPP_EXTRA_OPTIONS += ['--fd', str(1)]
