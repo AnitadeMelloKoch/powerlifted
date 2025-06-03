@@ -9,13 +9,12 @@
 #include <tuple>
 
 class SpeculativeScope{
-    private:
+    protected:
         Task task;
         std::vector<ActionSchema> relevant_actions;
         std::vector<int> relevant_predicate_idxs;
         std::vector<bool> negated_predicates;
         std::vector<bool> affirmed_predicates;
-        std::vector<int> required_objects;
         std::vector<int> object_count;
         std::vector<bool> samplable_object_types;
         std::vector<std::vector<int>> type_to_object_index;
@@ -29,8 +28,6 @@ class SpeculativeScope{
                                                        std::vector<bool> &negated_predicates,
                                                        std::vector<bool> &affirmed_predicates);
         std::vector<Object> get_objects(std::vector<int> &sampled_objects);
-        std::vector<int> get_object_count(const std::vector<ActionSchema> &relevant_actions, 
-                                          const std::vector<std::vector<int>> &type_to_object_index);
         std::vector<int> get_required_objects(const Task &task);
         std::tuple<std::unordered_map<int, std::unordered_set<int>>, 
                    std::unordered_map<int,int>> get_related_objects(const Task &task,
@@ -52,7 +49,9 @@ class SpeculativeScope{
                                std::string file_name = "");
         SpeculativeScope(const Task &task, int seed = 42, int max_attempts = 500);
         void dump_stats(const Task &task);
-        std::vector<int> sample_scope();
+        virtual std::vector<int> sample_scope();
+
+        virtual ~SpeculativeScope();
 
 };
 

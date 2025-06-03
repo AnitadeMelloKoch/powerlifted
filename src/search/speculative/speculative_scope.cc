@@ -29,12 +29,13 @@ SpeculativeScope::SpeculativeScope(const Task &task, int seed, int max_attempts)
     samplable_object_types = get_samplable_types(task,
                                                  relevant_predicate_idxs);
     required_objects = get_required_objects(task);
-    object_count = get_object_count(relevant_actions, task.compute_object_index());
     type_to_object_index = task.compute_object_index();
     tie(related_objects, object_cost) = get_related_objects(task,
                                                             relevant_predicate_idxs);
     attempted_scopes = unordered_set<vector<int>, TupleHash>();
 }
+
+SpeculativeScope::~SpeculativeScope() {}
 
 Task SpeculativeScope::speculative_scope(vector<int> &object_idxs, 
                                          bool write_pddl_file,
@@ -358,85 +359,8 @@ tuple<unordered_map<int, unordered_set<int>>,
     return make_tuple(related_objects, object_costs);
 }
 
-vector<int> SpeculativeScope::get_object_count(const vector<ActionSchema> &relevant_actions,
-                                               const std::vector<std::vector<int>> &type_to_object_index){
-    vector<int> object_type_count = vector<int>(task.type_names.size(), 0);
-    // we are counting the number of times each object appears in a parameter, effect or precondition
-    // this might result in a count higher than  the number of available objects which needs to be corrected
-
-    for (auto &action : relevant_actions){
-        for (auto &param : action.get_parameters()){
-            object_type_count[param.type] ++;
-        }
-        for (auto &precon : action.get_precondition()){
-            int pred_sym = precon.get_predicate_symbol_idx();
-            Predicate &pred = task.predicates[pred_sym];
-            for (auto type : pred.getTypes()){
-                object_type_count[type] ++;
-            }
-        }
-        for (auto &effect : action.get_effects()){
-            int pred_sym = effect.get_predicate_symbol_idx();
-            Predicate &pred = task.predicates[pred_sym];
-            for (auto type : pred.getTypes()){
-                object_type_count[type] ++;
-            }
-        }
-    }
-
-    // if we have a higher count than number of objects, set the count to the number of objects available
-    for (size_t x = 0; x < object_type_count.size(); x++){
-        if (object_type_count[x] > int(type_to_object_index[x].size())){
-            object_type_count[x] = type_to_object_index[x].size();
-        }
-    }
-
-    return object_type_count;
-}
-
 int sample_range(int min, int max){
     return min + rand() % (max - min + 1);
-}
-
-vector<int> SpeculativeScope::sample_scope(){
-    bool scope_found = false;
-
-    unordered_set<int> sampled_objects(required_objects.begin(), required_objects.end());
-    vector<int> sampled_objects_vec;
-
-    int attempts = 0;
-
-    while (!scope_found){
-        attempts ++;
-        if (attempts == max_attempts){
-            return vector<int>();
-        }
-        for (size_t type_idx = 0; type_idx < object_count.size(); type_idx++){
-            if (!samplable_object_types[type_idx]){
-                continue;
-            }
-            int max = type_to_object_index[type_idx].size();
-            int num_objects = sample_range(object_count[type_idx], max);
-            for (int x = 0; x < num_objects; x++){
-                int obj_idx = sample_range(1, max);
-                sampled_objects.insert(type_to_object_index[type_idx][obj_idx-1]);
-            }
-        }
-
-        for (auto it = sampled_objects.begin(); it != sampled_objects.end(); ++it){
-            auto related_obj = related_objects[*it];
-            sampled_objects.insert(related_obj.begin(), related_obj.end());
-        }
-
-        sampled_objects_vec = vector<int>(sampled_objects.begin(), sampled_objects.end());
-        sort(sampled_objects_vec.begin(), sampled_objects_vec.end());
-
-        scope_found = check_scope_unique(sampled_objects_vec);
-    }
-
-    attempted_scopes.insert(sampled_objects_vec);
-
-    return sampled_objects_vec;
 }
 
 vector<Object> SpeculativeScope::get_objects(vector<int> &sampled_objects){
