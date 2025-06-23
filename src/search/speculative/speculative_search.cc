@@ -1,5 +1,7 @@
 #include "speculative_search.h"
 #include "speculative_scope.h"
+#include "speculative_scope_cost.h"
+#include "speculative_scope_random.h"
 #include "../plan_manager.h"
 #include "../writer.h"
 
@@ -12,7 +14,16 @@
 using namespace std;
 
 SpeculativeSearch::SpeculativeSearch(const Task &task, Options &opt, int seed, int max_attempts)
-    :scope(SpeculativeScope(task, seed, max_attempts)), opt(opt), seed(seed) {}
+    :opt(opt), seed(seed) {
+        auto scoping_method = opt.get_scoping_method();
+        if (scoping_method == "cost"){
+            scope = make_unique<SpeculativeScopeCost>(task, seed, max_attempts, opt.get_domain_file());
+        } else if (scoping_method == "random"){
+            scope = make_unique<SpeculativeScopeRandom>(task, seed, max_attempts, opt.get_domain_file());
+        } else {
+            cout << "No valid scoping method provided" << endl;
+        }
+    }
 
 int SpeculativeSearch::speculative_search(int argc, char *argv[]){
     int rank, world_size;
@@ -47,7 +58,7 @@ int SpeculativeSearch::speculative_search(int argc, char *argv[]){
 
         // add some initial scopes 
         for (int i = 1; i < 2*world_size; ++i){
-            auto obj_list = scope.sample_scope();
+            auto obj_list = scope->sample_scope();
             if (obj_list.size() > 0){
                 task_queue.push(obj_list);
             }
@@ -76,7 +87,7 @@ int SpeculativeSearch::speculative_search(int argc, char *argv[]){
 
         while (!task_complete){
             // add a new scope to task queue
-            auto obj_list = scope.sample_scope();
+            auto obj_list = scope->sample_scope();
             if (obj_list.size() > 0){
                 task_queue.push(obj_list);
             }
@@ -90,7 +101,8 @@ int SpeculativeSearch::speculative_search(int argc, char *argv[]){
                     if (task_queue.size() == 0){
                         task_complete = true;
                         // improve this to not use abort
-                        MPI_Abort(MPI_COMM_WORLD, 0);
+                        cout << "No more scopes!" << endl;
+                        MPI_Abort(MPI_COMM_WORLD, -1);
                         break;
                     }
                     auto objects = task_queue.front();
@@ -106,6 +118,7 @@ int SpeculativeSearch::speculative_search(int argc, char *argv[]){
                     if (successes[i] == 1){
                         task_complete = true;
                         // need to improve this
+                        cout << "task success" << endl;
                         MPI_Abort(MPI_COMM_WORLD, 0);
                         break;
                     }
@@ -140,13 +153,13 @@ int SpeculativeSearch::speculative_search(int argc, char *argv[]){
             vector<int> obj_list = vector<int>(list_size, 0);
             MPI_Recv(obj_list.data(), list_size, MPI_INT, 0, scope_tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-            auto scoped_task = scope.speculative_scope(obj_list);
-            scope.dump_stats(scoped_task);
+            auto scoped_task = scope->speculative_scope(obj_list);
+            scope->dump_stats(scoped_task);
 
             bool success = search(scoped_task);
 
             if (success){
-                write(scoped_task, PlanManager::get_pddl_filename());
+                scope->write(scoped_task, PlanManager::get_pddl_filename());
             }
 
             int success_int = success;

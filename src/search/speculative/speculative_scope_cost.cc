@@ -7,10 +7,10 @@
 
 using namespace std;
 
-SpeculativeScopeCost::SpeculativeScopeCost(const Task &task, int seed, int max_attempts):
-    SpeculativeScopeCost(task, seed, max_attempts)
+SpeculativeScopeCost::SpeculativeScopeCost(const Task &task, int seed, int max_attempts, string domain_file):
+    SpeculativeScope(task, seed, max_attempts, domain_file)
     {
-        for (size_t i = 0; i < type_to_object_index; ++i){
+        for (size_t i = 0; i < type_to_object_index.size(); ++i){
             object_num.push_back(type_to_object_index[i].size());
             scope_idxs.push_back(vector<int>(1,0));
 
@@ -22,7 +22,7 @@ SpeculativeScopeCost::SpeculativeScopeCost(const Task &task, int seed, int max_a
                 [](const pair<int, int>& a, const pair<int, int>& b){
                     return a.second < b.second;
                 });
-            ordered_obj_idxs.append(costs);
+            ordered_obj_idxs.push_back(costs);
         }
     }
 
@@ -34,7 +34,7 @@ vector<int> SpeculativeScopeCost::sample_scope(){
     vector<int> sampled_objects_vec;
 
     while (!scope_found){
-        for (size_t type_idx = 0; type_idx < object_count.size(); ++type_idx){
+        for (size_t type_idx = 0; type_idx < samplable_object_types.size(); ++type_idx){
             if (!samplable_object_types[type_idx]){
                 continue;
             }
@@ -42,7 +42,7 @@ vector<int> SpeculativeScopeCost::sample_scope(){
             int scope_size = scope_idxs[type_idx].size();
             bool increase_idx = true;
             vector<bool> reset_idx(scope_size, false);
-            for (size_t i = 0; i < scope_size; ++i){
+            for (int i = 0; i < scope_size; ++i){
                 if (increase_idx){
                     scope_idxs[type_idx][i]++;
                     increase_idx = false;
@@ -58,7 +58,7 @@ vector<int> SpeculativeScopeCost::sample_scope(){
             }
 
             for (auto idx : scope_idxs[type_idx]){
-                sampled_objects.insert(ordered_obj_idxs[type_idx][idx]);
+                sampled_objects.insert(ordered_obj_idxs[type_idx][idx].first);
             }
         }
 

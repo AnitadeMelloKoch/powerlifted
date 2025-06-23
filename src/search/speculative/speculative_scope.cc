@@ -12,8 +12,8 @@
 
 using namespace std;
 
-SpeculativeScope::SpeculativeScope(const Task &task, int seed, int max_attempts)
-    : task(task), max_attempts(max_attempts){
+SpeculativeScope::SpeculativeScope(const Task &task, int seed, int max_attempts, string domain_file)
+    : task(task), max_attempts(max_attempts), writer(domain_file){
     srand(seed);
     
     cout << "initialising" << endl;
@@ -36,6 +36,10 @@ SpeculativeScope::SpeculativeScope(const Task &task, int seed, int max_attempts)
 }
 
 SpeculativeScope::~SpeculativeScope() {}
+
+vector<int> SpeculativeScope::sample_scope(){
+    throw runtime_error("sample scope not implemented");
+}
 
 Task SpeculativeScope::speculative_scope(vector<int> &object_idxs, 
                                          bool write_pddl_file,
@@ -359,7 +363,7 @@ tuple<unordered_map<int, unordered_set<int>>,
     return make_tuple(related_objects, object_costs);
 }
 
-int sample_range(int min, int max){
+int SpeculativeScope::sample_range(int min, int max){
     return min + rand() % (max - min + 1);
 }
 
@@ -375,6 +379,10 @@ vector<Object> SpeculativeScope::get_objects(vector<int> &sampled_objects){
 }
 
 bool SpeculativeScope::check_scope_unique(const vector<int> &object_idxs){
+    // for (auto idx : object_idxs){
+    //     cout << idx << " ";
+    // }
+    // cout << endl;
     if (attempted_scopes.find(object_idxs)==attempted_scopes.end()){
         return true;
     }
@@ -412,3 +420,8 @@ void SpeculativeScope::dump_stats(const Task &given_task){
     }
     cout << "=====================================================" << endl;
 }
+
+bool SpeculativeScope::write(Task &task, string filename){
+    return writer.write(task, filename);
+}
+

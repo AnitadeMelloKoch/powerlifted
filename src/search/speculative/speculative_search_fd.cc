@@ -20,27 +20,27 @@ bool SpeculativeSearchFD::search(Task scoped_task){
     // save pddl file
     // set up command line arguments for fd run
 
-    cout << opt.get_pddl_file() << endl;
-    cout << opt.get_domain_file() << endl;
-
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     auto tmp_dir = "tmp_rank_" + to_string(rank);
     filesystem::create_directories(tmp_dir);
 
     auto task_filename = tmp_dir + "/task.pddl";
-    write(scoped_task, task_filename);
+    scope->write(scoped_task, task_filename);
 
     
     string command = "python fast-downward.py --build fd-builds/release/bin --plan-file " + opt.get_plan_file() + "rank_" + to_string(rank)
     + " " + opt.get_domain_file() + " " + task_filename + " "
     + "--search \"" + opt.get_fd_search_opt() + "\""; 
-                            
+    
+    // command += " > planner_stdout.txt 2> planner_stderr.txt";
+    
     int code = system(command.c_str());
     
     filesystem::remove_all(tmp_dir);
     
     if (code == 0){
+        cout << "Plan found!" << endl;
         return true;
     }
 

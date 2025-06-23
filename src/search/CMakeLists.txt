@@ -133,6 +133,10 @@ add_executable(search
         parallel_hashmap/phmap.h
         speculative/speculative_scope.cc 
         speculative/speculative_scope.h
+        speculative/speculative_scope_cost.cc
+        speculative/speculative_scope_cost.h
+        speculative/speculative_scope_random.cc
+        speculative/speculative_scope_random.h
         speculative/speculative_search.cc
         speculative/speculative_search.h
         speculative/speculative_search_fd.cc 

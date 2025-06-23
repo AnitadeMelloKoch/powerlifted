@@ -2,12 +2,13 @@
 #define SPECULATIVE_SEARCH
 #include "speculative_scope.h"
 #include "../options.h"
+#include <memory>
 
 class SpeculativeSearch{
     protected:
-        SpeculativeScope scope;
         Options opt;
         int seed;
+        std::unique_ptr<SpeculativeScope> scope;
         virtual bool search(Task scoped_task) = 0;
     
     public:

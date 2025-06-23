@@ -4,10 +4,55 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <algorithm>
+#include <sstream>
 
 using namespace std;
 
-bool write(Task &task, string filename){
+Writer::Writer(string domain_file){
+    ifstream file(domain_file);
+
+    string line;
+    bool in_section = false;
+
+    if (!file){
+        cerr << "Error opening file: " << domain_file << endl; 
+    }
+
+    while (getline(file, line)){
+        istringstream stream(line);
+        string word;
+
+        bool collecting_objects = false;
+        while (stream >> word){
+            bool obj_sec = (word.find(":objects") != string::npos);
+            bool con_sec = (word.find(":constant") != string::npos);
+            if (obj_sec || con_sec){
+                in_section = true;
+                collecting_objects = true;
+                continue;
+            }
+
+            if (word.find(":") != string::npos){
+                // in new section
+                in_section = false;
+                continue;
+            }
+
+            if (word == "-"){
+                collecting_objects = false;
+                continue;
+            }
+
+            if (collecting_objects && in_section){
+                domain_defined_objects.push_back(word);
+            }
+        }
+    }
+
+}
+
+bool Writer::write(Task &task, string filename){
 
     ofstream out(filename);
     if (!out.is_open()){
@@ -21,7 +66,11 @@ bool write(Task &task, string filename){
 
     out << "(:objects" << endl;
     for (auto obj : task.objects){
-        out << obj.get_name() << " ";
+        if (find(domain_defined_objects.begin(), domain_defined_objects.end(), obj.get_name())
+            == domain_defined_objects.end())
+        {
+            out << obj.get_name() << " ";
+        }
     }
     out << endl << ")" << endl;
 

@@ -1,4 +1,7 @@
 #include "speculative_scope_random.h"
+#include <iostream>
+
+using namespace std;
 
 vector<int> SpeculativeScopeRandom::sample_scope(){
     bool scope_found = false;
@@ -13,12 +16,12 @@ vector<int> SpeculativeScopeRandom::sample_scope(){
         if (attempts == max_attempts){
             return vector<int>();
         }
-        for (size_t type_idx = 0; type_idx < object_count.size(); type_idx++){
+        for (size_t type_idx = 0; type_idx < samplable_object_types.size(); type_idx++){
             if (!samplable_object_types[type_idx]){
                 continue;
             }
             int max = type_to_object_index[type_idx].size();
-            int num_objects = sample_range(object_count[type_idx], max);
+            int num_objects = sample_range(0, max);
             for (int x = 0; x < num_objects; x++){
                 int obj_idx = sample_range(1, max);
                 sampled_objects.insert(type_to_object_index[type_idx][obj_idx-1]);

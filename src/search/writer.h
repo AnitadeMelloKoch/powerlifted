@@ -7,7 +7,15 @@
 
 class Task;
 
-bool write(Task &task, std::string filename);
+class Writer{
+    private:
+        std::vector<std::string> domain_defined_objects;
+    
+    public:
+        Writer(std::string domain_file);
+
+        bool write(Task &task, std::string filename);
+};
 
 #endif // SEARCH_PARSER_H
 
