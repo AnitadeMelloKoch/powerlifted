@@ -4,6 +4,7 @@
     (:types agent wood stone iron gold diamond)
 
     (:predicates
+        (alive ?ag - agent)
         (has_wood ?ag - agent)
         (has_stone ?ag - agent)
         (has_iron ?ag - agent)
@@ -35,6 +36,7 @@
         :parameters (?ag - agent ?w - wood)
         :precondition (and
             (wood_not_collected ?w)
+            (alive ?ag)
         )
         :effect (and
             (has_wood ?ag)
@@ -127,6 +129,16 @@
             (wood_collected ?w3)
             (wood_collected ?w4)
             (wood_collected ?w5)
+            (not (= ?w1 ?w2))
+            (not (= ?w1 ?w3))
+            (not (= ?w1 ?w4))
+            (not (= ?w1 ?w5))
+            (not (= ?w2 ?w3))
+            (not (= ?w2 ?w4))
+            (not (= ?w2 ?w5))
+            (not (= ?w3 ?w4))
+            (not (= ?w3 ?w5))
+            (not (= ?w4 ?w5))
         )
         :effect (and
             (not (has_wood ?ag))
@@ -154,6 +166,10 @@
             (stone_collected ?s1)
             (stone_collected ?s2)
             (stone_collected ?s3)
+            (not (= ?w1 ?w2))
+            (not (= ?s1 ?s2))
+            (not (= ?s1 ?s3))
+            (not (= ?s2 ?s3))
         )
         :effect (and
             (not (has_wood ?ag))
@@ -182,6 +198,10 @@
             (iron_collected ?i1)
             (iron_collected ?i2)
             (iron_collected ?i3)
+            (not (= ?w1 ?w2))
+            (not (= ?i1 ?i2))
+            (not (= ?i1 ?i3))
+            (not (= ?i2 ?i3))
         )
         :effect (and
             (not (has_wood ?ag))
@@ -210,6 +230,10 @@
             (gold_collected ?g1)
             (gold_collected ?g2)
             (gold_collected ?g3)
+            (not (= ?w1 ?w2))
+            (not (= ?g1 ?g2))
+            (not (= ?g1 ?g3))
+            (not (= ?g2 ?g3))
         )
         :effect (and
             (not (has_wood ?ag))
@@ -238,6 +262,10 @@
             (diamond_collected ?d1)
             (diamond_collected ?d2)
             (diamond_collected ?d3)
+            (not (= ?w1 ?w2))
+            (not (= ?d1 ?d2))
+            (not (= ?d1 ?d3))
+            (not (= ?d2 ?d3))
         )
         :effect (and
             (not (has_wood ?ag))

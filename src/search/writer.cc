@@ -69,10 +69,12 @@ bool Writer::write(Task &task, string filename){
         if (find(domain_defined_objects.begin(), domain_defined_objects.end(), obj.get_name())
             == domain_defined_objects.end())
         {
-            out << obj.get_name() << " ";
+            auto types = obj.get_types();
+            int type = *max_element(types.begin(), types.end());
+            out << "\t" << obj.get_name() << " - " << task.type_names[type] << endl;
         }
     }
-    out << endl << ")" << endl;
+    out << ")" << endl;
 
     out << "(:INIT " << endl;
     auto predicates = task.predicates;
@@ -81,13 +83,32 @@ bool Writer::write(Task &task, string filename){
     const auto& nullary_atoms = task.initial_state.get_nullary_atoms();
     for (size_t j = 0; j < nullary_atoms.size(); ++j){
         if (nullary_atoms[j]){
-            out << "(" << predicates[j].get_name() << ")" << endl;
+            out << "\t(" << predicates[j].get_name() << ")" << endl;
+        }
+    }
+    const auto& static_nullary_atoms = task.static_info.get_nullary_atoms();
+    for (size_t j = 0; j < nullary_atoms.size(); ++j){
+        if (static_nullary_atoms[j]){
+            out << "\t(" << predicates[j].get_name() << ")" << endl;
         }
     }
 
     for (auto relation : task.initial_state.get_relations()){
         for (auto tuple : relation.tuples){
-            out << "(" << predicates[relation.predicate_symbol].get_name() << " ";
+            out << "\t(" << predicates[relation.predicate_symbol].get_name() << " ";
+            for (auto obj : tuple){
+                out << objects[obj].get_name() << " ";
+            }
+            out << ")" << endl;
+        }
+    }
+    for (auto relation : task.static_info.get_relations()){
+        for (auto tuple : relation.tuples){
+            auto& name = predicates[relation.predicate_symbol].get_name();
+            if (name == "=" || (name.find("type@") != string::npos)){
+                continue;
+            }
+            out << "\t(" << predicates[relation.predicate_symbol].get_name() << " ";
             for (auto obj : tuple){
                 out << objects[obj].get_name() << " ";
             }

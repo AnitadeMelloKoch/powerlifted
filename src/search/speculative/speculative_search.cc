@@ -15,15 +15,15 @@ using namespace std;
 
 SpeculativeSearch::SpeculativeSearch(const Task &task, Options &opt, int seed, int max_attempts)
     :opt(opt), seed(seed) {
-        auto scoping_method = opt.get_scoping_method();
-        if (scoping_method == "cost"){
-            scope = make_unique<SpeculativeScopeCost>(task, seed, max_attempts, opt.get_domain_file());
-        } else if (scoping_method == "random"){
-            scope = make_unique<SpeculativeScopeRandom>(task, seed, max_attempts, opt.get_domain_file());
-        } else {
-            cout << "No valid scoping method provided" << endl;
-        }
+    auto scoping_method = opt.get_scoping_method();
+    if (scoping_method == "cost"){
+        scope = make_unique<SpeculativeScopeCost>(task, seed, max_attempts, opt.get_domain_file());
+    } else if (scoping_method == "random"){
+        scope = make_unique<SpeculativeScopeRandom>(task, seed, max_attempts, opt.get_domain_file());
+    } else {
+        cout << "No valid scoping method provided" << endl;
     }
+}
 
 int SpeculativeSearch::speculative_search(int argc, char *argv[]){
     int rank, world_size;
@@ -154,7 +154,6 @@ int SpeculativeSearch::speculative_search(int argc, char *argv[]){
             MPI_Recv(obj_list.data(), list_size, MPI_INT, 0, scope_tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
             auto scoped_task = scope->speculative_scope(obj_list);
-            scope->dump_stats(scoped_task);
 
             bool success = search(scoped_task);
 

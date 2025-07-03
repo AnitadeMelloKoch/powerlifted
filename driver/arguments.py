@@ -77,7 +77,7 @@ def parse_options():
     parser.add_argument('--seed', action='store', help='Random seed.',
                         default=1)
     parser.add_argument('--time-limit', action='store', type=int, help='Time limit in seconds.',
-                        default=1800)
+                        default=3600)
     parser.add_argument('--translator-output-file', dest='translator_file',
                         default='output.lifted',
                         help='Output file of the translator')

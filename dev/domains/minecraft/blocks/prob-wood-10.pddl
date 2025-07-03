@@ -29,6 +29,7 @@
         (stone_not_collected stone08)
         (stone_not_collected stone09)
         (stone_not_collected stone10)
+        (alive agent01)
     )
 
     (:goal (and

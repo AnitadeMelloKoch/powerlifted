@@ -4,6 +4,7 @@
 #include <vector>
 #include <unordered_map>
 #include <algorithm>
+#include <iostream>
 
 using namespace std;
 
@@ -28,36 +29,77 @@ SpeculativeScopeCost::SpeculativeScopeCost(const Task &task, int seed, int max_a
 
 
 vector<int> SpeculativeScopeCost::sample_scope(){
+    // cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << endl;
+
     bool scope_found = false;
 
     unordered_set<int> sampled_objects(required_objects.begin(), required_objects.end());
     vector<int> sampled_objects_vec;
 
+    int attempts = 0;
+
     while (!scope_found){
+        attempts ++;
+        if (attempts == max_attempts){
+            return vector<int>();
+        }
         for (size_t type_idx = 0; type_idx < samplable_object_types.size(); ++type_idx){
+
+            if (type_idx >= scope_idxs.size()) {
+                cout << "🔥 type_idx " << type_idx << " out of bounds for scope_idxs (size "
+                    << scope_idxs.size() << ")" << endl;
+            }
+
+
+
+            // cout << "============ TYPE IDX " << type_idx << " ============" << endl;
+
+            // cout << "sample object type size: " << samplable_object_types.size() << endl; 
+
             if (!samplable_object_types[type_idx]){
+                // cout << "not samplable type. Skip sampling" << endl;
                 continue;
             }
             
-            int scope_size = scope_idxs[type_idx].size();
+            // cout << "scope idx size: " << scope_idxs[type_idx].size() << " num type of objects: " << object_num[type_idx] << endl;
+            // cout << "sample indexs: ";
+            // for (auto idx : scope_idxs[type_idx]){
+            //     cout << idx << " ";
+            // }
+            // cout << endl;
+
+            int scope_size = min(int(scope_idxs[type_idx].size()), object_num[type_idx]);
+
+            // cout << "scope size: " << scope_size << endl;
+
             bool increase_idx = true;
             vector<bool> reset_idx(scope_size, false);
             for (int i = 0; i < scope_size; ++i){
                 if (increase_idx){
+                    // cout << "increase index" << endl;
                     scope_idxs[type_idx][i]++;
                     increase_idx = false;
                 } 
                 if (scope_idxs[type_idx][i] >= object_num[type_idx]){
+                    // cout << "reset scope size" << endl;
                     scope_idxs[type_idx][i] = 0;
                     increase_idx = true;
                     reset_idx[i] = true;
                 }
             }
-            if (all_of(reset_idx.begin(), reset_idx.end(), [](bool e){return e;})){
+            if (all_of(reset_idx.begin(), reset_idx.end(), [](bool e){return e;}) && int(scope_idxs[type_idx].size()) < object_num[type_idx]){
+                // cout << "all scope idx reset so increase scope size" << endl;
                 scope_idxs[type_idx] = vector<int>(scope_size+1, 0);
             }
-
+            
+            // cout << "get all sampled objects by index" << endl;
+            if (type_idx >= ordered_obj_idxs.size()){
+                cout << "ERROR: type idx " << type_idx << " out of bounds for ordered_obj_idxs (size " << ordered_obj_idxs[type_idx].size() << ")" << endl;
+            }
             for (auto idx : scope_idxs[type_idx]){
+                if (idx >= int(ordered_obj_idxs[type_idx].size())){
+                    cout << "ERROR: idx " << idx << " out of bounds for ordered_obj_idxs[" << type_idx << "] (size " << ordered_obj_idxs[type_idx].size() << ")" << endl;
+                }
                 sampled_objects.insert(ordered_obj_idxs[type_idx][idx].first);
             }
         }

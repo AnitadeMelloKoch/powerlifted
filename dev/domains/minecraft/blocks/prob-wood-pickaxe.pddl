@@ -115,7 +115,7 @@
     )
 
     (:goal (and
-        (has_diamond agent01)
+        (has_wood_pickaxe agent01)
     ))
 
 )
