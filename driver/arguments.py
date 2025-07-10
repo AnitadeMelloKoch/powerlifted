@@ -110,9 +110,11 @@ def parse_options():
                         help="flag if VAL should be called to validate the plan found")
     parser.add_argument("--forward-reachability", action="store_true",
                         help="run forward reachibility to generate all fact layers")
+    
     parser.add_argument("--speculative", action="store_true",
                         help="scope task speculatively")
     parser.add_argument("--processes", action="store", type=int, default=4)
+    parser.add_argument("--save-folder", dest='save_folder', default='./', help='Name of folder to save plan and generated files.')
     
     parser.add_argument("--fd", action="store_true", help="run fast downward planner during scope testing")
     parser.add_argument("--fd-search", dest='fd_search', action="store", help="search options to be passed to fast downward planner")

@@ -109,6 +109,7 @@ def set_extra_options(options):
         CPP_EXTRA_OPTIONS += ['--speculative', str(1)]
         CPP_EXTRA_OPTIONS += ['--scoping-method', options.scope]
         CPP_EXTRA_OPTIONS += ['--domain', options.domain]
+        CPP_EXTRA_OPTIONS += ['--save-folder', options.save_folder]
     
     if options.fd:
         CPP_EXTRA_OPTIONS += ['--fd', str(1)]

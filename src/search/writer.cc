@@ -6,48 +6,74 @@
 #include <string>
 #include <algorithm>
 #include <sstream>
+#include <cctype>
+#include <chrono>
 
 using namespace std;
 
 Writer::Writer(string domain_file){
     ifstream file(domain_file);
 
-    string line;
-    bool in_section = false;
-
     if (!file){
         cerr << "Error opening file: " << domain_file << endl; 
     }
 
+    string line;
+    bool collecting = false;
+    string section = "";
+
     while (getline(file, line)){
-        istringstream stream(line);
-        string word;
-
-        bool collecting_objects = false;
-        while (stream >> word){
-            bool obj_sec = (word.find(":objects") != string::npos);
-            bool con_sec = (word.find(":constant") != string::npos);
-            if (obj_sec || con_sec){
-                in_section = true;
-                collecting_objects = true;
-                continue;
-            }
-
-            if (word.find(":") != string::npos){
-                // in new section
-                in_section = false;
-                continue;
-            }
-
-            if (word == "-"){
-                collecting_objects = false;
-                continue;
-            }
-
-            if (collecting_objects && in_section){
-                domain_defined_objects.push_back(word);
-            }
+        // remove comments from line
+        auto comment_pos = line.find(';');
+        if (comment_pos != string::npos){
+            line = line.substr(0, comment_pos);
         }
+
+        // trim white space
+        line.erase(0, line.find_first_not_of("\t\r\n"));
+        line.erase(line.find_last_not_of("\t\r\n") + 1);
+
+        if (line.empty()) continue;
+
+        if (line.find(":constant") != string::npos || line.find(":objects") != string::npos){
+            collecting = true;
+            auto pos = line.find("(:");
+            if (pos != string::npos){
+                auto next_space = line.find(" ");
+                if (next_space != string::npos){
+                    line = line.substr(pos + next_space);
+                } else {
+                    line = "";
+                }
+            }
+        } else if (line.find(":") != string::npos) {
+            collecting = false;
+        }
+
+        if (collecting){
+            section += " " + line;
+        }
+
+        if (!collecting && !section.empty()){
+            istringstream stream(section);
+            string token;
+            while (stream >> token){
+                if (token == "-"){
+                    string type;
+                    stream >> type;
+                    continue;
+                }
+                if (!token.empty() && token[0] != '(' && token != ")"){
+                    string lowered_token = token;
+                    transform(lowered_token.begin(), lowered_token.end(), lowered_token.begin(),
+                                          [](unsigned char c){ return tolower(c); });
+                    domain_defined_objects.push_back(lowered_token);
+                }
+            }
+            section.clear();
+        }
+
+        
     }
 
 }
@@ -65,6 +91,7 @@ bool Writer::write(Task &task, string filename){
     out << "(:domain " << task.get_domain_name() << ")" << endl;
 
     out << "(:objects" << endl;
+
     for (auto obj : task.objects){
         if (find(domain_defined_objects.begin(), domain_defined_objects.end(), obj.get_name())
             == domain_defined_objects.end())
@@ -149,3 +176,27 @@ bool Writer::write(Task &task, string filename){
 }
 
 
+bool Writer::write_summary(string filename, 
+                           int scope_num, 
+                           bool task_success,
+                           chrono::time_point<std::chrono::high_resolution_clock> start, 
+                           chrono::time_point<std::chrono::high_resolution_clock> end){
+    ofstream outfile(filename);
+
+    if (!outfile){
+        cerr << "Error opening file: " << filename << endl;
+        return false;
+    }
+
+    outfile << "Speculative Scoping Summary" << endl;
+    outfile << "Tested Scopes: " << scope_num << endl;
+    outfile << "Plan Found: " << task_success << endl;
+    auto duration = chrono::duration_cast<chrono::milliseconds>(end-start);
+    outfile << "Total Time: " << duration.count() << "ms" << endl;
+    auto duration_s = chrono::duration_cast<chrono::seconds>(end-start);
+    outfile << "Total Time: " << duration_s.count() << "s" << endl;
+
+    outfile.close();
+
+    return true;
+}

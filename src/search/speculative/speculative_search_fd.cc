@@ -27,10 +27,12 @@ bool SpeculativeSearchFD::search(Task scoped_task){
 
     auto task_filename = tmp_dir + "/task.pddl";
     scope->write(scoped_task, task_filename);
-
+    auto sas_file_name = "output_" + to_string(rank) + ".sas";
     
-    string command = "python fast-downward.py --build fd-builds/release/bin --plan-file " + opt.get_plan_file() + "rank_" + to_string(rank)
-    + " " + opt.get_domain_file() + " " + task_filename + " "
+    string command = "python fast-downward.py --build fd-builds/release/bin --plan-file " + opt.get_save_folder()
+    + "/" + opt.get_plan_file() + "rank_" + to_string(rank)
+    + " " + "--sas-file " + sas_file_name + " "
+    + opt.get_domain_file() + " " + task_filename + " "
     + "--search \"" + opt.get_fd_search_opt() + "\""; 
     
     // command += " > planner_stdout.txt 2> planner_stderr.txt";
@@ -38,6 +40,7 @@ bool SpeculativeSearchFD::search(Task scoped_task){
     int code = system(command.c_str());
     
     filesystem::remove_all(tmp_dir);
+    filesystem::remove(sas_file_name);
     
     if (code == 0){
         cout << "Plan found!" << endl;

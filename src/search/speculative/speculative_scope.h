@@ -8,6 +8,7 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <tuple>
+#include <chrono>
 
 class SpeculativeScope{
     protected:
@@ -57,6 +58,11 @@ class SpeculativeScope{
         virtual ~SpeculativeScope();
 
         bool write(Task &task, std::string filename);
+        bool write_summary(std::string filename,
+                           int scope_num,
+                           bool task_success,
+                           std::chrono::time_point<std::chrono::high_resolution_clock> start,
+                           std::chrono::time_point<std::chrono::high_resolution_clock> end);
 
 };
 

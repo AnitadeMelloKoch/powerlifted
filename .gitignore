@@ -17,3 +17,5 @@ local-tests/
 .vscode/*
 
 fd-builds/
+benchmarks/
+experiments/

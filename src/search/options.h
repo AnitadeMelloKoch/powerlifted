@@ -24,6 +24,7 @@ class Options {
     std::string domain_file;
     std::string fd_search_opt;
     std::string scoping_method;
+    std::string save_folder;
 
 public:
     Options(int argc, char** argv) {
@@ -46,6 +47,7 @@ public:
             ("domain", po::value<std::string>()->default_value("FilePathNotFound"), "Domain file.")
             ("fd-search", po::value<std::string>()->default_value("astar(lmcut())"), "search options")
             ("scoping-method", po::value<std::string>()->default_value("cost"), "scoping method")
+            ("save-folder", po::value<std::string>()->default_value("./"), "save folder")
             ;
 
         po::variables_map vm;
@@ -80,6 +82,7 @@ public:
         domain_file = vm["domain"].as<std::string>();
         fd_search_opt = vm["fd-search"].as<std::string>();
         scoping_method = vm["scoping-method"].as<std::string>();
+        save_folder = vm["save-folder"].as<std::string>();
     }
 
     const std::string &get_filename() const {
@@ -144,6 +147,10 @@ public:
 
     const std::string &get_scoping_method() const {
         return scoping_method;
+    }
+
+    const std::string &get_save_folder() const {
+        return save_folder;
     }
 
 
