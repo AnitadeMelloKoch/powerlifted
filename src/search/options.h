@@ -21,7 +21,9 @@ class Options {
     bool forward_reachability;
     bool speculative;
     bool fd;
+    std::string duplicate_file;
     std::string domain_file;
+    std::string problem_file;
     std::string fd_search_opt;
     std::string scoping_method;
     std::string save_folder;
@@ -44,7 +46,9 @@ public:
             ("forward-reachability", po::value<bool>()->default_value(false), "Generate all fact layers")
             ("speculative", po::value<bool>()->default_value(false), "Speculatively scope the task")
             ("fd", po::value<bool>()->default_value(false), "Use fast-downward for scope evaluation")
+            ("duplicate-file", po::value<std::string>()->default_value("NoDup"), "Create new pddl file with all objects duplicated")
             ("domain", po::value<std::string>()->default_value("FilePathNotFound"), "Domain file.")
+            ("problem", po::value<std::string>()->default_value("FilePathNotFound"), "problem file.")
             ("fd-search", po::value<std::string>()->default_value("astar(lmcut())"), "search options")
             ("scoping-method", po::value<std::string>()->default_value("cost"), "scoping method")
             ("save-folder", po::value<std::string>()->default_value("./"), "save folder")
@@ -79,7 +83,9 @@ public:
         forward_reachability = vm["forward-reachability"].as<bool>();
         speculative = vm["speculative"].as<bool>();
         fd = vm["fd"].as<bool>();
+        duplicate_file = vm["duplicate-file"].as<std::string>();
         domain_file = vm["domain"].as<std::string>();
+        problem_file = vm["problem"].as<std::string>();
         fd_search_opt = vm["fd-search"].as<std::string>();
         scoping_method = vm["scoping-method"].as<std::string>();
         save_folder = vm["save-folder"].as<std::string>();
@@ -137,8 +143,16 @@ public:
         return fd;
     }
 
+    std::string get_duplicate_file() const {
+        return duplicate_file;
+    }
+
     const std::string &get_domain_file() const {
         return domain_file;
+    }
+
+    const std::string &get_problem_file() const {
+        return problem_file;
     }
 
     const std::string &get_fd_search_opt() const {

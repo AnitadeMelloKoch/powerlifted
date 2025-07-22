@@ -12,8 +12,8 @@
 
 using namespace std;
 
-SpeculativeScope::SpeculativeScope(const Task &task, int seed, int max_attempts, string domain_file)
-    : task(task), max_attempts(max_attempts), writer(domain_file){
+SpeculativeScope::SpeculativeScope(const Task &task, int seed, int max_attempts, string domain_file, string problem_file)
+    : task(task), max_attempts(max_attempts), writer(domain_file, problem_file){
     srand(seed);
     
     cout << "initialising" << endl;
@@ -27,7 +27,8 @@ SpeculativeScope::SpeculativeScope(const Task &task, int seed, int max_attempts,
         negated_predicates,
         affirmed_predicates) = scope_actions(task);
     samplable_object_types = get_samplable_types(task,
-                                                 relevant_predicate_idxs);
+                                                 relevant_predicate_idxs,
+                                                 relevant_actions);
     required_objects = get_required_objects(task);
     type_to_object_index = task.compute_object_index();
     tie(related_objects, object_cost) = get_related_objects(task,
@@ -215,6 +216,12 @@ tuple<vector<ActionSchema>, vector<int>, vector<bool>, vector<bool>> Speculative
         relevant_predicates.insert(pred_idx);
     }
 
+    // cout << "initial predicates" << endl;
+    // for (auto idx : relevant_predicates){
+    //     cout << idx << " ";
+    // }
+    // cout << endl;
+
     do{
         auto action_num = relevant_actions.size();
         action_added = false;
@@ -253,12 +260,22 @@ tuple<vector<ActionSchema>, vector<int>, vector<bool>, vector<bool>> Speculative
             action_added = true;
         }
 
+        // cout << "in loop" << endl;
+        // for (auto action : relevant_actions){
+        //     cout << action.get_name() << " ";
+        // }
+        // cout << endl;
+        // for (auto idx : relevant_predicates){
+        //     cout << idx << " ";
+        // }
+        // cout << endl;
+
         
     } while(action_added);
 
     vector<int> relevant_pred_vec(relevant_predicates.begin(),
                                   relevant_predicates.end());
-
+    cout << "returning" << endl;
     return make_tuple(relevant_actions,
                       relevant_pred_vec,
                       negated_predicate,
@@ -268,18 +285,30 @@ tuple<vector<ActionSchema>, vector<int>, vector<bool>, vector<bool>> Speculative
 
 
 vector<int> SpeculativeScope::get_required_objects(const Task &task){
-    vector<int> required_objects = vector<int>();
+    unordered_set<int> required_objects = unordered_set<int>();
     for (auto &goal : task.get_goal().goal){
         for (auto obj_idx : goal.get_arguments()){
-            required_objects.push_back(task.objects[obj_idx].get_index());
+            required_objects.insert(task.objects[obj_idx].get_index());
         }
     }
 
-    return required_objects;
+    auto constants = writer.get_domain_defined_objects();
+
+    for (auto &obj : task.objects){
+        if (find(constants.begin(), constants.end(), obj.get_name()) != constants.end()){
+            required_objects.insert(obj.get_index());
+        }
+    } 
+
+    auto required_objects_vec = vector<int>(required_objects.begin(), required_objects.end());
+    
+
+    return required_objects_vec;
 }
 
 vector<bool> SpeculativeScope::get_samplable_types(const Task &task,
-                                                   vector<int> &relevant_predicate_idxs){
+                                                   vector<int> &relevant_predicate_idxs,
+                                                   vector<ActionSchema> &relevant_actions){
     // go through all predicates and save what types are important then save ids 
     // of all objects of those types
     vector<bool> object_type_needed(task.type_names.size(), false);
@@ -290,6 +319,20 @@ vector<bool> SpeculativeScope::get_samplable_types(const Task &task,
             auto predicate = task.predicates[relation.predicate_symbol];
             for (auto type : predicate.getTypes()){
                 object_type_needed[type] = true;
+            }
+        }
+    }
+
+    for (auto action : relevant_actions){
+        for (auto param : action.get_parameters()){
+            object_type_needed[param.type] = true;
+        }
+    }
+
+    if (object_type_needed.size() > 1){
+        for (size_t i = 0; i < task.type_names.size(); ++i){
+            if (task.type_names[i] == "object"){
+                object_type_needed[i] = false;
             }
         }
     }
@@ -357,7 +400,11 @@ tuple<unordered_map<int, unordered_set<int>>,
         } while(objects_added);
 
         related_objects[object.get_index()] = related_obj;
-        object_costs[object.get_index()] = related_obj.size();
+        if (find(required_objects.begin(), required_objects.end(), object.get_index()) != required_objects.end()){
+            object_costs[object.get_index()] = related_obj.size();
+        } else {
+            object_cost[object.get_index()] = 0;
+        }
     }
 
     return make_tuple(related_objects, object_costs);

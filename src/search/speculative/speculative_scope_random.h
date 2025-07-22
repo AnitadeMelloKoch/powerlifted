@@ -6,8 +6,8 @@
 
 class SpeculativeScopeRandom : public SpeculativeScope{
     public:
-        SpeculativeScopeRandom(const Task &task, int seed = 42, int max_attempts = 500, std::string domain_file = ""):
-            SpeculativeScope(task, seed, max_attempts, domain_file) {};
+        SpeculativeScopeRandom(const Task &task, int seed = 42, int max_attempts = 500, std::string domain_file = "", std::string problem_file=""):
+            SpeculativeScope(task, seed, max_attempts, domain_file, problem_file) {};
         std::vector<int> sample_scope() override;
 
         ~SpeculativeScopeRandom() override;

@@ -109,11 +109,18 @@ def set_extra_options(options):
         CPP_EXTRA_OPTIONS += ['--speculative', str(1)]
         CPP_EXTRA_OPTIONS += ['--scoping-method', options.scope]
         CPP_EXTRA_OPTIONS += ['--domain', options.domain]
+        CPP_EXTRA_OPTIONS += ['--problem', options.instance]
         CPP_EXTRA_OPTIONS += ['--save-folder', options.save_folder]
     
     if options.fd:
         CPP_EXTRA_OPTIONS += ['--fd', str(1)]
         CPP_EXTRA_OPTIONS += ['--fd-search', options.fd_search]
+    
+    if options.duplicate_file is not None:
+        CPP_EXTRA_OPTIONS += ['--duplicate-file', options.duplicate_file]
+        CPP_EXTRA_OPTIONS += ['--pddl-file', options.pddl_file]
+        CPP_EXTRA_OPTIONS += ['--domain', options.domain]
+        CPP_EXTRA_OPTIONS += ['--problem', options.instance]
 
     return PYTHON_EXTRA_OPTIONS, CPP_EXTRA_OPTIONS
 

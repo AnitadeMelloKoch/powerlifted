@@ -183,6 +183,14 @@ def print_action_schemas(output, task, object_index, predicate_index, type_index
     print("ACTION-SCHEMAS %d" % len(task.actions), file=output)
     for action in task.actions:
         parameter_index = {}
+        all_parameters = list(action.parameters)
+
+        # Include parameters from forall effects
+        for eff in action.effects:
+            for par in eff.parameters:
+                if par.name not in parameter_index:
+                    all_parameters.append(par)
+
         if action.cost is None:
             action.cost = 0
         if isinstance(action.cost, pddl.Increase):
@@ -192,9 +200,9 @@ def print_action_schemas(output, task, object_index, predicate_index, type_index
                 action.cost = 1
         precond = action.get_action_preconditions
         assert isinstance(action.effects, list)
-        print(action.name, action.cost, len(list(action.parameters)),
-              len(precond), len(list(action.effects)), file=output)
-        for index, par in enumerate(action.parameters):
+        print(action.name, action.cost, len(all_parameters),
+              len(precond), len(action.effects), file=output)
+        for index, par in enumerate(all_parameters):
             parameter_index[par.name] = index
             print(par.name, index, type_index[par.type_name], file=output)
         for cond in sorted(precond):

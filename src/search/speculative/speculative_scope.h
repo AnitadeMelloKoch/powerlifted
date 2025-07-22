@@ -40,7 +40,8 @@ class SpeculativeScope{
                    std::vector<bool>,
                    std::vector<bool>> scope_actions(const Task &task);
         std::vector<bool> get_samplable_types(const Task &task, 
-                                              std::vector<int> &relevant_predicate_idxs);
+                                              std::vector<int> &relevant_predicate_idxs,
+                                              std::vector<ActionSchema> &relevant_actions);
 
 
         DBState update_state(const DBState &original_state, std::vector<int> &obj_map);
@@ -48,11 +49,16 @@ class SpeculativeScope{
         int sample_range(int min, int max);
 
     public:
-        SpeculativeScope(const Task &task, int seed = 42, int max_attempts = 500, std::string domain_file = "");
+        SpeculativeScope(const Task &task, 
+                         int seed = 42, 
+                         int max_attempts = 500, 
+                         std::string domain_file = "",
+                         std::string problem_file = "");
         Task speculative_scope(std::vector<int> &object_idxs, 
                                bool write_pddl_file = false,
                                std::string file_name = "");
         void dump_stats(const Task &task);
+        Task& get_task() { return task; };
         virtual std::vector<int> sample_scope();
 
         virtual ~SpeculativeScope();

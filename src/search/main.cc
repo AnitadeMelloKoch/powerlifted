@@ -12,6 +12,7 @@
 
 #include "speculative/speculative_search_power.h"
 #include "speculative/speculative_search_fd.h"
+#include "writer.h"
 
 // TODO This should be included in the heuristic, not here. Right now it is here for testing
 #include "heuristics/ff_heuristic.h"
@@ -50,6 +51,12 @@ int main(int argc, char *argv[]) {
 
     cout << "IMPORTANT: Assuming that negative effects are always listed first. "
             "(This is guaranteed by the default translator.)" << endl;
+
+    if (opt.get_duplicate_file() != "NoDup"){
+        Writer writer(opt.get_domain_file(), opt.get_problem_file());
+        writer.write_duplicate_pddl(opt.get_pddl_file(), task, opt.get_duplicate_file());
+        return 0;
+    }
 
     // Let's create a couple unique_ptr's that deal with mem allocation themselves
     std::unique_ptr<SearchBase> search(SearchFactory::create(opt, opt.get_search_engine(), opt.get_state_representation()));

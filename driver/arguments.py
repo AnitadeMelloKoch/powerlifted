@@ -119,6 +119,8 @@ def parse_options():
     parser.add_argument("--fd", action="store_true", help="run fast downward planner during scope testing")
     parser.add_argument("--fd-search", dest='fd_search', action="store", help="search options to be passed to fast downward planner")
     
+    parser.add_argument("--duplicate-file", action="store", dest="duplicate_file", help="prefix for file duplication.")
+    
     args = parser.parse_args()
     if args.domain is None:
         args.domain = find_domain_filename(args.instance)

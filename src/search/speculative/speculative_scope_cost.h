@@ -14,7 +14,7 @@ class SpeculativeScopeCost : public SpeculativeScope{
         
 
     public:
-        SpeculativeScopeCost(const Task &task, int seed = 42, int max_attempts=500, std::string domain_file = "");
+        SpeculativeScopeCost(const Task &task, int seed = 42, int max_attempts=500, std::string domain_file = "", std::string problem_file = "");
         std::vector<int> sample_scope() override;
 
         ~SpeculativeScopeCost() override;

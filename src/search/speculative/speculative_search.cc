@@ -19,15 +19,17 @@ SpeculativeSearch::SpeculativeSearch(const Task &task, Options &opt, int seed, i
     start = chrono::high_resolution_clock::now();
     auto scoping_method = opt.get_scoping_method();
     if (scoping_method == "cost"){
-        scope = make_unique<SpeculativeScopeCost>(task, seed, max_attempts, opt.get_domain_file());
+        scope = make_unique<SpeculativeScopeCost>(task, seed, max_attempts, opt.get_domain_file(), opt.get_problem_file());
     } else if (scoping_method == "random"){
-        scope = make_unique<SpeculativeScopeRandom>(task, seed, max_attempts, opt.get_domain_file());
+        scope = make_unique<SpeculativeScopeRandom>(task, seed, max_attempts, opt.get_domain_file(), opt.get_problem_file());
     } else {
         cout << "No valid scoping method provided" << endl;
     }
 }
 
 int SpeculativeSearch::speculative_search(int argc, char *argv[]){
+    scope->dump_stats(scope->get_task());
+    
     int rank, world_size;
 
     MPI_Init(&argc, &argv);
@@ -178,12 +180,20 @@ int SpeculativeSearch::speculative_search(int argc, char *argv[]){
             vector<int> obj_list = vector<int>(list_size, 0);
             MPI_Recv(obj_list.data(), list_size, MPI_INT, 0, scope_tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
+            // cout << "rank[" << rank << "] Scope received: ";
+            // for (auto idx : obj_list){
+            //     cout << idx << " ";
+            // }
+            // cout << endl;
+
             auto scoped_task = scope->speculative_scope(obj_list);
 
             bool success = search(scoped_task);
             
             int success_int = success;
-            MPI_Send(&success_int, 1, MPI_INT, 0, result_tag, MPI_COMM_WORLD);
+            MPI_Send(&success_int, 1, MPI_INT, 0, result_tag, MPI_COMM_WORLD);            
+
+            scope->write(scoped_task, PlanManager::get_pddl_filename());
 
             if (success){
                 scope->write(scoped_task, PlanManager::get_pddl_filename());
