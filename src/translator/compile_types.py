@@ -95,7 +95,7 @@ def add_conditions_to_actions(task, graph):
                 # If the type is none, then it is not a parameter and
                 # it must be constant.  THus, we search for its type in the
                 # obj list.
-                param_type = resolve_type(arg, action, task)
+                param_type = resolve_type(l, action, task)
             obj_in_action.add((param_type, name))
 
         action.transform_precondition_into_list()

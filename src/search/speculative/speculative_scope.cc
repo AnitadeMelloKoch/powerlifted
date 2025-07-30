@@ -12,8 +12,8 @@
 
 using namespace std;
 
-SpeculativeScope::SpeculativeScope(const Task &task, int seed, int max_attempts, string domain_file, string problem_file)
-    : task(task), max_attempts(max_attempts), writer(domain_file, problem_file){
+SpeculativeScope::SpeculativeScope(const Task &task, int seed, int max_attempts, string domain_file, string problem_file, bool preserve_links)
+    : task(task), max_attempts(max_attempts), writer(domain_file, problem_file), preserve_links(preserve_links){
     srand(seed);
     
     cout << "initialising" << endl;
@@ -126,7 +126,6 @@ DBState SpeculativeScope::update_state(const DBState &original_state, vector<int
     return DBState(move(new_relations), move(new_nullary_atoms));
 }
 
-// TODO REALLY NEED TO CHECK THESE FUNCTIONS WORK WITH NULLARY ATOMS
 
 vector<ActionSchema> SpeculativeScope::get_relevant_actions(const Task &task, 
                                                             unordered_set<int> &relevant_pred_idxs,
@@ -216,12 +215,6 @@ tuple<vector<ActionSchema>, vector<int>, vector<bool>, vector<bool>> Speculative
         relevant_predicates.insert(pred_idx);
     }
 
-    // cout << "initial predicates" << endl;
-    // for (auto idx : relevant_predicates){
-    //     cout << idx << " ";
-    // }
-    // cout << endl;
-
     do{
         auto action_num = relevant_actions.size();
         action_added = false;
@@ -260,22 +253,11 @@ tuple<vector<ActionSchema>, vector<int>, vector<bool>, vector<bool>> Speculative
             action_added = true;
         }
 
-        // cout << "in loop" << endl;
-        // for (auto action : relevant_actions){
-        //     cout << action.get_name() << " ";
-        // }
-        // cout << endl;
-        // for (auto idx : relevant_predicates){
-        //     cout << idx << " ";
-        // }
-        // cout << endl;
-
         
     } while(action_added);
 
     vector<int> relevant_pred_vec(relevant_predicates.begin(),
                                   relevant_predicates.end());
-    cout << "returning" << endl;
     return make_tuple(relevant_actions,
                       relevant_pred_vec,
                       negated_predicate,
@@ -360,44 +342,46 @@ tuple<unordered_map<int, unordered_set<int>>,
         related_obj.insert(object.get_index());
         bool objects_added = false;
 
-        do {
-            auto original_size = related_obj.size();
-            objects_added = false;
-            for (auto it = related_obj.begin(); it != related_obj.end(); ++it){
-                for (auto &relation : init_relations){
-                    if (find(relevant_predicate_idxs.begin(),
-                             relevant_predicate_idxs.end(),
-                             relation.predicate_symbol) != relevant_predicate_idxs.end()){
-                        for (auto &tuple : relation.tuples){
-                            if (find(tuple.begin(), tuple.end(), *it) != tuple.end()){
-                                for (auto obj_id : tuple){
-                                    related_obj.insert(obj_id);
+        if (preserve_links){
+            do {
+                auto original_size = related_obj.size();
+                objects_added = false;
+                for (auto it = related_obj.begin(); it != related_obj.end(); ++it){
+                    for (auto &relation : init_relations){
+                        if (find(relevant_predicate_idxs.begin(),
+                                 relevant_predicate_idxs.end(),
+                                 relation.predicate_symbol) != relevant_predicate_idxs.end()){
+                            for (auto &tuple : relation.tuples){
+                                if (find(tuple.begin(), tuple.end(), *it) != tuple.end()){
+                                    for (auto obj_id : tuple){
+                                        related_obj.insert(obj_id);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    for (auto &relation : static_relations){
+                        if (find(relevant_predicate_idxs.begin(),
+                                 relevant_predicate_idxs.end(),
+                                 relation.predicate_symbol) != relevant_predicate_idxs.end()){
+                            for (auto &tuple : relation.tuples){
+                                if (find(tuple.begin(), tuple.end(), *it) != tuple.end()){
+                                    for (auto obj_id : tuple){
+                                        related_obj.insert(obj_id);
+                                    }
                                 }
                             }
                         }
                     }
                 }
-                for (auto &relation : static_relations){
-                    if (find(relevant_predicate_idxs.begin(),
-                             relevant_predicate_idxs.end(),
-                             relation.predicate_symbol) != relevant_predicate_idxs.end()){
-                        for (auto &tuple : relation.tuples){
-                            if (find(tuple.begin(), tuple.end(), *it) != tuple.end()){
-                                for (auto obj_id : tuple){
-                                    related_obj.insert(obj_id);
-                                }
-                            }
-                        }
-                    }
+    
+                if (original_size < related_obj.size()){
+                    objects_added = true;
                 }
-            }
-
-            if (original_size < related_obj.size()){
-                objects_added = true;
-            }
-
-
-        } while(objects_added);
+    
+    
+            } while(objects_added);
+        }
 
         related_objects[object.get_index()] = related_obj;
         if (find(required_objects.begin(), required_objects.end(), object.get_index()) != required_objects.end()){

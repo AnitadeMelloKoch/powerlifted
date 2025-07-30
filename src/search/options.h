@@ -27,6 +27,9 @@ class Options {
     std::string fd_search_opt;
     std::string scoping_method;
     std::string save_folder;
+    int process_timeout;
+    std::string process_mem_limit;
+    bool preserve_links;
 
 public:
     Options(int argc, char** argv) {
@@ -52,6 +55,9 @@ public:
             ("fd-search", po::value<std::string>()->default_value("astar(lmcut())"), "search options")
             ("scoping-method", po::value<std::string>()->default_value("cost"), "scoping method")
             ("save-folder", po::value<std::string>()->default_value("./"), "save folder")
+            ("process-timeout", po::value<int>()->default_value(1800), "process timeout")
+            ("process-mem-limit", po::value<std::string>()->default_value("128G"), "process memory limit")
+            ("preserve-links", po::value<bool>()->default_value(true), "add relevantly linked objects during sampling")
             ;
 
         po::variables_map vm;
@@ -89,6 +95,9 @@ public:
         fd_search_opt = vm["fd-search"].as<std::string>();
         scoping_method = vm["scoping-method"].as<std::string>();
         save_folder = vm["save-folder"].as<std::string>();
+        process_timeout = vm["process-timeout"].as<int>();
+        process_mem_limit = vm["process-mem-limit"].as<std::string>();
+        preserve_links = vm["preserve-links"].as<bool>();
     }
 
     const std::string &get_filename() const {
@@ -165,6 +174,18 @@ public:
 
     const std::string &get_save_folder() const {
         return save_folder;
+    }
+
+    const int &get_process_timeout() const {
+        return process_timeout;
+    }
+
+    const std::string &get_process_mem_limit() const {
+        return process_mem_limit;
+    }
+
+    const bool &get_preserve_links() const {
+        return preserve_links;
     }
 
 

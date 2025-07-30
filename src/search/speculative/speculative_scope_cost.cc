@@ -8,8 +8,8 @@
 
 using namespace std;
 
-SpeculativeScopeCost::SpeculativeScopeCost(const Task &task, int seed, int max_attempts, string domain_file, string problem_file):
-    SpeculativeScope(task, seed, max_attempts, domain_file, problem_file)
+SpeculativeScopeCost::SpeculativeScopeCost(const Task &task, int seed, int max_attempts, string domain_file, string problem_file, bool preserve_link):
+    SpeculativeScope(task, seed, max_attempts, domain_file, problem_file, preserve_link)
     {
         for (size_t i = 0; i < type_to_object_index.size(); ++i){
             object_num.push_back(type_to_object_index[i].size());
@@ -86,9 +86,11 @@ vector<int> SpeculativeScopeCost::sample_scope(){
             // cout << endl;
         }
 
-        for (auto it = sampled_objects.begin(); it != sampled_objects.end(); ++it){
-            auto related_obj = related_objects[*it];
-            sampled_objects.insert(related_obj.begin(), related_obj.end());
+        if (preserve_links){
+            for (auto it = sampled_objects.begin(); it != sampled_objects.end(); ++it){
+                auto related_obj = related_objects[*it];
+                sampled_objects.insert(related_obj.begin(), related_obj.end());
+            }
         }
 
         sampled_objects_vec = vector<int>(sampled_objects.begin(), sampled_objects.end());

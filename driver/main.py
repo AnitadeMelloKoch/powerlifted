@@ -111,6 +111,13 @@ def set_extra_options(options):
         CPP_EXTRA_OPTIONS += ['--domain', options.domain]
         CPP_EXTRA_OPTIONS += ['--problem', options.instance]
         CPP_EXTRA_OPTIONS += ['--save-folder', options.save_folder]
+        CPP_EXTRA_OPTIONS += ['--process-timeout', str(options.process_timeout)]
+        CPP_EXTRA_OPTIONS += ['--process-mem-limit', options.process_mem_limit]
+        if options.turn_link_off:
+            CPP_EXTRA_OPTIONS += ['--preserve-links', str(0)]
+        else:
+            CPP_EXTRA_OPTIONS += ['--preserve-links', str(1)]
+            
     
     if options.fd:
         CPP_EXTRA_OPTIONS += ['--fd', str(1)]

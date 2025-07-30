@@ -5,6 +5,7 @@ src/search/config
 src/search/latex
 src/search/html
 builds/
+build/
 output.lifted
 model.lp
 plan*
@@ -19,3 +20,6 @@ local-tests/
 fd-builds/
 benchmarks/
 experiments/
+*.sas 
+*.lifted
+tmp_*/

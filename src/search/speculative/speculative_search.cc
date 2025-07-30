@@ -15,20 +15,20 @@
 using namespace std;
 
 SpeculativeSearch::SpeculativeSearch(const Task &task, Options &opt, int seed, int max_attempts)
-    :opt(opt), seed(seed) {
+    :opt(opt), seed(seed), preserve_links(opt.get_preserve_links()) {
     start = chrono::high_resolution_clock::now();
     auto scoping_method = opt.get_scoping_method();
     if (scoping_method == "cost"){
-        scope = make_unique<SpeculativeScopeCost>(task, seed, max_attempts, opt.get_domain_file(), opt.get_problem_file());
+        scope = make_unique<SpeculativeScopeCost>(task, seed, max_attempts, opt.get_domain_file(), opt.get_problem_file(), opt.get_preserve_links());
     } else if (scoping_method == "random"){
-        scope = make_unique<SpeculativeScopeRandom>(task, seed, max_attempts, opt.get_domain_file(), opt.get_problem_file());
+        scope = make_unique<SpeculativeScopeRandom>(task, seed, max_attempts, opt.get_domain_file(), opt.get_problem_file(), opt.get_preserve_links());
     } else {
         cout << "No valid scoping method provided" << endl;
     }
 }
 
 int SpeculativeSearch::speculative_search(int argc, char *argv[]){
-    scope->dump_stats(scope->get_task());
+    // scope->dump_stats(scope->get_task());
     
     int rank, world_size;
 
@@ -43,7 +43,9 @@ int SpeculativeSearch::speculative_search(int argc, char *argv[]){
     int end_signal_tag = 5;
     vector<int> successes(world_size - 1, 0);
     vector<bool> end_signal_received(world_size - 1, false);
+    vector<bool> send_task(world_size - 1, false);
     bool task_success = false;
+    int no_scope_count = 0;
 
     if (rank == 0){
         // rank 0 creates all scopes and waits for results
@@ -68,14 +70,6 @@ int SpeculativeSearch::speculative_search(int argc, char *argv[]){
         vector<int> work_flags(world_size - 1, 0);
         vector<int> result_flags(world_size - 1, 0);
         vector<int> end_signal_flags(world_size - 1, 0);
-
-        // add some initial scopes 
-        for (int i = 1; i < 2*world_size; ++i){
-            auto obj_list = scope->sample_scope();
-            if (obj_list.size() > 0){
-                task_queue.push(obj_list);
-            }
-        }
 
         //receive requests from workers
         for (int i = 1; i < world_size; ++i){
@@ -115,35 +109,44 @@ int SpeculativeSearch::speculative_search(int argc, char *argv[]){
                 task_queue.push(obj_list);
             }
 
+            for (int i = 1; i < world_size+1; ++i){
+                if (send_task[i-1]){
+                    if (task_queue.size() > 0 && !task_complete){
+                        auto objects = task_queue.front();
+                        task_queue.pop();
+                        int list_size = objects.size();
+                        MPI_Send(&list_size, 1, MPI_INT, i, list_size_tag, MPI_COMM_WORLD);
+                        MPI_Send(objects.data(), list_size, MPI_INT, i, scope_tag, MPI_COMM_WORLD);
+                        send_task[i-1] = false;
+                    } else if (task_complete) {
+                        int end_signal_list_size = -1;
+                        MPI_Send(&end_signal_list_size, 1, MPI_INT, i, list_size_tag, MPI_COMM_WORLD);
+                        send_task[i-1] = false;
+                    }
+                }
+            }
+
             for (int i = 0; i < world_size - 1; ++i){
                 // send new scope to ranks that request 
                 MPI_Test(&work_requests[i], &work_flags[i], MPI_STATUS_IGNORE);
                 if (work_flags[i] == 1){
                     // we have no more scopes left.
                     // search ended unsuccessfully
-                    if (task_queue.size() == 0){
-                        task_complete = true;
-                    }
-                    if (task_complete){
-                        int end_signal_list_size = -1;
-                        MPI_Send(&end_signal_list_size, 1, MPI_INT, i+1, list_size_tag, MPI_COMM_WORLD);
-                    } else{
-                        auto objects = task_queue.front();
-                        task_queue.pop();
-                        int list_size = objects.size();
-                        MPI_Send(&list_size, 1, MPI_INT, i+1, list_size_tag, MPI_COMM_WORLD);
-                        MPI_Send(objects.data(), list_size, MPI_INT, i+1, scope_tag, MPI_COMM_WORLD);
-                        MPI_Irecv(nullptr, 0, MPI_INT, i+1, work_request_tag, MPI_COMM_WORLD, &work_requests[i]);
-                    }
+                    send_task[i] = true;
+                    MPI_Irecv(nullptr, 0, MPI_INT, i+1, work_request_tag, MPI_COMM_WORLD, &work_requests[i]);
                 }
                 // check results from completed tasks
                 MPI_Test(&result_requests[i],  &result_flags[i], MPI_STATUSES_IGNORE);
                 if (result_flags[i] == 1){
                     scope_count += 1;
                     if (successes[i] == 1){
-                        task_complete = true;
-                        task_success = true;
-                        cout << "task success after " << scope_count << " scopes" << endl;
+                        if (!task_complete){
+                            task_complete = true;
+                            task_success = true;
+                            cout << "task success after " << scope_count << " scopes" << endl;
+                            auto end = chrono::high_resolution_clock::now();
+                            scope->write_summary(opt.get_save_folder() + "/" + "summary.out", scope_count, task_success, start, end);
+                        }
                     }
                     MPI_Irecv(&successes[i], 1, MPI_INT, i+1, result_tag, MPI_COMM_WORLD, &result_requests[i]);
                 }
@@ -155,6 +158,17 @@ int SpeculativeSearch::speculative_search(int argc, char *argv[]){
             }
             if (all_of(end_signal_received.begin(), end_signal_received.end(), [](bool b) { return b; })){
                 break;
+            }
+            if (all_of(send_task.begin(), send_task.end(), [](bool b) { return b; })){
+                no_scope_count += 1;
+                if (no_scope_count > 3){
+                    cout << "Ran out of scopes" << endl;
+                    task_complete = true;
+                    auto end = chrono::high_resolution_clock::now();
+                    scope->write_summary(opt.get_save_folder() + "/" + "summary.out", scope_count, task_success, start, end);
+                }
+            } else {
+                no_scope_count = 0;
             }
         }
     } else {
@@ -180,33 +194,24 @@ int SpeculativeSearch::speculative_search(int argc, char *argv[]){
             vector<int> obj_list = vector<int>(list_size, 0);
             MPI_Recv(obj_list.data(), list_size, MPI_INT, 0, scope_tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-            // cout << "rank[" << rank << "] Scope received: ";
-            // for (auto idx : obj_list){
-            //     cout << idx << " ";
-            // }
-            // cout << endl;
-
             auto scoped_task = scope->speculative_scope(obj_list);
 
             bool success = search(scoped_task);
             
             int success_int = success;
-            MPI_Send(&success_int, 1, MPI_INT, 0, result_tag, MPI_COMM_WORLD);            
-
-            scope->write(scoped_task, PlanManager::get_pddl_filename());
-
+            MPI_Send(&success_int, 1, MPI_INT, 0, result_tag, MPI_COMM_WORLD);    
+            
             if (success){
                 scope->write(scoped_task, PlanManager::get_pddl_filename());
                 MPI_Send(nullptr, 0, MPI_INT, 0, end_signal_tag, MPI_COMM_WORLD);
                 break;
             }
+
+
         }
     }
 
-    if (rank == 0){
-        auto end = chrono::high_resolution_clock::now();
-        scope->write_summary(opt.get_save_folder() + "/" + "summary.out", scope_count, task_success, start, end);
-    }
+    MPI_Barrier(MPI_COMM_WORLD);
 
     MPI_Finalize();
 
@@ -214,6 +219,30 @@ int SpeculativeSearch::speculative_search(int argc, char *argv[]){
 
     return 0;
 
+}
+
+int SpeculativeSearch::run_validate(const string& command) {
+    array<char, 128> buffer;
+    string result;
+
+    FILE* pipe = popen(command.c_str(), "r");
+    if (!pipe) throw std::runtime_error("popen() failed!");
+
+    while (fgets(buffer.data(), buffer.size(), pipe) != nullptr) {
+        result += buffer.data();
+    }
+
+    pclose(pipe);
+
+    int return_code = -1;
+
+    if (result.find("Plan valid") != string::npos){
+        return_code = 0;
+        cout << "Valid plan found in result:" << endl;
+        cout << result << endl;
+    }
+
+    return return_code;
 }
 
 SpeculativeSearch::~SpeculativeSearch() {}

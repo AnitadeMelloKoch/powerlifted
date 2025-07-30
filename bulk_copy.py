@@ -2,6 +2,7 @@ import subprocess
 from pathlib import Path
 import argparse 
 import os
+from concurrent.futures import ThreadPoolExecutor
 
 def find_domains_and_problems(folder_dir):
     domain = None
@@ -19,7 +20,7 @@ def run_duplicator(domain, problem, outdir, prefix):
     
     cmd = [
         "python", "powerlifted.py", "-d", domain,
-        "-i", problem, "--build", "--cxx-compile",
+        "-i", problem, "--cxx-compile",
         "/usr/local/bin/mpic++", "--pddl-file", outfile,
         "--duplicate-file", prefix
     ]
@@ -27,25 +28,33 @@ def run_duplicator(domain, problem, outdir, prefix):
     print(cmd)
     
     try:
-        result = subprocess.run(cmd, timeout=300)
+        result = subprocess.run(cmd, timeout=120)
     except subprocess.TimeoutExpired:
         print(f"Timeout expired for {outfile}. Skipping.")
         result = None
      
     return result, outfile
-    
+
+def run_triple(domain, problem, outdir):
+    _, file = run_duplicator(domain, problem, outdir, "dup1")
+    _, file = run_duplicator(domain, Path(file), outdir, "dup2")
+    _, file = run_duplicator(domain, Path(file), outdir, "dup3")
+    _, file = run_duplicator(domain, Path(file), outdir, "dup4")
+
 def main(benchmark_folder):
-    for folder in Path(benchmark_folder).glob("*"):
-        domain, problems = find_domains_and_problems(folder)
+    all_problems = []
+    for f in Path(benchmark_folder).glob("*"):
+        domain, problems = find_domains_and_problems(f)
         if domain is None:
-            print("No single domain found in", folder.name, "skipping duplication...")
+            print(f"Skipping {f} — missing or multiple domain files.")
             continue
-        
+        out_dir = os.path.join("benchmarks", "dup-domains", f.stem)
         for problem in problems:
-            outdir = os.path.join("benchmarks", "dup-domains", folder.stem)
-            _, file1 = run_duplicator(domain, problem, outdir, "dup1")
-            _, file1 = run_duplicator(domain, Path(file1), outdir, "dup2")
-            _, file1 = run_duplicator(domain, Path(file1), outdir, "dup3")
+            all_problems.append((domain, problem, out_dir))
+    
+    with ThreadPoolExecutor(max_workers=1) as executor:
+        futures = [executor.submit(run_triple, domain, prob, out_dir) for domain, prob, out_dir in all_problems]
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

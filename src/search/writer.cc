@@ -124,7 +124,11 @@ Writer::Writer(string domain_file, string problem_file){
                 if (token == "(=" || token == "="){
                     collect = true;
                     expr = token;
-                    depth = 1;
+                    depth = 0;
+                    for (char c : token){
+                        if (c == '(') depth++;
+                        else if (c == ')') depth--;
+                    }
                     continue;
                 }
                 if (collect){
@@ -144,18 +148,28 @@ Writer::Writer(string domain_file, string problem_file){
         }
 
         // collecting metric line
-        if (line.find(":metric") != string::npos){
+        if (line.find("(:metric") != std::string::npos) {
             collecting_metric = true;
+            metric_paren_depth = 0;
         }
 
-        if (collecting_metric){
-            metric_block += line + "\n";
-            for (char c : line){
+        // Only process when collecting_metric is true
+        if (collecting_metric) {
+            string fragment;
+            for (char c : line) {
+                fragment += c;
                 if (c == '(') metric_paren_depth++;
                 else if (c == ')') metric_paren_depth--;
+
+                if (metric_paren_depth == 0) {
+                    metric_block += fragment + "\n";
+                    collecting_metric = false;
+                    break;  // Stop appending excess after balance
+                }
             }
-            if (metric_paren_depth == 0){
-                collecting_metric = false;
+
+            if (collecting_metric) {
+                metric_block += fragment + "\n";  // Only append up to balance
             }
         }
     }

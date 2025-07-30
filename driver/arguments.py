@@ -121,6 +121,11 @@ def parse_options():
     
     parser.add_argument("--duplicate-file", action="store", dest="duplicate_file", help="prefix for file duplication.")
     
+    parser.add_argument("--process-timeout", action="store", type=int, default=1800, dest="process_timeout", help="process timeout")
+    parser.add_argument("--process-mem-limit", action="store", type=str, default="128G", dest="process_mem_limit", help="process memory limit")
+    
+    parser.add_argument("--turn-link-off", action="store_true", dest="turn_link_off", help="turn off relevant linking")
+    
     args = parser.parse_args()
     if args.domain is None:
         args.domain = find_domain_filename(args.instance)

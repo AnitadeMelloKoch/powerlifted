@@ -25,6 +25,7 @@ class SpeculativeScope{
         std::unordered_map<int, int> object_cost; // cost of including this object into scope
         int max_attempts;
         Writer writer;
+        bool preserve_links;
 
         std::vector<ActionSchema> get_relevant_actions(const Task &task, 
                                                        std::unordered_set<int> &relevant_pred_idxs,
@@ -53,7 +54,8 @@ class SpeculativeScope{
                          int seed = 42, 
                          int max_attempts = 500, 
                          std::string domain_file = "",
-                         std::string problem_file = "");
+                         std::string problem_file = "",
+                         bool preserve_links = true);
         Task speculative_scope(std::vector<int> &object_idxs, 
                                bool write_pddl_file = false,
                                std::string file_name = "");

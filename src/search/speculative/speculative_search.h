@@ -10,9 +10,12 @@ class SpeculativeSearch{
         Options opt;
         int seed;
         std::unique_ptr<SpeculativeScope> scope;
-        virtual bool search(Task scoped_task) = 0;
         int scope_count = 0;
         std::chrono::time_point<std::chrono::high_resolution_clock> start;
+        bool preserve_links;
+        
+        virtual bool search(Task scoped_task) = 0;
+        int run_validate(const std::string& command);
     
     public:
         int speculative_search(int argc, char *argv[]);
