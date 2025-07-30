@@ -80,99 +80,34 @@ Writer::Writer(string domain_file, string problem_file){
 
     bool collecting_metric = false;
     int metric_paren_depth = 0;
-    bool collecting_init = false;
-    int init_paren_depth = 0;
-    string init_block = "";
     
     if (!prob_file){
         cerr << "Error opening problem file: " << problem_file << endl;
     }
 
     while (getline(prob_file, line)){
-        auto comment_pos = line.find(';');
-        if (comment_pos != string::npos){
-            line = line.substr(0, comment_pos);
-        }
 
-        line.erase(0, line.find_first_not_of("\t\r\n"));
-        line.erase(line.find_last_not_of("\t\r\n") + 1);
-        if (line.empty()) continue;
-
-        if (line.find(":init") != string::npos){
-            collecting_init = true;
-        }
-
-        if (collecting_init){
-            init_block += " " + line;
-            for (char c:line){
-                if (c == '(') init_paren_depth++;
-                else if (c == ')') init_paren_depth--;
-            }
-            if (init_paren_depth == 0){
-                collecting_init = false;
-            }
-        }
-
-        if (!collecting_init && !init_block.empty()){
-            istringstream stream(init_block);
-            string token;
-            string expr;
-            bool collect = false;
-            int depth = 0;
-
-            while (stream >> token){
-                if (token == "(=" || token == "="){
-                    collect = true;
-                    expr = token;
-                    depth = 0;
-                    for (char c : token){
-                        if (c == '(') depth++;
-                        else if (c == ')') depth--;
-                    }
-                    continue;
-                }
-                if (collect){
-                    expr += " " + token;
-                    for (char c : token){
-                        if (c == '(') depth++;
-                        else if (c == ')') depth--;
-                    }
-                    if (depth == 0){
-                        cost_expressions.push_back(expr);
-                        expr.clear();
-                        collect = false;
-                    }
-                }
-            }
-            init_block.clear();
+        if (line.find("=") != string::npos){
+            cost_expressions.push_back(line);
         }
 
         // collecting metric line
-        if (line.find("(:metric") != std::string::npos) {
+        if (line.find(":metric") != string::npos){
             collecting_metric = true;
-            metric_paren_depth = 0;
         }
 
-        // Only process when collecting_metric is true
-        if (collecting_metric) {
-            string fragment;
-            for (char c : line) {
-                fragment += c;
+        if (collecting_metric){
+            metric_block += line + "\n";
+            for (char c : line){
                 if (c == '(') metric_paren_depth++;
                 else if (c == ')') metric_paren_depth--;
-
-                if (metric_paren_depth == 0) {
-                    metric_block += fragment + "\n";
-                    collecting_metric = false;
-                    break;  // Stop appending excess after balance
-                }
             }
-
-            if (collecting_metric) {
-                metric_block += fragment + "\n";  // Only append up to balance
+            if (metric_paren_depth == 0){
+                collecting_metric = false;
             }
         }
     }
+
 }
 
 bool Writer::write(Task &task, string filename){
