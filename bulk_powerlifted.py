@@ -2,6 +2,8 @@ import subprocess
 import os 
 from pathlib import Path 
 import argparse
+from concurrent.futures import ThreadPoolExecutor
+
 
 RUN_COMMANDS = [
     "--time-limit", "1800",
@@ -31,7 +33,7 @@ def find_domain_and_problems(folder_dir):
     
 #     return domain, problems
 
-def run_planner(domain, problem, outdir, lifted_name, seed):
+def run_planner(domain, problem, outdir):
     
     os.makedirs(outdir, exist_ok=True)
     
@@ -40,9 +42,7 @@ def run_planner(domain, problem, outdir, lifted_name, seed):
     cmd = [
         "python", "powerlifted.py", "-d", str(domain),
         "-i", str(problem), "--build",
-        "--save-folder", outdir,
-        "--translator-output-file", lifted_name,
-        "--seed", str(seed)
+        "--translator-output-file", f"{problem.stem}.lifted",
     ] + RUN_COMMANDS
     
     print(cmd)
@@ -66,36 +66,26 @@ def validate_plan(domain, problem, out_dir):
     
     return result.returncode == 0
 
-def main(folder, save_folder, lifted_name, seed):
+def main(folder):
+    all_problems = []
     for f in Path(folder).glob("*"):
         domain, problems = find_domain_and_problems(f)
-        # domains, problems = find_domain_and_problems(f)
-        # assert domain is not None, "No domain.pddl found. Script does not support problems with domain file not matching domain.pddl"
+        if domain is None:
+            print(f"Skipping {f} — missing or multiple domain files.")
+            continue
         
         for problem in problems:
-        # for domain, problem in zip(domains,problems):
             problem_name = problem.stem
             
             relative_subdir = problem.parent.relative_to(folder)
             subdir_str = "_".join(relative_subdir.parts)
             
-            out_dir = os.path.join(save_folder, subdir_str, problem_name)
+            outdir = os.path.join("experiments", "dup_results", subdir_str, problem_name)
             
-            summary_file = Path(out_dir) / "summary.out"
-            if summary_file.is_file():
-                continue 
-            
-            return_code = run_planner(domain, 
-                                    problem, 
-                                    out_dir,
-                                    lifted_name,
-                                    seed)
-            
-            if return_code == 0:
-                valid = validate_plan(domain, problem, out_dir)
-                print(valid)
-            else:
-                print("Planner failed")
+            all_problems.append((problem, outdir))
+
+    with ThreadPoolExecutor(max_workers=32) as executor:
+        futures = [executor.submit(run_planner, domain, prob, outdir) for prob, outdir in all_problems]
 
 
 
@@ -103,14 +93,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     
     parser.add_argument('-f', '--folder', dest='folder')
-    parser.add_argument('-s', '--seed', action="store", type=int, default=0)
-    parser.add_argument('--save_dir', action="store", default="experiment", type=str)
-    parser.add_argument('--lifted', action="store", default="exp.lifted")
     
     
     args = parser.parse_args()
 
-    main(args.folder,
-         args.save_dir,
-         args.lifted,
-         args.seed)
+    main(args.folder)

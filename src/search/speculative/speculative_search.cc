@@ -146,6 +146,7 @@ int SpeculativeSearch::speculative_search(int argc, char *argv[]){
                             cout << "task success after " << scope_count << " scopes" << endl;
                             auto end = chrono::high_resolution_clock::now();
                             scope->write_summary(opt.get_save_folder() + "/" + "summary.out", scope_count, task_success, start, end);
+                            MPI_Abort(MPI_COMM_WORLD, 0);
                         }
                     }
                     MPI_Irecv(&successes[i], 1, MPI_INT, i+1, result_tag, MPI_COMM_WORLD, &result_requests[i]);
