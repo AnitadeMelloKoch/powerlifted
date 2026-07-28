@@ -49,6 +49,19 @@ def add_conditions_to_actions(task, graph):
     parameters.
 
     """
+    def resolve_type(arg, action, task):
+        for x in action.parameters:
+            if x.name == arg:
+                return x.type_name
+        for eff in action.effects:
+            for x in eff.parameters:
+                if x.name == arg:
+                    return x.type_name
+        for x in task.objects:
+            if x.name == arg:
+                return x.type_name
+        return None
+            
     for action in task.actions:
         obj_in_action = set()
         for param in action.parameters:
@@ -82,14 +95,16 @@ def add_conditions_to_actions(task, graph):
                 # If the type is none, then it is not a parameter and
                 # it must be constant.  THus, we search for its type in the
                 # obj list.
-                param_type = next(
-                    (x.type_name for x in task.objects if x.name == l), None)
+                param_type = resolve_type(l, action, task)
             obj_in_action.add((param_type, name))
 
         action.transform_precondition_into_list()
+        print(action)
         for obj in obj_in_action:
             param_type = obj[0]
             name = obj[1]
+            print(name)
+            print(param_type)
             action.precondition.add_condition(
                 pddl.Atom(_get_type_predicate_name(param_type), [name]))
     return

@@ -5,6 +5,7 @@ src/search/config
 src/search/latex
 src/search/html
 builds/
+build/
 output.lifted
 model.lp
 plan*
@@ -14,3 +15,11 @@ powerlifted.sif
 reports/
 local-tests/
 *.out
+.vscode/*
+
+fd-builds/
+benchmarks/
+experiments/
+*.sas 
+*.lifted
+tmp_*/

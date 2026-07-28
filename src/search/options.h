@@ -14,10 +14,22 @@ class Options {
     std::string evaluator;
     std::string state_representation;
     std::string plan_file;
+    std::string pddl_file;
     bool only_effects_opt;
     bool novelty_early_stop;
     unsigned seed;
     bool forward_reachability;
+    bool speculative;
+    bool fd;
+    std::string duplicate_file;
+    std::string domain_file;
+    std::string problem_file;
+    std::string fd_search_opt;
+    std::string scoping_method;
+    std::string save_folder;
+    int process_timeout;
+    std::string process_mem_limit;
+    bool preserve_links;
 
 public:
     Options(int argc, char** argv) {
@@ -31,9 +43,21 @@ public:
             ("search,s", po::value<std::string>()->required(), "Search engine.")
             ("state-representation,r", po::value<std::string>()->default_value("sparse"), "State representation.")
             ("plan-file", po::value<std::string>()->default_value("FilePathUndefined"), "Plan file.")
+            ("pddl-file", po::value<std::string>()->default_value("FilePathUndefined"), "PDDL file.")
             ("only-effects-novelty-check", po::value<bool>()->default_value(false), "Check only effects of applied actions when evaluation novelty of a state.")
             ("novelty-early-stop", po::value<bool>()->default_value(false), "Stop evaluating novelty as soon as w-value is defined.")
             ("forward-reachability", po::value<bool>()->default_value(false), "Generate all fact layers")
+            ("speculative", po::value<bool>()->default_value(false), "Speculatively scope the task")
+            ("fd", po::value<bool>()->default_value(false), "Use fast-downward for scope evaluation")
+            ("duplicate-file", po::value<std::string>()->default_value("NoDup"), "Create new pddl file with all objects duplicated")
+            ("domain", po::value<std::string>()->default_value("FilePathNotFound"), "Domain file.")
+            ("problem", po::value<std::string>()->default_value("FilePathNotFound"), "problem file.")
+            ("fd-search", po::value<std::string>()->default_value("astar(lmcut())"), "search options")
+            ("scoping-method", po::value<std::string>()->default_value("cost"), "scoping method")
+            ("save-folder", po::value<std::string>()->default_value("./"), "save folder")
+            ("process-timeout", po::value<int>()->default_value(1800), "process timeout")
+            ("process-mem-limit", po::value<std::string>()->default_value("128G"), "process memory limit")
+            ("preserve-links", po::value<bool>()->default_value(true), "add relevantly linked objects during sampling")
             ;
 
         po::variables_map vm;
@@ -58,11 +82,22 @@ public:
         search_engine = vm["search"].as<std::string>();
         state_representation = vm["state-representation"].as<std::string>();
         plan_file = vm["plan-file"].as<std::string>();
+        pddl_file =vm["pddl-file"].as<std::string>();
         only_effects_opt = vm["only-effects-novelty-check"].as<bool>();
         novelty_early_stop = vm["novelty-early-stop"].as<bool>();
         seed = vm["seed"].as<unsigned>();
         forward_reachability = vm["forward-reachability"].as<bool>();
-
+        speculative = vm["speculative"].as<bool>();
+        fd = vm["fd"].as<bool>();
+        duplicate_file = vm["duplicate-file"].as<std::string>();
+        domain_file = vm["domain"].as<std::string>();
+        problem_file = vm["problem"].as<std::string>();
+        fd_search_opt = vm["fd-search"].as<std::string>();
+        scoping_method = vm["scoping-method"].as<std::string>();
+        save_folder = vm["save-folder"].as<std::string>();
+        process_timeout = vm["process-timeout"].as<int>();
+        process_mem_limit = vm["process-mem-limit"].as<std::string>();
+        preserve_links = vm["preserve-links"].as<bool>();
     }
 
     const std::string &get_filename() const {
@@ -89,6 +124,10 @@ public:
         return plan_file;
     }
 
+    const std::string &get_pddl_file() const {
+        return pddl_file;
+    }
+
     bool get_only_effects_opt() const {
         return only_effects_opt;
     }
@@ -103,6 +142,50 @@ public:
 
     bool get_forward_reachability() const {
         return forward_reachability;
+    }
+
+    bool get_speculative() const {
+        return speculative;
+    }
+
+    bool get_fd() const {
+        return fd;
+    }
+
+    std::string get_duplicate_file() const {
+        return duplicate_file;
+    }
+
+    const std::string &get_domain_file() const {
+        return domain_file;
+    }
+
+    const std::string &get_problem_file() const {
+        return problem_file;
+    }
+
+    const std::string &get_fd_search_opt() const {
+        return fd_search_opt;
+    }
+
+    const std::string &get_scoping_method() const {
+        return scoping_method;
+    }
+
+    const std::string &get_save_folder() const {
+        return save_folder;
+    }
+
+    const int &get_process_timeout() const {
+        return process_timeout;
+    }
+
+    const std::string &get_process_mem_limit() const {
+        return process_mem_limit;
+    }
+
+    const bool &get_preserve_links() const {
+        return preserve_links;
     }
 
 

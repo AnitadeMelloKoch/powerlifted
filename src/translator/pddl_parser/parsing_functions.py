@@ -14,10 +14,11 @@ import pddl
 # features is still present. This was done in purpose so we can modify
 # the parser more easily in case such features are added in the future.
 
-UNSUPPORTED_FEATURES = ["imply",
-                        "forall",
-                        "exists",
-                        "when"]
+# UNSUPPORTED_FEATURES = ["imply",
+#                         "forall",
+#                         "exists",
+#                         "when"]
+UNSUPPORTED_FEATURES = []
 
 def is_tag_supported(tag):
     if tag in UNSUPPORTED_FEATURES:

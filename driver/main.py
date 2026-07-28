@@ -9,7 +9,7 @@ from build import build, PROJECT_ROOT
 
 from . import arguments, portfolio_runner
 from .utils import get_elapsed_time, remove_temporary_files
-from .single_search_runner import run_single_search
+from .single_search_runner import run_single_search, run_mpi_search
 from .preprocessor import preprocess_cpddl
 
 def validate(domain_name, instance_name, planfile):
@@ -30,6 +30,25 @@ def validate(domain_name, instance_name, planfile):
 
 
 def run_search(build_dir, options, extra):
+
+    if options.speculative:
+        code = run_mpi_search(build_dir,
+                              options.time_limit,
+                              options.translator_file,
+                              options.search,
+                              options.heuristic,
+                              options.generator,
+                              options.state,
+                              str(options.seed),
+                              options.plan_file,
+                              options.pddl_file,
+                              extra,
+                              options.processes)
+        # If we found a plan, try to validate it
+        if code == 0 and options.validate:
+            validate(options.domain, options.instance, options.plan_file)
+        remove_temporary_files(options)
+        return code
 
     if options.iteration is None:
         code = run_single_search(build_dir,
@@ -85,6 +104,30 @@ def set_extra_options(options):
     
     if options.forward_reachability:
         CPP_EXTRA_OPTIONS += ['--forward-reachability', str(1)]
+    
+    if options.speculative:
+        CPP_EXTRA_OPTIONS += ['--speculative', str(1)]
+        CPP_EXTRA_OPTIONS += ['--scoping-method', options.scope]
+        CPP_EXTRA_OPTIONS += ['--domain', options.domain]
+        CPP_EXTRA_OPTIONS += ['--problem', options.instance]
+        CPP_EXTRA_OPTIONS += ['--save-folder', options.save_folder]
+        CPP_EXTRA_OPTIONS += ['--process-timeout', str(options.process_timeout)]
+        CPP_EXTRA_OPTIONS += ['--process-mem-limit', options.process_mem_limit]
+        if options.turn_link_off:
+            CPP_EXTRA_OPTIONS += ['--preserve-links', str(0)]
+        else:
+            CPP_EXTRA_OPTIONS += ['--preserve-links', str(1)]
+            
+    
+    if options.fd:
+        CPP_EXTRA_OPTIONS += ['--fd', str(1)]
+        CPP_EXTRA_OPTIONS += ['--fd-search', options.fd_search]
+    
+    if options.duplicate_file is not None:
+        CPP_EXTRA_OPTIONS += ['--duplicate-file', options.duplicate_file]
+        CPP_EXTRA_OPTIONS += ['--pddl-file', options.pddl_file]
+        CPP_EXTRA_OPTIONS += ['--domain', options.domain]
+        CPP_EXTRA_OPTIONS += ['--problem', options.instance]
 
     return PYTHON_EXTRA_OPTIONS, CPP_EXTRA_OPTIONS
 

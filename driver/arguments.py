@@ -38,6 +38,9 @@ SUCCESSOR_GENERATOR_CHOICES = ['yannakakis',
                                'clique_bk',
                                'clique_kckp']
 
+SCOPING_METHOD = ['random',
+                  'cost']
+
 
 def parse_options():
     parser = argparse.ArgumentParser()
@@ -63,6 +66,8 @@ def parse_options():
     parser.add_argument('-g', '--generator', dest='generator', action='store',
                         default='yannakakis', help='Successor generator method',
                         choices=SUCCESSOR_GENERATOR_CHOICES)
+    parser.add_argument('--scope', action='store', default='cost', help='Speculative scope building method',
+                        choices=SCOPING_METHOD)
     parser.add_argument('--iteration', action='append', default=None, type=str,
                         help='Pass a triple S,E,G,T corresponding to search ' \
                         'algorithm, evaluator, successor generator, and relative time.' \
@@ -72,13 +77,16 @@ def parse_options():
     parser.add_argument('--seed', action='store', help='Random seed.',
                         default=1)
     parser.add_argument('--time-limit', action='store', type=int, help='Time limit in seconds.',
-                        default=1800)
+                        default=3600)
     parser.add_argument('--translator-output-file', dest='translator_file',
                         default='output.lifted',
                         help='Output file of the translator')
     parser.add_argument('--plan-file', dest='plan_file',
                         default='plan',
                         help='name of plan file')
+    parser.add_argument('--pddl-file', dest='pddl_file',
+                        default='scoped_pddl',
+                        help='name of scoped pddl file')
     parser.add_argument('--datalog-file', dest='datalog_file',
                         default='model.lp',
                         help='Datalog model for the lifted heuristic.')
@@ -102,6 +110,22 @@ def parse_options():
                         help="flag if VAL should be called to validate the plan found")
     parser.add_argument("--forward-reachability", action="store_true",
                         help="run forward reachibility to generate all fact layers")
+    
+    parser.add_argument("--speculative", action="store_true",
+                        help="scope task speculatively")
+    parser.add_argument("--processes", action="store", type=int, default=4)
+    parser.add_argument("--save-folder", dest='save_folder', default='./', help='Name of folder to save plan and generated files.')
+    
+    parser.add_argument("--fd", action="store_true", help="run fast downward planner during scope testing")
+    parser.add_argument("--fd-search", dest='fd_search', action="store", help="search options to be passed to fast downward planner")
+    
+    parser.add_argument("--duplicate-file", action="store", dest="duplicate_file", help="prefix for file duplication.")
+    
+    parser.add_argument("--process-timeout", action="store", type=int, default=1800, dest="process_timeout", help="process timeout")
+    parser.add_argument("--process-mem-limit", action="store", type=str, default="128G", dest="process_mem_limit", help="process memory limit")
+    
+    parser.add_argument("--turn-link-off", action="store_true", dest="turn_link_off", help="turn off relevant linking")
+    
     args = parser.parse_args()
     if args.domain is None:
         args.domain = find_domain_filename(args.instance)

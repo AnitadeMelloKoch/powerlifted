@@ -9,7 +9,10 @@
 #include "search_engines/search_factory.h"
 #include "successor_generators/successor_generator.h"
 #include "successor_generators/successor_generator_factory.h"
-#include "fact_layer/fact_layer_generator.h"
+
+#include "speculative/speculative_search_power.h"
+#include "speculative/speculative_search_fd.h"
+#include "writer.h"
 
 // TODO This should be included in the heuristic, not here. Right now it is here for testing
 #include "heuristics/ff_heuristic.h"
@@ -49,6 +52,12 @@ int main(int argc, char *argv[]) {
     cout << "IMPORTANT: Assuming that negative effects are always listed first. "
             "(This is guaranteed by the default translator.)" << endl;
 
+    if (opt.get_duplicate_file() != "NoDup"){
+        Writer writer(opt.get_domain_file(), opt.get_problem_file());
+        writer.write_duplicate_pddl(opt.get_pddl_file(), task, opt.get_duplicate_file());
+        return 0;
+    }
+
     // Let's create a couple unique_ptr's that deal with mem allocation themselves
     std::unique_ptr<SearchBase> search(SearchFactory::create(opt, opt.get_search_engine(), opt.get_state_representation()));
     std::unique_ptr<Heuristic> heuristic(HeuristicFactory::create(opt, task));
@@ -56,7 +65,13 @@ int main(int argc, char *argv[]) {
                                                                                opt.get_seed(),
                                                                                task));
     
-    std::unique_ptr<FactLayerGenerator> forward_reachability = make_unique<FactLayerGenerator>(task);
+    std::unique_ptr<SpeculativeSearch> speculative_scope;
+
+    if (opt.get_fd()){
+        speculative_scope = make_unique<SpeculativeSearchFD>(task, opt, opt.get_seed());
+    } else {
+        speculative_scope = make_unique<SpeculativeSearchPower>(task, opt, opt.get_seed());
+    }
 
     PlanManager::set_plan_filename(opt.get_plan_file());
 
@@ -67,11 +82,10 @@ int main(int argc, char *argv[]) {
     }
 
     try {
-        if (opt.get_forward_reachability()){
-            auto new_state = forward_reachability->generate_fact_layers(task.get_action_schemas(),
-                                                                        task.initial_state,
-                                                                        task.get_goal());
-            task.dump_state(new_state);
+        if (opt.get_speculative()){
+
+            speculative_scope->speculative_search(argc, argv);
+
         }else{
             auto exitcode = search->search(task, *sgen, *heuristic);
             search->print_statistics();
@@ -80,13 +94,10 @@ int main(int argc, char *argv[]) {
         }
         
     }
-    // catch (const bad_alloc& ex) {
-    //     //search->print_statistics();
-    //     exit_with(utils::ExitCode::SEARCH_OUT_OF_MEMORY);
-    // }
-    catch (const exception& ex) {
+    catch (const bad_alloc& ex) {
         //search->print_statistics();
-        cerr << ex.what();
+        exit_with(utils::ExitCode::SEARCH_OUT_OF_MEMORY);
     }
+
 
 }

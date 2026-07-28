@@ -1,0 +1,71 @@
+(define (problem minecraft-diamond-pickaxe)
+    (:domain minecraft-blocks)
+
+    (:objects
+        agent01 - agent
+        wood01 wood02 wood03 wood04 wood05 wood06 wood07 wood08 wood09 wood10 - wood  
+        stone01 stone02 stone03 stone04 stone05 stone06 stone07 stone08 stone09 stone10 - stone
+        iron01 iron02 iron03 iron04 iron05 iron06 iron07 iron08 iron09 iron10 - iron
+        gold01 gold02 gold03 gold04 gold05 gold06 gold07 gold08 gold09 gold10 - gold
+        diamond01 diamond02 diamond03 diamond04 diamond05 diamond06 diamond07 diamond08 diamond09 diamond10 - diamond  
+    )
+
+    (:init
+        (alive agent01)
+        (wood_not_collected wood01)
+        (wood_not_collected wood02)
+        (wood_not_collected wood03)
+        (wood_not_collected wood04)
+        (wood_not_collected wood05)
+        (wood_not_collected wood06)
+        (wood_not_collected wood07)
+        (wood_not_collected wood08)
+        (wood_not_collected wood09)
+        (wood_not_collected wood10)
+        (stone_not_collected stone01)
+        (stone_not_collected stone02)
+        (stone_not_collected stone03)
+        (stone_not_collected stone04)
+        (stone_not_collected stone05)
+        (stone_not_collected stone06)
+        (stone_not_collected stone07)
+        (stone_not_collected stone08)
+        (stone_not_collected stone09)
+        (stone_not_collected stone10)
+        (iron_not_collected iron01)
+        (iron_not_collected iron02)
+        (iron_not_collected iron03)
+        (iron_not_collected iron04)
+        (iron_not_collected iron05)
+        (iron_not_collected iron06)
+        (iron_not_collected iron07)
+        (iron_not_collected iron08)
+        (iron_not_collected iron09)
+        (iron_not_collected iron10)
+        (gold_not_collected gold01)
+        (gold_not_collected gold02)
+        (gold_not_collected gold03)
+        (gold_not_collected gold04)
+        (gold_not_collected gold05)
+        (gold_not_collected gold06)
+        (gold_not_collected gold07)
+        (gold_not_collected gold08)
+        (gold_not_collected gold09)
+        (gold_not_collected gold10)
+        (diamond_not_collected diamond01)
+        (diamond_not_collected diamond02)
+        (diamond_not_collected diamond03)
+        (diamond_not_collected diamond04)
+        (diamond_not_collected diamond05)
+        (diamond_not_collected diamond06)
+        (diamond_not_collected diamond07)
+        (diamond_not_collected diamond08)
+        (diamond_not_collected diamond09)
+        (diamond_not_collected diamond10)
+    )
+
+    (:goal (and
+        (has_iron_pickaxe agent01)
+    ))
+
+)
