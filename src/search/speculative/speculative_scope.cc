@@ -460,6 +460,7 @@ bool SpeculativeScope::write_summary(string filename,
                                      int scope_num,
                                      bool task_success,
                                      std::chrono::time_point<std::chrono::high_resolution_clock> start,
-                                     std::chrono::time_point<std::chrono::high_resolution_clock> end){
-    return writer.write_summary(filename, scope_num, task_success, start, end);
+                                     std::chrono::time_point<std::chrono::high_resolution_clock> end,
+                                     double total_cpu_time_s){
+    return writer.write_summary(filename, scope_num, task_success, start, end, total_cpu_time_s);
 }

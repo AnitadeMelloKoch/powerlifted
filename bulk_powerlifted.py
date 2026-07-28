@@ -41,14 +41,14 @@ def run_planner(domain, problem, outdir):
     
     cmd = [
         "python", "powerlifted.py", "-d", str(domain),
-        "-i", str(problem), "--build",
+        "-i", str(problem), 
         "--translator-output-file", f"{problem.stem}.lifted",
     ] + RUN_COMMANDS
     
     print(cmd)
     
     with open(out_file, 'w') as f:
-        result = subprocess.run(cmd, stdout=f, text=True)
+        result = subprocess.run(cmd, stdout=f, stderr=subprocess.STDOUT, text=True)
     
     return result.returncode
 
@@ -80,12 +80,12 @@ def main(folder):
             relative_subdir = problem.parent.relative_to(folder)
             subdir_str = "_".join(relative_subdir.parts)
             
-            outdir = os.path.join("experiments", "dup_results", subdir_str, problem_name)
+            outdir = os.path.join("experiments", "powerlifted_dup", subdir_str, problem_name)
             
-            all_problems.append((problem, outdir))
+            all_problems.append((domain, problem, outdir))
 
     with ThreadPoolExecutor(max_workers=32) as executor:
-        futures = [executor.submit(run_planner, domain, prob, outdir) for prob, outdir in all_problems]
+        futures = [executor.submit(run_planner, dom, prob, outdir) for dom, prob, outdir in all_problems]
 
 
 

@@ -51,7 +51,7 @@ def run_mpi_search(build_dir, time, translator_file,search, evaluator, generator
     print(f'Executing "{" ".join(cmd)}"')
     try:
         code = subprocess.call(cmd, timeout=time)
-        print("Iteration finished correctly.")
+        print(f"Iteration finished with code: {code}.")
     except subprocess.TimeoutExpired as e:
         print(f"Iteration ran out of time: {e}")
         return -1

@@ -18,6 +18,9 @@ def run_duplicator(domain, problem, outdir, prefix):
     os.makedirs(outdir, exist_ok=True)
     outfile = outdir + "/" + problem.stem + "_" + prefix + ".pddl"
     
+    if os.path.exists(outfile):
+        return True, outfile
+    
     cmd = [
         "python", "powerlifted.py", "-d", domain,
         "-i", problem, "--cxx-compile",
@@ -36,10 +39,13 @@ def run_duplicator(domain, problem, outdir, prefix):
     return result, outfile
 
 def run_triple(domain, problem, outdir):
-    _, file = run_duplicator(domain, problem, outdir, "dup1")
-    _, file = run_duplicator(domain, Path(file), outdir, "dup2")
-    _, file = run_duplicator(domain, Path(file), outdir, "dup3")
-    _, file = run_duplicator(domain, Path(file), outdir, "dup4")
+    _, file = run_duplicator(domain, problem, outdir, "copy1")
+    _, file = run_duplicator(domain, Path(file), outdir, "copy2")
+    _, file = run_duplicator(domain, Path(file), outdir, "copy3")
+    _, file = run_duplicator(domain, Path(file), outdir, "copy4")
+    _, file = run_duplicator(domain, Path(file), outdir, "copy5")
+    _, file = run_duplicator(domain, Path(file), outdir, "copy6")
+    _, file = run_duplicator(domain, Path(file), outdir, "copy7")
 
 def main(benchmark_folder):
     all_problems = []

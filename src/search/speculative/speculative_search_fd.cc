@@ -12,6 +12,9 @@
 #include <string>
 #include <iostream>
 #include <filesystem>
+#include <unistd.h>
+#include <signal.h>
+#include <sys/wait.h>
 
 using namespace std;
 
@@ -46,9 +49,33 @@ bool SpeculativeSearchFD::search(Task scoped_task){
     + opt.get_domain_file() + " " + task_filename + " "
     + "--search \"" + opt.get_fd_search_opt() + "\""; 
         
-    int code = system(command.c_str());
-    
-    if (!preserve_links) {
+    pid_t pid = fork();
+    int code = -1;
+    if (pid == 0) {
+        execl("/bin/sh", "sh", "-c", command.c_str(), nullptr);
+        _exit(127);
+    } else if (pid > 0) {
+        int status;
+        while (true) {
+            pid_t result = waitpid(pid, &status, WNOHANG);
+            if (result != 0) {
+                code = WEXITSTATUS(status);
+                break;
+            }
+            int abort_flag = 0;
+            MPI_Iprobe(0, abort_tag, MPI_COMM_WORLD, &abort_flag, MPI_STATUS_IGNORE);
+            if (abort_flag) {
+                MPI_Recv(nullptr, 0, MPI_INT, 0, abort_tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+                kill(pid, SIGTERM);
+                waitpid(pid, &status, 0);
+                filesystem::remove_all(tmp_dir);
+                filesystem::remove(sas_file_name);
+                return false;
+            }
+            usleep(10000); // poll every 10ms
+        }
+    }
+    if (!preserve_links && code == 0) {
         string val_command = "Validate " + opt.get_domain_file() + " "
         + opt.get_problem_file() + " " + plan_file_name;
         int val_code = run_validate(val_command);

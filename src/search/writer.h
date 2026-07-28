@@ -19,11 +19,12 @@ class Writer{
 
         bool write(Task &task, std::string filename);
 
-        bool write_summary(std::string filename, 
-                           int scope_num, 
+        bool write_summary(std::string filename,
+                           int scope_num,
                            bool task_success,
-                           std::chrono::time_point<std::chrono::high_resolution_clock> start, 
-                           std::chrono::time_point<std::chrono::high_resolution_clock> end);
+                           std::chrono::time_point<std::chrono::high_resolution_clock> start,
+                           std::chrono::time_point<std::chrono::high_resolution_clock> end,
+                           double total_cpu_time_s);
         
         std::vector<std::string> get_domain_defined_objects() { return domain_defined_objects; };
 

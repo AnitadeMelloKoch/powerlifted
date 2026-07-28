@@ -1,6 +1,7 @@
-import subprocess 
-import os 
-from pathlib import Path 
+import subprocess
+import os
+import random
+from pathlib import Path
 import argparse
 
 RUN_COMMANDS = [
@@ -11,32 +12,39 @@ RUN_COMMANDS = [
 ]
 
 def find_domain_and_problems(folder_dir):
-    domain = None 
+    """Flat layout: one domain.pddl + problems in the same folder (IPC style)."""
+    domain = None
     problems = []
-    for file in Path(folder_dir).glob("**/*.pddl"):
+    for file in Path(folder_dir).glob("*.pddl"):
         if "domain.pddl" in file.name:
-            # if domain is not None:
-            #     return None, problems
             domain = file
         else:
             problems.append(file)
-    
     return domain, problems
 
-# def find_domain_and_problems(folder_dir):
-#     domain = [] 
-#     problems = []
-#     for file in Path(folder_dir).glob("**/*.pddl"):
-#         if "domain.pddl" in file.name:
-#             domain.append(file)
-#         else:
-#             problems.append(file)
-    
-#     return domain, problems
 
-def run_planner(domain, problem, outdir, fd, power, cost, random, processes, disable_links, lifted_name, seed):
+def find_domain_problem_pairs(folder_dir):
+    """Nested layout: each problem lives alongside its own domain file (minecraft style)."""
+    pairs = []
+    for file in Path(folder_dir).glob("**/*.pddl"):
+        if "domain.pddl" not in file.name:
+            siblings = list(file.parent.glob("*domain.pddl"))
+            if siblings:
+                pairs.append((siblings[0], file))
+    return pairs
+
+
+def is_flat_layout(folder):
+    """Detect IPC-style layout by checking if any immediate subfolder has a domain.pddl directly."""
+    return any(
+        "domain.pddl" in p.name
+        for f in Path(folder).glob("*/")
+        for p in f.glob("*.pddl")
+    )
+
+def run_planner(domain, problem, outdir, fd, power, cost, use_random, processes, disable_links, lifted_name, seed):
     assert not (fd and power)
-    assert not (cost and random)
+    assert not (cost and use_random)
     
     os.makedirs(outdir, exist_ok=True)
     
@@ -55,7 +63,7 @@ def run_planner(domain, problem, outdir, fd, power, cost, random, processes, dis
     if cost:
         cmd += ["--scope", "cost"]
     
-    if random:
+    if use_random:
         cmd += ["--scope", "random"]
     if disable_links:
         cmd += ["--turn-link-off"]
@@ -82,42 +90,39 @@ def validate_plan(domain, problem, out_dir):
     
     return result.returncode == 0
 
-def main(folder, fd, power, cost, random, processes, disable_links, save_folder, lifted_name, seed):
-    for f in Path(folder).glob("*"):
-        domain, problems = find_domain_and_problems(f)
-        # domains, problems = find_domain_and_problems(f)
-        # assert domain is not None, "No domain.pddl found. Script does not support problems with domain file not matching domain.pddl"
-        
-        for problem in problems:
-        # for domain, problem in zip(domains,problems):
-            problem_name = problem.stem
-            
-            relative_subdir = problem.parent.relative_to(folder)
-            subdir_str = "_".join(relative_subdir.parts)
-            
-            out_dir = os.path.join(save_folder, subdir_str, problem_name)
-            
-            summary_file = Path(out_dir) / "summary.out"
-            if summary_file.is_file():
-                continue 
-            
-            return_code = run_planner(domain, 
-                                    problem, 
-                                    out_dir,
-                                    fd,
-                                    power,
-                                    cost,
-                                    random,
-                                    processes,
-                                    disable_links,
-                                    lifted_name,
-                                    seed)
-            
-            if return_code == 0:
-                valid = validate_plan(domain, problem, out_dir)
-                print(valid)
-            else:
-                print("Planner failed")
+def main(folder, fd, power, cost, use_random, processes, disable_links, save_folder, lifted_name, seed):
+    if is_flat_layout(folder):
+        pairs = []
+        for f in Path(folder).glob("*"):
+            domain, problems = find_domain_and_problems(f)
+            if domain is None:
+                print(f"Skipping {f} — no domain.pddl found")
+                continue
+            for problem in problems:
+                pairs.append((domain, problem))
+    else:
+        pairs = find_domain_problem_pairs(folder)
+
+    random.shuffle(pairs)
+
+    for domain, problem in pairs:
+        problem_name = problem.stem
+        relative_subdir = problem.parent.relative_to(folder)
+        subdir_str = "_".join(relative_subdir.parts)
+        out_dir = os.path.join(save_folder, subdir_str, problem_name)
+
+        summary_file = Path(out_dir) / "summary.out"
+        if summary_file.is_file():
+            continue
+
+        return_code = run_planner(domain, problem, out_dir, fd, power, cost,
+                                  use_random, processes, disable_links, lifted_name, seed)
+
+        if return_code == 0:
+            valid = validate_plan(domain, problem, out_dir)
+            print(valid)
+        else:
+            print("Planner failed")
 
 
 

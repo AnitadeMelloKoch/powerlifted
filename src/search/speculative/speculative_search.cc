@@ -11,6 +11,7 @@
 #include <queue>
 #include <vector>
 #include <chrono>
+#include <sys/resource.h>
 
 using namespace std;
 
@@ -41,6 +42,7 @@ int SpeculativeSearch::speculative_search(int argc, char *argv[]){
     int list_size_tag = 3;
     int scope_tag = 4;
     int end_signal_tag = 5;
+    int cpu_time_tag = 6;
     vector<int> successes(world_size - 1, 0);
     vector<bool> end_signal_received(world_size - 1, false);
     vector<bool> send_task(world_size - 1, false);
@@ -50,16 +52,18 @@ int SpeculativeSearch::speculative_search(int argc, char *argv[]){
     if (rank == 0){
         // rank 0 creates all scopes and waits for results
         bool task_complete = false;
+        bool summary_written = false;
         queue<vector<int>> task_queue;
+        double total_cpu_time = 0.0;
 
         vector<MPI_Request> work_requests(world_size - 1);
         for (size_t i = 0; i < work_requests.size(); ++i) {
-            work_requests[i] = MPI_REQUEST_NULL;  
+            work_requests[i] = MPI_REQUEST_NULL;
         }
 
         vector<MPI_Request> result_requests(world_size - 1);
         for (size_t i = 0; i < result_requests.size(); ++i) {
-            result_requests[i] = MPI_REQUEST_NULL;  
+            result_requests[i] = MPI_REQUEST_NULL;
         }
 
         vector<MPI_Request> end_signal_requests(world_size - 1);
@@ -70,6 +74,7 @@ int SpeculativeSearch::speculative_search(int argc, char *argv[]){
         vector<int> work_flags(world_size - 1, 0);
         vector<int> result_flags(world_size - 1, 0);
         vector<int> end_signal_flags(world_size - 1, 0);
+        int winning_rank = -1;
 
         //receive requests from workers
         for (int i = 1; i < world_size; ++i){
@@ -127,7 +132,7 @@ int SpeculativeSearch::speculative_search(int argc, char *argv[]){
             }
 
             for (int i = 0; i < world_size - 1; ++i){
-                // send new scope to ranks that request 
+                // send new scope to ranks that request
                 MPI_Test(&work_requests[i], &work_flags[i], MPI_STATUS_IGNORE);
                 if (work_flags[i] == 1){
                     // we have no more scopes left.
@@ -139,14 +144,30 @@ int SpeculativeSearch::speculative_search(int argc, char *argv[]){
                 MPI_Test(&result_requests[i],  &result_flags[i], MPI_STATUSES_IGNORE);
                 if (result_flags[i] == 1){
                     scope_count += 1;
+                    // worker sends cpu_time before result, so it is guaranteed buffered
+                    double worker_cpu_time = 0.0;
+                    MPI_Recv(&worker_cpu_time, 1, MPI_DOUBLE, i+1, cpu_time_tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+                    total_cpu_time += worker_cpu_time;
                     if (successes[i] == 1){
                         if (!task_complete){
                             task_complete = true;
                             task_success = true;
+                            winning_rank = i + 1;
                             cout << "task success after " << scope_count << " scopes" << endl;
                             auto end = chrono::high_resolution_clock::now();
-                            scope->write_summary(opt.get_save_folder() + "/" + "summary.out", scope_count, task_success, start, end);
-                            MPI_Abort(MPI_COMM_WORLD, 0);
+                            struct rusage rank0_usage;
+                            getrusage(RUSAGE_SELF, &rank0_usage);
+                            double rank0_cpu = (rank0_usage.ru_utime.tv_sec + rank0_usage.ru_stime.tv_sec) +
+                                               (rank0_usage.ru_utime.tv_usec + rank0_usage.ru_stime.tv_usec) * 1e-6;
+                            scope->write_summary(opt.get_save_folder() + "/" + "summary.out",
+                                                 scope_count, task_success, start, end, total_cpu_time + rank0_cpu);
+                            summary_written = true;
+                            // signal all other workers to abort their current search
+                            for (int w = 1; w < world_size; ++w) {
+                                if (w != winning_rank) {
+                                    MPI_Send(nullptr, 0, MPI_INT, w, abort_tag, MPI_COMM_WORLD);
+                                }
+                            }
                         }
                     }
                     MPI_Irecv(&successes[i], 1, MPI_INT, i+1, result_tag, MPI_COMM_WORLD, &result_requests[i]);
@@ -162,11 +183,17 @@ int SpeculativeSearch::speculative_search(int argc, char *argv[]){
             }
             if (all_of(send_task.begin(), send_task.end(), [](bool b) { return b; })){
                 no_scope_count += 1;
-                if (no_scope_count > 3){
+                if (no_scope_count > 3 && !summary_written){
                     cout << "Ran out of scopes" << endl;
                     task_complete = true;
                     auto end = chrono::high_resolution_clock::now();
-                    scope->write_summary(opt.get_save_folder() + "/" + "summary.out", scope_count, task_success, start, end);
+                    struct rusage rank0_usage;
+                    getrusage(RUSAGE_SELF, &rank0_usage);
+                    double rank0_cpu = (rank0_usage.ru_utime.tv_sec + rank0_usage.ru_stime.tv_sec) +
+                                       (rank0_usage.ru_utime.tv_usec + rank0_usage.ru_stime.tv_usec) * 1e-6;
+                    scope->write_summary(opt.get_save_folder() + "/" + "summary.out",
+                                         scope_count, task_success, start, end, total_cpu_time + rank0_cpu);
+                    summary_written = true;
                 }
             } else {
                 no_scope_count = 0;
@@ -198,22 +225,35 @@ int SpeculativeSearch::speculative_search(int argc, char *argv[]){
             auto scoped_task = scope->speculative_scope(obj_list);
 
             bool success = search(scoped_task);
-            
+
+            // send cpu time before result so rank 0 can recv it synchronously on result arrival
+            struct rusage usage_self, usage_children;
+            getrusage(RUSAGE_SELF, &usage_self);
+            getrusage(RUSAGE_CHILDREN, &usage_children);
+            double cpu_time = (usage_self.ru_utime.tv_sec  + usage_self.ru_stime.tv_sec  +
+                               usage_children.ru_utime.tv_sec + usage_children.ru_stime.tv_sec) +
+                              (usage_self.ru_utime.tv_usec  + usage_self.ru_stime.tv_usec  +
+                               usage_children.ru_utime.tv_usec + usage_children.ru_stime.tv_usec) * 1e-6;
+            MPI_Send(&cpu_time, 1, MPI_DOUBLE, 0, cpu_time_tag, MPI_COMM_WORLD);
+
             int success_int = success;
-            MPI_Send(&success_int, 1, MPI_INT, 0, result_tag, MPI_COMM_WORLD);    
-            
+            MPI_Send(&success_int, 1, MPI_INT, 0, result_tag, MPI_COMM_WORLD);
+
             if (success){
                 scope->write(scoped_task, PlanManager::get_pddl_filename());
                 MPI_Send(nullptr, 0, MPI_INT, 0, end_signal_tag, MPI_COMM_WORLD);
                 break;
             }
-
-
+        }
+        // drain any abort message that arrived after search() already returned
+        int abort_flag = 0;
+        MPI_Iprobe(0, abort_tag, MPI_COMM_WORLD, &abort_flag, MPI_STATUS_IGNORE);
+        if (abort_flag) {
+            MPI_Recv(nullptr, 0, MPI_INT, 0, abort_tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         }
     }
 
     MPI_Barrier(MPI_COMM_WORLD);
-
     MPI_Finalize();
 
     

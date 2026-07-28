@@ -13,6 +13,7 @@ class SpeculativeSearch{
         int scope_count = 0;
         std::chrono::time_point<std::chrono::high_resolution_clock> start;
         bool preserve_links;
+        static const int abort_tag = 7;
         
         virtual bool search(Task scoped_task) = 0;
         int run_validate(const std::string& command);

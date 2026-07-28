@@ -8,6 +8,11 @@
 #include <iomanip>
 #include <sstream>
 
+#include <unistd.h>
+#include <sys/resource.h>
+#include <sys/wait.h>
+#include <signal.h>
+
 #include "speculative_search_power.h"
 #include "speculative_scope.h"
 #include "../heuristics/heuristic_factory.h"
@@ -18,6 +23,33 @@
 #include "../search_engines/search.h"
 
 using namespace std;
+
+namespace {
+rlim_t parse_mem_limit_bytes(const string &limit_str) {
+    if (limit_str.empty()) {
+        return RLIM_INFINITY;
+    }
+    string digits = limit_str;
+    unsigned long long multiplier = 1;
+    switch (digits.back()) {
+        case 'G': case 'g':
+            multiplier = 1024ULL * 1024 * 1024;
+            digits.pop_back();
+            break;
+        case 'M': case 'm':
+            multiplier = 1024ULL * 1024;
+            digits.pop_back();
+            break;
+        case 'K': case 'k':
+            multiplier = 1024ULL;
+            digits.pop_back();
+            break;
+        default:
+            break;
+    }
+    return static_cast<rlim_t>(stoull(digits) * multiplier);
+}
+}
 
 bool SpeculativeSearchPower::search(Task scoped_task){
     unique_ptr<Heuristic> heuristic(HeuristicFactory::create(opt, scoped_task));
@@ -45,7 +77,37 @@ bool SpeculativeSearchPower::search(Task scoped_task){
                         + " --plan-file " + plan_file_name
                         + " --stop-after-first-plan --time-limit " + to_string(opt.get_process_timeout());
 
-    int code = system(command.c_str());
+    pid_t pid = fork();
+    int code = -1;
+    if (pid == 0) {
+        struct rlimit limit;
+        rlim_t mem_limit_bytes = parse_mem_limit_bytes(opt.get_process_mem_limit());
+        limit.rlim_cur = mem_limit_bytes;
+        limit.rlim_max = mem_limit_bytes;
+        setrlimit(RLIMIT_AS, &limit);
+
+        execl("/bin/sh", "sh", "-c", command.c_str(), nullptr);
+        _exit(127);
+    } else if (pid > 0) {
+        int status;
+        while (true) {
+            pid_t result = waitpid(pid, &status, WNOHANG);
+            if (result != 0) {
+                code = WEXITSTATUS(status);
+                break;
+            }
+            int abort_flag = 0;
+            MPI_Iprobe(0, abort_tag, MPI_COMM_WORLD, &abort_flag, MPI_STATUS_IGNORE);
+            if (abort_flag) {
+                MPI_Recv(nullptr, 0, MPI_INT, 0, abort_tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+                kill(pid, SIGTERM);
+                waitpid(pid, &status, 0);
+                filesystem::remove_all(tmp_dir);
+                return false;
+            }
+            usleep(10000); // poll every 10ms
+        }
+    }
 
     if (!preserve_links) {
         string val_command = "Validate " + opt.get_domain_file() + " "

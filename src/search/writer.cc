@@ -226,11 +226,12 @@ bool Writer::write(Task &task, string filename){
 }
 
 
-bool Writer::write_summary(string filename, 
-                           int scope_num, 
+bool Writer::write_summary(string filename,
+                           int scope_num,
                            bool task_success,
-                           chrono::time_point<std::chrono::high_resolution_clock> start, 
-                           chrono::time_point<std::chrono::high_resolution_clock> end){
+                           chrono::time_point<std::chrono::high_resolution_clock> start,
+                           chrono::time_point<std::chrono::high_resolution_clock> end,
+                           double total_cpu_time_s){
     ofstream outfile(filename);
 
     if (!outfile){
@@ -242,9 +243,11 @@ bool Writer::write_summary(string filename,
     outfile << "Tested Scopes: " << scope_num << endl;
     outfile << "Plan Found: " << task_success << endl;
     auto duration = chrono::duration_cast<chrono::milliseconds>(end-start);
-    outfile << "Total Time: " << duration.count() << "ms" << endl;
+    outfile << "Total Wall Time: " << duration.count() << "ms" << endl;
     auto duration_s = chrono::duration_cast<chrono::seconds>(end-start);
-    outfile << "Total Time: " << duration_s.count() << "s" << endl;
+    outfile << "Total Wall Time: " << duration_s.count() << "s" << endl;
+    outfile << "Total CPU Time: " << static_cast<long long>(total_cpu_time_s * 1000) << "ms" << endl;
+    outfile << "Total CPU Time: " << static_cast<long long>(total_cpu_time_s) << "s" << endl;
 
     outfile.close();
 
